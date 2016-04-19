@@ -5,7 +5,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- instructions for initial Totals activity -->
-    <string name="instructions">Enter subtotal, tax and tip. Then add each person's details.</string>
+    <string name="instructions">Enter subtotal, tax and tip. Then add deatils for each person.</string>
 
     <!-- label for subtotal -->
     <string name="subtotal">Subtotal</string>
@@ -29,7 +29,7 @@
     <string name="total_accounted_unaccounted">Total (accounted/original)</string>
 
     <!-- label for adding more people -->
-    <string name="friend">Friend</string>
+    <string name="add_friend">+Friend</string>
 
     <!-- label for additional people names-->
     <string name="name">Name</string>
