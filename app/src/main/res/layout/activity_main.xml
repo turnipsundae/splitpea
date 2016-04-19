@@ -31,7 +31,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/item_cost_default" />
+            android:hint="@string/item_cost_default"
+            android:inputType="numberDecimal"/>
     </LinearLayout>
 
     <LinearLayout
@@ -50,7 +51,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/tax_default" />
+            android:hint="@string/tax_default"
+            android:inputType="numberDecimal"/>
     </LinearLayout>
 
     <LinearLayout
@@ -69,7 +71,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/tip_default" />
+            android:hint="@string/tip_default"
+            android:inputType="numberDecimal"/>
     </LinearLayout>
 
     <LinearLayout
