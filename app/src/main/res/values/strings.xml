@@ -1,3 +1,44 @@
 <resources>
     <string name="app_name">Split Pea</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- instructions for initial Totals activity -->
+    <string name="instructions">Enter subtotal, tax and tip. Then add each person's details.</string>
+
+    <!-- label for subtotal -->
+    <string name="subtotal">Subtotal</string>
+
+    <!-- label for tax -->
+    <string name="tax">Tax</string>
+
+    <!-- label for tax default % -->
+    <string name="tax_default">8.5%</string>
+
+    <!-- label for tip -->
+    <string name="tip">Tip</string>
+
+    <!-- label for tip default % -->
+    <string name="tip_default">15%</string>
+
+    <!-- simple label for total -->
+    <string name="total">Total</string>
+
+    <!-- label for accounted vs original total -->
+    <string name="total_accounted_unaccounted">Total (accounted/original)</string>
+
+    <!-- label for adding more people -->
+    <string name="friend">Friend</string>
+
+    <!-- label for additional people names-->
+    <string name="name">Name</string>
+
+    <!-- label for items in detail activity-->
+    <string name="item">Item</string>
+
+    <!-- label for items default cost -->
+    <string name="item_cost_default">25</string>
+
+
 </resources>
