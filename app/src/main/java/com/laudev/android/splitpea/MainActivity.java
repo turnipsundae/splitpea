@@ -1,5 +1,6 @@
 package com.laudev.android.splitpea;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText mTaxEditText;
     private EditText mTipEditText;
     private TextView mTotalTextView;
+    private Button mAllocate;
     private Button mCalcTotal;
 
     @Override
@@ -34,6 +36,19 @@ public class MainActivity extends AppCompatActivity {
         mTipEditText = (EditText)findViewById(R.id.tip);
         mTotalTextView = (TextView)findViewById(R.id.total);
 
+        // add button to allocate costs for now
+        // remove this later
+        mAllocate = (Button)findViewById(R.id.allocate);
+        mAllocate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AllocateActivity.class)
+                        .putExtra("total", total)
+                        .putExtra("subtotal", subtotal);
+                startActivity(intent);
+            }
+        });
+
         // add button to calculate total for now
         // remove this later
         mCalcTotal = (Button)findViewById(R.id.calc_total);
@@ -43,8 +58,6 @@ public class MainActivity extends AppCompatActivity {
                 updateTotal();
             }
         });
-
-        // auto focus on subtotal
     }
 
     /*

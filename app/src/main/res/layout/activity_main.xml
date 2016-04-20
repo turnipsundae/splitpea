@@ -99,7 +99,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_friend" />
+        android:text="@string/add_friend"
+        android:id="@+id/allocate"/>
 
     <Button
         android:layout_width="wrap_content"
