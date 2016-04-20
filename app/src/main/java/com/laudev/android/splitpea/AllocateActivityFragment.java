@@ -6,7 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -34,8 +40,14 @@ public class AllocateActivityFragment extends Fragment {
             subtotal = intent.getFloatExtra("subtotal", 25);
             total = intent.getFloatExtra("total", 25);
         }
-        TextView totalTextView = (TextView)rootView.findViewById(R.id.total);
-        totalTextView.setText("Subtotal is " + subtotal + "\n" + "Total is " + total);
+
+        // test data for listview
+        String[] summaryData = {"Subtotal: " + subtotal, "Total: " + total};
+        List<String> summaryList = new ArrayList<String>(Arrays.asList(summaryData));
+        ArrayAdapter<String> personsAdapter = new ArrayAdapter<String>(getActivity(), R.layout.listview_item_person, R.id.listivew_item_text, summaryList);
+        ListView personsListView = (ListView)rootView.findViewById(R.id.persons_listview);
+        personsListView.setAdapter(personsAdapter);
+
         return rootView;
     }
 }
