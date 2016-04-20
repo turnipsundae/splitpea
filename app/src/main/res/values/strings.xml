@@ -40,6 +40,7 @@
     <!-- label for items default cost -->
     <string name="item_cost_default">25</string>
     <string name="title_activity_allocate">AllocateActivity</string>
+    <string name="title_activity_detail">DetailActivity</string>
     <string name="action_settings">Settings</string>
 
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,6 +22,8 @@ public class AllocateActivityFragment extends Fragment {
 
     private float subtotal;
     private float total;
+
+    private ArrayAdapter<String> mPersonsAdapter;
 
     public AllocateActivityFragment() {
     }
@@ -42,11 +45,21 @@ public class AllocateActivityFragment extends Fragment {
         }
 
         // test data for listview
-        String[] summaryData = {"Subtotal: " + subtotal, "Total: " + total};
+        String[] summaryData = {"Remainder: " + total, "Subtotal: " + subtotal, "Total: " + total};
         List<String> summaryList = new ArrayList<String>(Arrays.asList(summaryData));
-        ArrayAdapter<String> personsAdapter = new ArrayAdapter<String>(getActivity(), R.layout.listview_item_person, R.id.listivew_item_text, summaryList);
+        mPersonsAdapter = new ArrayAdapter<String>(getActivity(), R.layout.listview_item_person, R.id.listivew_item_text, summaryList);
         ListView personsListView = (ListView)rootView.findViewById(R.id.persons_listview);
-        personsListView.setAdapter(personsAdapter);
+        personsListView.setAdapter(mPersonsAdapter);
+        personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String details = (String)mPersonsAdapter.getItem(position);
+                if (details != null) {
+                    startActivity(new Intent(getActivity(), DetailActivity.class)
+                            .putExtra("details", details));
+                }
+            }
+        });
 
         return rootView;
     }
