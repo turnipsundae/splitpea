@@ -20,9 +20,11 @@ import java.util.List;
  */
 public class AllocateFragment extends Fragment {
 
+    private String name;
     private float subtotal;
     private float total;
 
+    private final String PARAM_NAME = "name";
     private final String PARAM_SUBTOTAL = "subtotal";
     private final String PARAM_TOTAL = "total";
 
@@ -84,11 +86,11 @@ public class AllocateFragment extends Fragment {
         personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String details = (String)mPersonsAdapter.getItem(position);
-                if (details != null) {
+                Person person = (Person)mPersonsAdapter.getItem(position);
+                if (person != null) {
                     startActivity(new Intent(getActivity(), DetailActivity.class)
-                            .putExtra(PARAM_SUBTOTAL, subtotal)
-                            .putExtra(PARAM_TOTAL, total));
+                            .putExtra(PARAM_NAME, person.getName())
+                            .putExtra(PARAM_SUBTOTAL, person.getSubtotal()));
                 }
             }
         });

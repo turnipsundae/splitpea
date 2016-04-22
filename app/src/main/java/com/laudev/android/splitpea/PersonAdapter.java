@@ -67,7 +67,7 @@ public class PersonAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return mData.get(position);
     }
 
 }

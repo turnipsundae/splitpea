@@ -22,10 +22,12 @@ import android.widget.TextView;
 public class DetailFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String PARAM_NAME = "name";
     private static final String PARAM_SUBTOTAL = "subtotal";
     private static final String PARAM_TOTAL = "total";
 
     // TODO: Rename and change types of parameters
+    private String name;
     private float subtotal;
     private float total;
 
@@ -67,10 +69,11 @@ public class DetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         Intent intent = getActivity().getIntent();
         if (intent != null) {
+            name = intent.getStringExtra(PARAM_NAME);
             subtotal = intent.getFloatExtra(PARAM_SUBTOTAL, 0);
             total = intent.getFloatExtra(PARAM_TOTAL, 0);
             TextView detailTextView = (TextView)rootView.findViewById(R.id.detail_textview);
-            detailTextView.setText("Subtotal is: " + subtotal + " and Total is: " + total);
+            detailTextView.setText("Name: " + name + " and Total is: " + subtotal);
         }
         return rootView;
     }
