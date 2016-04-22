@@ -6,6 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -34,6 +37,7 @@ public class DetailFragment extends Fragment {
 
     public DetailFragment() {
         // Required empty public constructor
+        setHasOptionsMenu(true);
     }
 
     /**
@@ -52,6 +56,35 @@ public class DetailFragment extends Fragment {
         args.putFloat(PARAM_TOTAL, total);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    //TODO create confirm button in app bar
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.menu_detailfragment, menu);
+
+        // Retrieve the confirm changes to person menu item
+        MenuItem confirmPersonItem = menu.findItem(R.id.action_confirm_person);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_confirm_person:
+                // TODO pass values back into allocate fragment
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public Intent confirmPersonDetailIntent() {
+        Intent intent = new Intent(getActivity(), AllocateActivity.class);
+        return intent;
     }
 
     @Override
