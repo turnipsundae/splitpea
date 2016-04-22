@@ -7,6 +7,12 @@
     <!-- instructions for initial Totals activity -->
     <string name="instructions">Enter subtotal, tax and tip. Then add deatils for each person.</string>
 
+    <!-- label for detailed item -->
+    <string name="detail_item">Item</string>
+
+    <!-- label for detailed item default amount-->
+    <string name="detail_item_default">25</string>
+
     <!-- label for subtotal -->
     <string name="subtotal">Subtotal</string>
 

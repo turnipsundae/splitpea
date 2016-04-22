@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 
@@ -67,14 +68,25 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+        TextView detailTextView = (TextView)rootView.findViewById(R.id.detail_textview);
+        EditText nameEditText = (EditText)rootView.findViewById(R.id.name_edit_text);
+        EditText detailedItemEditText = (EditText)rootView.findViewById(R.id.detail_item_edit_text);
+
         Intent intent = getActivity().getIntent();
         if (intent != null) {
             name = intent.getStringExtra(PARAM_NAME);
             subtotal = intent.getFloatExtra(PARAM_SUBTOTAL, 0);
             total = intent.getFloatExtra(PARAM_TOTAL, 0);
-            TextView detailTextView = (TextView)rootView.findViewById(R.id.detail_textview);
-            detailTextView.setText("Name: " + name + " and Total is: " + subtotal);
         }
+
+        nameEditText.setText(name);
+
+        if (subtotal == 0f) {
+            detailedItemEditText.setHint(Float.toString(subtotal));
+        } else {
+            detailedItemEditText.setText(Float.toString(subtotal));
+        }
+
         return rootView;
     }
 }
