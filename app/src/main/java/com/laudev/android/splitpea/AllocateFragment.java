@@ -83,10 +83,14 @@ public class AllocateFragment extends Fragment {
                 String details = (String)mPersonsAdapter.getItem(position);
                 if (details != null) {
                     startActivity(new Intent(getActivity(), DetailActivity.class)
-                            .putExtra("details", details));
+                            .putExtra(PARAM_SUBTOTAL, subtotal)
+                            .putExtra(PARAM_TOTAL, total));
                 }
             }
         });
+
+        // add a FAB
+
 
         return rootView;
     }
@@ -97,4 +101,6 @@ public class AllocateFragment extends Fragment {
         outState.putFloat(PARAM_TOTAL, total);
         super.onSaveInstanceState(outState);
     }
+
+
 }

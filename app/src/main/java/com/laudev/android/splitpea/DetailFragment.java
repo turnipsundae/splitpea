@@ -22,12 +22,12 @@ import android.widget.TextView;
 public class DetailFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String PARAM_SUBTOTAL = "subtotal";
+    private static final String PARAM_TOTAL = "total";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private float subtotal;
+    private float total;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -37,16 +37,16 @@ public class DetailFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
+     * @param subtotal sum of all detailed items.
+     * @param total sum of subtotal and tax.
+     * @return A new instance of fragment DetailFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DetailFragment newInstance(String param1, String param2) {
+    public static DetailFragment newInstance(float subtotal, float total) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putFloat(PARAM_SUBTOTAL, subtotal);
+        args.putFloat(PARAM_TOTAL, total);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,8 +55,8 @@ public class DetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            subtotal = getArguments().getFloat(PARAM_SUBTOTAL);
+            total = getArguments().getFloat(PARAM_TOTAL);
         }
     }
 
@@ -67,9 +67,10 @@ public class DetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         Intent intent = getActivity().getIntent();
         if (intent != null) {
-            String details = intent.getStringExtra("details");
+            subtotal = intent.getFloatExtra(PARAM_SUBTOTAL, 0);
+            total = intent.getFloatExtra(PARAM_TOTAL, 0);
             TextView detailTextView = (TextView)rootView.findViewById(R.id.detail_textview);
-            detailTextView.setText(details);
+            detailTextView.setText("Subtotal is: " + subtotal + " and Total is: " + total);
         }
         return rootView;
     }
