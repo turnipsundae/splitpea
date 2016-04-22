@@ -29,7 +29,7 @@ public class AllocateFragment extends Fragment {
     private View mSubtotalFooterView;
     private View mTotalFooterView;
 
-    private ArrayAdapter<String> mPersonsAdapter;
+    private PersonAdapter mPersonsAdapter;
 
     public AllocateFragment() {
     }
@@ -50,8 +50,11 @@ public class AllocateFragment extends Fragment {
         }
 
         // test data for listview
-        String[] summaryData = {"Remainder: " + total, "Subtotal: " + subtotal, "Total: " + total};
-        List<String> summaryList = new ArrayList<String>(Arrays.asList(summaryData));
+        Person[] summaryData = {new Person("Kevin", 10),
+                                new Person("Melissa", 20),
+                                new Person("Andrew", 30),
+                                new Person("Haylee", 40)};
+        List<Person> summaryList = new ArrayList<Person>(Arrays.asList(summaryData));
 
         // inflate footer Views
         if (mSubtotalFooterView == null) {
@@ -62,19 +65,20 @@ public class AllocateFragment extends Fragment {
         }
 
         // hook up footer data
-        ((TextView)mSubtotalFooterView).setText("" + subtotal);
-        ((TextView)mTotalFooterView).setText("" + total);
+//        ((TextView)mSubtotalFooterView).setText("" + subtotal);
+//        ((TextView)mTotalFooterView).setText("" + total);
 
         // initialize adapter
-        mPersonsAdapter = new ArrayAdapter<String>(getActivity(), R.layout.listview_item_person, R.id.listivew_item_text, summaryList);
+        // TODO test this code
+        mPersonsAdapter = new PersonAdapter(getActivity(), R.layout.listview_item_person, summaryList);
 
         // find and hook up adapter
         ListView personsListView = (ListView)rootView.findViewById(R.id.persons_listview);
         personsListView.setAdapter(mPersonsAdapter);
 
         // attach total data as footers
-        personsListView.addFooterView(mSubtotalFooterView);
-        personsListView.addFooterView(mTotalFooterView);
+//        personsListView.addFooterView(mSubtotalFooterView);
+//        personsListView.addFooterView(mTotalFooterView);
 
         // set onItemClick to launch detail activity
         personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

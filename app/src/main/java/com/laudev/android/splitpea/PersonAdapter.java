@@ -42,6 +42,7 @@ public class PersonAdapter extends BaseAdapter {
         }
 
         // bind view with new data
+        bindView(view, mContext, (Person)mData.get(position));
 
         return view;
     }
@@ -53,8 +54,10 @@ public class PersonAdapter extends BaseAdapter {
         return view;
     }
 
-    public void bindView(View view, Context context, List data) {
+    public void bindView(View view, Context context, Person person) {
         ListItemHolder holder = (ListItemHolder)view.getTag();
+        holder.mName.setText(person.getName());
+        holder.mSubtotal.setText("" + person.getSubtotal());
     }
 
     @Override
