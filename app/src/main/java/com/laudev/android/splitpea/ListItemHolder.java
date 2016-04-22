@@ -7,8 +7,8 @@ import android.widget.TextView;
  * Created by kevin on 4/21/16.
  */
 public class ListItemHolder {
-    private final TextView mName;
-    private final TextView mSubtotal;
+    public final TextView mName;
+    public final TextView mSubtotal;
 
     public ListItemHolder(View view) {
         mName = (TextView)view.findViewById(R.id.name_textview);

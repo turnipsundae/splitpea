@@ -25,4 +25,16 @@ public class Person {
         mSubtotal = subtotal;
         mTip = tip;
     }
+
+    public String getName() {
+        return mName;
+    }
+
+    public float getSubtotal() {
+        return mSubtotal;
+    }
+
+    public float getTip() {
+        return mTip;
+    }
 }
