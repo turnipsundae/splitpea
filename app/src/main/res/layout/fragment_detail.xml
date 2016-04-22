@@ -6,12 +6,6 @@
     tools:context="com.laudev.android.splitpea.DetailFragment"
     android:layout_margin="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment"
-        android:id="@+id/detail_textview"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
