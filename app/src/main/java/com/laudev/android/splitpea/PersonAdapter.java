@@ -48,7 +48,7 @@ public class PersonAdapter extends BaseAdapter {
     }
 
     public View newView(Context context, List data, ViewGroup parent) {
-        View view = LayoutInflater.from(context).inflate(R.layout.listview_item_person, parent, false);
+        View view = mInflater.inflate(mResLayout, parent, false);
         ListItemHolder holder = new ListItemHolder(view);
         view.setTag(holder);
         return view;
