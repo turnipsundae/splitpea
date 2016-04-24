@@ -60,6 +60,13 @@ public class PersonAdapter extends BaseAdapter {
         holder.mSubtotal.setText("" + person.getSubtotal());
     }
 
+    public void add(Object object) {
+        if (object instanceof Person) {
+            mData.add(object);
+        }
+        notifyDataSetChanged();
+    }
+
     @Override
     public long getItemId(int position) {
         return 0;

@@ -37,4 +37,16 @@ public class Person {
     public float getTip() {
         return mTip;
     }
+
+    public void setName(String name) {
+        mName = name;
+    }
+
+    public void setSubtotal(float subtotal) {
+        mSubtotal = subtotal;
+    }
+
+    public void setTip (float tip) {
+        mTip = tip;
+    }
 }

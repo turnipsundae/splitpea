@@ -26,14 +26,20 @@ import android.widget.TextView;
 public class DetailFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private final String PARAM_POSITION_ID = "positionId";
     private static final String PARAM_NAME = "name";
     private static final String PARAM_SUBTOTAL = "subtotal";
     private static final String PARAM_TOTAL = "total";
 
     // TODO: Rename and change types of parameters
+    private int positionId;
     private String name;
     private float subtotal;
     private float total;
+
+    private EditText mNameEditText;
+    private EditText mDetailedItemEditText;
+
 
     public DetailFragment() {
         // Required empty public constructor
@@ -65,9 +71,6 @@ public class DetailFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_detailfragment, menu);
-
-        // Retrieve the confirm changes to person menu item
-        MenuItem confirmPersonItem = menu.findItem(R.id.action_confirm_person);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -77,14 +80,24 @@ public class DetailFragment extends Fragment {
         switch (id) {
             case R.id.action_confirm_person:
                 // TODO pass values back into allocate fragment
+                updateParams();
+                startActivity(confirmPersonDetailIntent());
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public Intent confirmPersonDetailIntent() {
-        Intent intent = new Intent(getActivity(), AllocateActivity.class);
+    private Intent confirmPersonDetailIntent() {
+        Intent intent = new Intent(getActivity(), AllocateActivity.class)
+                .putExtra(PARAM_POSITION_ID, positionId)
+                .putExtra(PARAM_NAME, name)
+                .putExtra(PARAM_SUBTOTAL, subtotal);
         return intent;
+    }
+
+    private void updateParams() {
+        name = mNameEditText.getText().toString();
+        subtotal = Float.parseFloat(mDetailedItemEditText.getText().toString());
     }
 
     @Override
@@ -101,25 +114,42 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-        TextView detailTextView = (TextView)rootView.findViewById(R.id.detail_textview);
-        EditText nameEditText = (EditText)rootView.findViewById(R.id.name_edit_text);
-        EditText detailedItemEditText = (EditText)rootView.findViewById(R.id.detail_item_edit_text);
+        mNameEditText = (EditText)rootView.findViewById(R.id.name_edit_text);
+        mDetailedItemEditText = (EditText)rootView.findViewById(R.id.detail_item_edit_text);
 
         Intent intent = getActivity().getIntent();
         if (intent != null) {
-            name = intent.getStringExtra(PARAM_NAME);
-            subtotal = intent.getFloatExtra(PARAM_SUBTOTAL, 0);
-            total = intent.getFloatExtra(PARAM_TOTAL, 0);
+            getParamsFromIntent(intent);
         }
 
-        nameEditText.setText(name);
+        // if no name provided, hint will show up underneath
+        mNameEditText.setText(name);
 
         if (subtotal == 0f) {
-            detailedItemEditText.setHint(Float.toString(subtotal));
+            mDetailedItemEditText.setHint(Float.toString(subtotal));
         } else {
-            detailedItemEditText.setText(Float.toString(subtotal));
+            mDetailedItemEditText.setText(Float.toString(subtotal));
         }
 
         return rootView;
+    }
+
+    private void getParamsFromIntent(Intent intent) {
+        // get position of item called so edits can be returned
+        if (intent.hasExtra(PARAM_POSITION_ID)) {
+            positionId = intent.getIntExtra(PARAM_POSITION_ID, 0);
+        }
+        // get name of person
+        if (intent.hasExtra(PARAM_NAME)) {
+            name = intent.getStringExtra(PARAM_NAME);
+        }
+        // get subtotal of person
+        if (intent.hasExtra(PARAM_SUBTOTAL)) {
+            subtotal = intent.getFloatExtra(PARAM_SUBTOTAL, 0f);
+        }
+        // placeholder total for person
+        if (intent.hasExtra(PARAM_TOTAL)) {
+            total = intent.getFloatExtra(PARAM_TOTAL, 0f);
+        }
     }
 }
