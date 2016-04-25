@@ -1,9 +1,12 @@
 package com.laudev.android.splitpea;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by kevin on 4/21/16.
  */
-public class Person {
+public class Person implements Parcelable{
     private String mName;
     private float mSubtotal;
     private float mTip;
@@ -49,4 +52,32 @@ public class Person {
     public void setTip (float tip) {
         mTip = tip;
     }
+
+    public Person(Parcel parcel) {
+        mName = parcel.readString();
+        mSubtotal = parcel.readFloat();
+        mTip = parcel.readFloat();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mName);
+        dest.writeFloat(mSubtotal);
+        dest.writeFloat(mTip);
+    }
+
+    public static final Parcelable.Creator<Person> CREATOR = new Parcelable.Creator<Person>() {
+        public Person createFromParcel(Parcel parcel) {
+            return new Person(parcel);
+        }
+
+        public Person[] newArray(int size) {
+            return new Person[size];
+        }
+    };
 }
