@@ -10,6 +10,10 @@ import android.view.View;
 
 public class AllocateActivity extends AppCompatActivity {
 
+    private final String PARAM_NEW_PERSON = "newPerson";
+
+    private boolean newPerson = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +25,8 @@ public class AllocateActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), DetailActivity.class));
+                startActivity(new Intent(getApplicationContext(), DetailActivity.class)
+                        .putExtra(PARAM_NEW_PERSON, newPerson));
             }
         });
     }
