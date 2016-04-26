@@ -1,5 +1,6 @@
 package com.laudev.android.splitpea;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,23 +24,19 @@ import java.util.List;
 public class AllocateFragment extends Fragment {
 
     private boolean newPerson;
-    private String name;
-    private float subtotal;
-    private float total;
-    private float subtotalPerson;
-    private float totalPerson;
+    private float mSubtotal;
+    private float mTotal;
     private List<Person> summaryList;
 
     private final String PARAM_NEW_EVENT = "newEvent";
     private final String PARAM_NEW_PERSON = "newPerson";
     private final String PARAM_POSITION_ID = "positionId";
-    private final String PARAM_NAME = "name";
-    private final String PARAM_SUBTOTAL = "subtotal";
-    private final String PARAM_TOTAL = "total";
-    private final String PARAM_SUBTOTAL_PERSON = "subtotalPerson";
-    private final String PARAM_TOTAL_PERSON = "totalPerson";
+    private final String PARAM_SUBTOTAL = "mSubtotal";
+    private final String PARAM_TOTAL = "mTotal";
     private final String PARAM_PERSON = "person";
     private final String PARAM_PERSONS_ARRAY = "persons";
+    private final int PERSON_DETAIL_REQUEST = 1;
+    private final int ADD_PERSON_REQUEST = 2;
 
     private View mSubtotalFooterView;
     private View mTotalFooterView;
@@ -62,19 +59,38 @@ public class AllocateFragment extends Fragment {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case PERSON_DETAIL_REQUEST:
+                if (resultCode == Activity.RESULT_OK) {
+                    Person person = data.getParcelableExtra(PARAM_PERSON);
+                    mPersonsAdapter.add(person);
+                }
+                break;
+            case ADD_PERSON_REQUEST:
+                if (resultCode == Activity.RESULT_OK) {
+                    Person person = data.getParcelableExtra(PARAM_PERSON);
+                    mPersonsAdapter.add(person);
+                }
+                break;
+        }
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Log.v("AllocateFragment", "onCreate called");
-        if (savedInstanceState != null) {
-            Person[] persons = (Person[]) savedInstanceState.getParcelableArray("Persons");
-            summaryList = new ArrayList<>(Arrays.asList(persons));
-            String names = "";
-            if (persons != null) {
-                for (Person person : persons) {
-                    names += person.getName() + " ";
-                }
+
+        // if new instance
+        if (savedInstanceState == null) {
+            Intent intent = getActivity().getIntent();
+
+            // check if brand new activity
+            if (intent.hasExtra(PARAM_NEW_EVENT) && intent.getBooleanExtra(PARAM_NEW_EVENT, true)) {
+                mSubtotal = intent.getFloatExtra(PARAM_SUBTOTAL, 0f);
+                mTotal = intent.getFloatExtra(PARAM_TOTAL, 0f);
+                Log.v("AllocateFragment", "Subtotal/Total: " + mSubtotal + "/" + mTotal);
             }
-            Log.v("AllocateFragment", names);
-        } else {
+
             // test data for listview
             Person[] persons = {new Person("Kevin", 10),
                     new Person("Melissa", 20),
@@ -105,10 +121,11 @@ public class AllocateFragment extends Fragment {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Person person = (Person) mPersonsAdapter.getItem(position);
                         if (person != null) {
-                            startActivity(new Intent(getActivity(), DetailActivity.class)
+                            startActivityForResult(new Intent(getActivity(), DetailActivity.class)
                                     .putExtra(PARAM_NEW_PERSON, false)
                                     .putExtra(PARAM_POSITION_ID, position)
-                                    .putExtra(PARAM_PERSON, person));
+                                    .putExtra(PARAM_PERSON, person),
+                                    PERSON_DETAIL_REQUEST);
                         }
                     }
                 });

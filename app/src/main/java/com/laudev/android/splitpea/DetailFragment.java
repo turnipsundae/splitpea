@@ -1,5 +1,6 @@
 package com.laudev.android.splitpea;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -73,7 +74,8 @@ public class DetailFragment extends Fragment {
         switch (id) {
             case R.id.action_confirm_person:
                 updateParams();
-                startActivity(confirmPersonDetailIntent());
+                getActivity().setResult(Activity.RESULT_OK, confirmPersonDetailIntent());
+                getActivity().finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
