@@ -13,6 +13,9 @@ import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final String PARAM_SUBTOTAL = "subtotal";
+    private final String PARAM_TOTAL = "total";
+
     private float subtotal;
     private float tax;
     private float tip;
@@ -43,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), AllocateActivity.class)
-                        .putExtra("total", total)
-                        .putExtra("subtotal", subtotal);
+                        .putExtra(PARAM_SUBTOTAL, subtotal)
+                        .putExtra(PARAM_TOTAL, total);
                 startActivity(intent);
             }
         });
@@ -65,10 +68,15 @@ public class MainActivity extends AppCompatActivity {
         * if values are not filled out, assumes default values
         */
     private void getParams() {
-        //TODO get input parameters
-        subtotal = Float.parseFloat(mSubtotalEditText.getText().toString());
-        tax = Float.parseFloat(mTaxEditText.getText().toString());
-        tip = Float.parseFloat(mTipEditText.getText().toString());
+        if (mSubtotalEditText.getText() != null) {
+            subtotal = Float.parseFloat(mSubtotalEditText.getText().toString());
+        }
+        if (mTaxEditText.getText() != null) {
+            tax = Float.parseFloat(mTaxEditText.getText().toString());
+        }
+        if (mTipEditText.getText() != null) {
+            tip = Float.parseFloat(mTipEditText.getText().toString());
+        }
     }
 
     /*
