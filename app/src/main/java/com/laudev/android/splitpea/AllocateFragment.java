@@ -63,8 +63,12 @@ public class AllocateFragment extends Fragment {
         switch (requestCode) {
             case PERSON_DETAIL_REQUEST:
                 if (resultCode == Activity.RESULT_OK) {
+                    int positionId = data.getIntExtra(PARAM_POSITION_ID, 0);
                     Person person = data.getParcelableExtra(PARAM_PERSON);
-                    mPersonsAdapter.add(person);
+                    Person clickedPerson = (Person)mPersonsAdapter.getItem(positionId);
+                    clickedPerson.setName(person.getName());
+                    clickedPerson.setSubtotal(person.getSubtotal());
+                    mPersonsAdapter.notifyDataSetChanged();
                 }
                 break;
             case ADD_PERSON_REQUEST:
