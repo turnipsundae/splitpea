@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -106,17 +107,31 @@ public class AllocateFragment extends Fragment {
         // find and hook up adapter
         ListView personsListView = (ListView) rootView.findViewById(R.id.persons_listview);
         personsListView.setAdapter(mPersonsAdapter);
+        // add three footers for subtotal, tax + tip, total
+        for (int i = 0; i < 3; i++) {
+            View view = inflater.inflate(R.layout.listview_item_footer, container, false);
+            TextView title = (TextView) view.findViewById(R.id.name_textview);
+            title.setText(getString(R.string.subtotal));
+            personsListView.addFooterView(view);
+        }
 
         // set click listener
         personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Person person = (Person) mPersonsAdapter.getItem(position);
-                startActivityForResult(new Intent(getActivity(), DetailActivity.class)
-                        .putExtra(PARAM_NEW_PERSON, false)
-                        .putExtra(PARAM_POSITION_ID, position)
-                        .putExtra(PARAM_PERSON, person),
-                        PERSON_DETAIL_REQUEST);
+                switch (view.getId()) {
+                    case (R.id.listview_item_person):
+                        Person person = (Person) mPersonsAdapter.getItem(position);
+                        startActivityForResult(new Intent(getActivity(), DetailActivity.class)
+                                        .putExtra(PARAM_NEW_PERSON, false)
+                                        .putExtra(PARAM_POSITION_ID, position)
+                                        .putExtra(PARAM_PERSON, person),
+                                PERSON_DETAIL_REQUEST);
+                        break;
+                    case (R.id.listview_item_footer):
+                        Toast.makeText(getActivity(), "You clicked on a footer", Toast.LENGTH_SHORT).show();
+                        break;
+                }
             }
         });
 
@@ -132,17 +147,17 @@ public class AllocateFragment extends Fragment {
                 }
             });
         }
-        // inflate footer Views
+//         inflate footer Views
 //        if (mSubtotalFooterView == null) {
 //            mSubtotalFooterView = inflater.inflate(R.layout.listview_item_person, container, false);
 //        }
 //        if (mTotalFooterView == null) {
 //            mTotalFooterView = inflater.inflate(R.layout.listview_item_person, container, false);
 //        }
-        // hook up footer data
+//         hook up footer data
 //        ((TextView)mSubtotalFooterView).setText("" + subtotal);
 //        ((TextView)mTotalFooterView).setText("" + total);
-        // attach total data as footers
+//         attach total data as footers
 //        personsListView.addFooterView(mSubtotalFooterView);
 //        personsListView.addFooterView(mTotalFooterView);
 

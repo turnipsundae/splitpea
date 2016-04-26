@@ -10,11 +10,7 @@ import android.view.View;
 
 public class AllocateActivity extends AppCompatActivity {
 
-    private final String PARAM_NEW_PERSON = "newPerson";
-    private final int ADD_PERSON_REQUEST = 2;
     private final String ALLOCATE_FRAGMENT_TAG = "AllocateFragmentTag";
-
-    private boolean newPerson = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
