@@ -25,26 +25,15 @@ import android.widget.TextView;
  * create an instance of this fragment.
  */
 public class DetailFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private final String PARAM_NEW_PERSON = "newPerson";
     private final String PARAM_POSITION_ID = "positionId";
-    private static final String PARAM_NAME = "name";
-    private static final String PARAM_SUBTOTAL = "subtotal";
-    private static final String PARAM_TOTAL = "total";
-    private static final String PARAM_SUBTOTAL_PERSON = "subtotalPerson";
-    private static final String PARAM_TOTAL_PERSON = "totalPerson";
+    private static final String PARAM_PERSON = "person";
 
-    // TODO: Rename and change types of parameters
     private boolean newPerson;
     private int positionId;
-    private String name;
-    private float subtotal;
-    private float total;
-    private float subtotalPerson;
-    private float totalPerson;
     private Person person;
 
+    // references to XML views
     private EditText mNameEditText;
     private EditText mDetailedItemEditText;
 
@@ -62,18 +51,14 @@ public class DetailFragment extends Fragment {
      * @param total sum of subtotal and tax.
      * @return A new instance of fragment DetailFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static DetailFragment newInstance(float subtotal, float total) {
-        DetailFragment fragment = new DetailFragment();
-        Bundle args = new Bundle();
-        args.putFloat(PARAM_SUBTOTAL, subtotal);
-        args.putFloat(PARAM_TOTAL, total);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    //TODO create confirm button in app bar
-
+//    public static DetailFragment newInstance(float subtotal, float total) {
+//        DetailFragment fragment = new DetailFragment();
+//        Bundle args = new Bundle();
+//        args.putFloat(PARAM_SUBTOTAL, subtotal);
+//        args.putFloat(PARAM_TOTAL, total);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -87,7 +72,6 @@ public class DetailFragment extends Fragment {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_confirm_person:
-                // TODO pass values back into allocate fragment
                 updateParams();
                 startActivity(confirmPersonDetailIntent());
                 return true;
@@ -99,21 +83,22 @@ public class DetailFragment extends Fragment {
         return new Intent(getActivity(), AllocateActivity.class)
                 .putExtra(PARAM_NEW_PERSON, newPerson)
                 .putExtra(PARAM_POSITION_ID, positionId)
-                .putExtra(PARAM_NAME, name)
-                .putExtra(PARAM_SUBTOTAL_PERSON, subtotalPerson);
+                .putExtra(PARAM_PERSON, person);
     }
 
     private void updateParams() {
-        name = mNameEditText.getText().toString();
-        subtotalPerson = Float.parseFloat(mDetailedItemEditText.getText().toString());
+        String name = mNameEditText.getText().toString();
+        float subtotalPerson = Float.parseFloat(mDetailedItemEditText.getText().toString());
+        person.setName(name);
+        person.setSubtotal(subtotalPerson);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            subtotal = getArguments().getFloat(PARAM_SUBTOTAL);
-            total = getArguments().getFloat(PARAM_TOTAL);
+//            subtotal = getArguments().getFloat(PARAM_SUBTOTAL);
+//            total = getArguments().getFloat(PARAM_TOTAL);
         }
     }
 
@@ -130,44 +115,36 @@ public class DetailFragment extends Fragment {
             getParamsFromIntent(intent);
         }
 
-        // if no name provided, hint will show up underneath
-        mNameEditText.setText(name);
-
-        if (subtotalPerson == 0f) {
-            mDetailedItemEditText.setHint(Float.toString(subtotalPerson));
+        if (newPerson) {
+            // if new person, create a new person
+            person = new Person();
         } else {
-            mDetailedItemEditText.setText(Float.toString(subtotalPerson));
+            // initialize text views with existing person data
+            mNameEditText.setText(person.getName());
+            mDetailedItemEditText.setText(Float.toString(person.getSubtotal()));
         }
 
         return rootView;
     }
 
     private void getParamsFromIntent(Intent intent) {
-        // TODO test if Person was parceled
-        if (intent.hasExtra("Person")) {
-            person = intent.getParcelableExtra("Person");
-            Log.v("DetailFragment", "Extracted Parceled person. Name: " + person.getName());
-        }
-
         // is this new person or modify existing?
         if (intent.hasExtra(PARAM_NEW_PERSON)) {
             newPerson = intent.getBooleanExtra(PARAM_NEW_PERSON, true);
         }
-        // get position of item called so edits can be returned
-        if (intent.hasExtra(PARAM_POSITION_ID)) {
-            positionId = intent.getIntExtra(PARAM_POSITION_ID, 0);
-        }
-        // get name of person
-        if (intent.hasExtra(PARAM_NAME)) {
-            name = intent.getStringExtra(PARAM_NAME);
-        }
-        // get subtotal of person
-        if (intent.hasExtra(PARAM_SUBTOTAL_PERSON)) {
-            subtotalPerson = intent.getFloatExtra(PARAM_SUBTOTAL_PERSON, 0f);
-        }
-        // placeholder total for person
-        if (intent.hasExtra(PARAM_TOTAL_PERSON)) {
-            totalPerson = intent.getFloatExtra(PARAM_TOTAL_PERSON, 0f);
+
+        if (!newPerson) {
+            // get position of item called so edits can be returned
+            if (intent.hasExtra(PARAM_POSITION_ID)) {
+                positionId = intent.getIntExtra(PARAM_POSITION_ID, 0);
+            }
+            // get person object
+            if (intent.hasExtra(PARAM_PERSON)) {
+                person = intent.getParcelableExtra(PARAM_PERSON);
+            }
+
+            Log.v("DetailFragment", "Extracted Parceled person. New? " + newPerson +
+                    " #" + positionId + " " + person.getName() + " " + person.getSubtotal());
         }
     }
 }

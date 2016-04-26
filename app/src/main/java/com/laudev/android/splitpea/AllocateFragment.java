@@ -30,6 +30,7 @@ public class AllocateFragment extends Fragment {
     private float totalPerson;
     private List<Person> summaryList;
 
+    private final String PARAM_NEW_EVENT = "newEvent";
     private final String PARAM_NEW_PERSON = "newPerson";
     private final String PARAM_POSITION_ID = "positionId";
     private final String PARAM_NAME = "name";
@@ -37,6 +38,8 @@ public class AllocateFragment extends Fragment {
     private final String PARAM_TOTAL = "total";
     private final String PARAM_SUBTOTAL_PERSON = "subtotalPerson";
     private final String PARAM_TOTAL_PERSON = "totalPerson";
+    private final String PARAM_PERSON = "person";
+    private final String PARAM_PERSONS_ARRAY = "persons";
 
     private View mSubtotalFooterView;
     private View mTotalFooterView;
@@ -48,36 +51,19 @@ public class AllocateFragment extends Fragment {
 
     @Override
     public void onResume() {
-        boolean newPerson;
-        String name;
-        float subtotalPerson;
+        Log.v("AllocateFragment", "onResume called");
 
         // get the intent
         Intent intent = getActivity().getIntent();
 
-        // check if intent is null
-        if (intent != null && intent.hasExtra(PARAM_NEW_PERSON) && mPersonsAdapter != null) {
+        updatePersonsWithIntent(intent);
 
-            newPerson = intent.getBooleanExtra(PARAM_NEW_PERSON, true);
-            name = intent.getStringExtra(PARAM_NAME);
-            subtotalPerson = intent.getFloatExtra(PARAM_SUBTOTAL_PERSON, 0f);
-
-            // if a new person was added, add to adapter, otherwise find the positionId and update
-            if (newPerson) {
-                Person person = new Person(name, subtotalPerson);
-                mPersonsAdapter.add(person);
-            } else {
-                Person clickedPerson = (Person) mPersonsAdapter.getItem(intent.getIntExtra(PARAM_POSITION_ID, 0));
-                clickedPerson.setName(name);
-                clickedPerson.setSubtotal(subtotalPerson);
-                mPersonsAdapter.notifyDataSetChanged();
-            }
-        }
         super.onResume();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.v("AllocateFragment", "onCreate called");
         if (savedInstanceState != null) {
             Person[] persons = (Person[]) savedInstanceState.getParcelableArray("Persons");
             summaryList = new ArrayList<>(Arrays.asList(persons));
@@ -102,6 +88,7 @@ public class AllocateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.v("AllocateFragment", "onCreateView called");
         View rootView = inflater.inflate(R.layout.fragment_allocate, container, false);
 
             if (summaryList != null) {
@@ -121,9 +108,7 @@ public class AllocateFragment extends Fragment {
                             startActivity(new Intent(getActivity(), DetailActivity.class)
                                     .putExtra(PARAM_NEW_PERSON, false)
                                     .putExtra(PARAM_POSITION_ID, position)
-                                    .putExtra(PARAM_NAME, person.getName())
-                                    .putExtra(PARAM_SUBTOTAL_PERSON, person.getSubtotal())
-                                    .putExtra("Person", person));
+                                    .putExtra(PARAM_PERSON, person));
                         }
                     }
                 });
@@ -150,9 +135,30 @@ public class AllocateFragment extends Fragment {
         return rootView;
     }
 
+    private void updatePersonsWithIntent(Intent intent) {
+        // check if intent is null
+        if (intent != null && intent.hasExtra(PARAM_NEW_PERSON) && mPersonsAdapter != null) {
+
+            // get params
+            boolean newPerson = intent.getBooleanExtra(PARAM_NEW_PERSON, true);
+            int positionId = intent.getIntExtra(PARAM_POSITION_ID, 0);
+            Person person = intent.getParcelableExtra(PARAM_PERSON);
+
+            // if a new person was added, add to adapter, otherwise find the positionId and update
+            if (newPerson) {
+                mPersonsAdapter.add(person);
+            } else {
+                Person clickedPerson = (Person) mPersonsAdapter.getItem(positionId);
+                clickedPerson.setName(person.getName());
+                clickedPerson.setSubtotal(person.getSubtotal());
+                mPersonsAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArray("Persons", getPersonsFromAdapter(mPersonsAdapter));
+        outState.putParcelableArray(PARAM_PERSONS_ARRAY, getPersonsFromAdapter(mPersonsAdapter));
         super.onSaveInstanceState(outState);
     }
 
@@ -163,5 +169,11 @@ public class AllocateFragment extends Fragment {
             Log.v("AllocateFragment", "Name of Person parceled: " + persons[i].getName());
         }
         return persons;
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.v("AllocateFragment", "Activity destroyed");
+        super.onDestroy();
     }
 }
