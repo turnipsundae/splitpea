@@ -47,18 +47,6 @@ public class AllocateFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        Log.v("AllocateFragment", "onResume called");
-
-        // get the intent
-        Intent intent = getActivity().getIntent();
-
-        updatePersonsWithIntent(intent);
-
-        super.onResume();
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case PERSON_DETAIL_REQUEST:
@@ -111,31 +99,25 @@ public class AllocateFragment extends Fragment {
         Log.v("AllocateFragment", "onCreateView called");
         View rootView = inflater.inflate(R.layout.fragment_allocate, container, false);
 
-            if (summaryList != null) {
-                // initialize adapter
-                mPersonsAdapter = new PersonAdapter(getActivity(), R.layout.listview_item_person, summaryList);
+        // initialize adapter
+        mPersonsAdapter = new PersonAdapter(getActivity(), R.layout.listview_item_person, summaryList);
 
-                // find and hook up adapter
-                ListView personsListView = (ListView) rootView.findViewById(R.id.persons_listview);
-                personsListView.setAdapter(mPersonsAdapter);
+        // find and hook up adapter
+        ListView personsListView = (ListView) rootView.findViewById(R.id.persons_listview);
+        personsListView.setAdapter(mPersonsAdapter);
 
-                // set click listener
-                personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Person person = (Person) mPersonsAdapter.getItem(position);
-                        if (person != null) {
-                            startActivityForResult(new Intent(getActivity(), DetailActivity.class)
-                                    .putExtra(PARAM_NEW_PERSON, false)
-                                    .putExtra(PARAM_POSITION_ID, position)
-                                    .putExtra(PARAM_PERSON, person),
-                                    PERSON_DETAIL_REQUEST);
-                        }
-                    }
-                });
+        // set click listener
+        personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Person person = (Person) mPersonsAdapter.getItem(position);
+                startActivityForResult(new Intent(getActivity(), DetailActivity.class)
+                        .putExtra(PARAM_NEW_PERSON, false)
+                        .putExtra(PARAM_POSITION_ID, position)
+                        .putExtra(PARAM_PERSON, person),
+                        PERSON_DETAIL_REQUEST);
             }
-
-
+        });
 
         // inflate footer Views
 //        if (mSubtotalFooterView == null) {
