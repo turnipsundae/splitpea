@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,6 +43,7 @@ public class DetailFragment extends Fragment {
     private float total;
     private float subtotalPerson;
     private float totalPerson;
+    private Person person;
 
     private EditText mNameEditText;
     private EditText mDetailedItemEditText;
@@ -94,12 +96,11 @@ public class DetailFragment extends Fragment {
     }
 
     private Intent confirmPersonDetailIntent() {
-        Intent intent = new Intent(getActivity(), AllocateActivity.class)
+        return new Intent(getActivity(), AllocateActivity.class)
                 .putExtra(PARAM_NEW_PERSON, newPerson)
                 .putExtra(PARAM_POSITION_ID, positionId)
                 .putExtra(PARAM_NAME, name)
                 .putExtra(PARAM_SUBTOTAL_PERSON, subtotalPerson);
-        return intent;
     }
 
     private void updateParams() {
@@ -142,6 +143,12 @@ public class DetailFragment extends Fragment {
     }
 
     private void getParamsFromIntent(Intent intent) {
+        // TODO test if Person was parceled
+        if (intent.hasExtra("Person")) {
+            person = intent.getParcelableExtra("Person");
+            Log.v("DetailFragment", "Extracted Parceled person. Name: " + person.getName());
+        }
+
         // is this new person or modify existing?
         if (intent.hasExtra(PARAM_NEW_PERSON)) {
             newPerson = intent.getBooleanExtra(PARAM_NEW_PERSON, true);

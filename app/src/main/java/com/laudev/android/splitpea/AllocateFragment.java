@@ -1,8 +1,10 @@
 package com.laudev.android.splitpea;
 
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ public class AllocateFragment extends Fragment {
     private float total;
     private float subtotalPerson;
     private float totalPerson;
+    private List<Person> summaryList;
 
     private final String PARAM_NEW_PERSON = "newPerson";
     private final String PARAM_POSITION_ID = "positionId";
@@ -74,40 +77,57 @@ public class AllocateFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            Person[] persons = (Person[]) savedInstanceState.getParcelableArray("Persons");
+            summaryList = new ArrayList<>(Arrays.asList(persons));
+            String names = "";
+            if (persons != null) {
+                for (Person person : persons) {
+                    names += person.getName() + " ";
+                }
+            }
+            Log.v("AllocateFragment", names);
+        } else {
+            // test data for listview
+            Person[] persons = {new Person("Kevin", 10),
+                    new Person("Melissa", 20),
+                    new Person("Andrew", 30),
+                    new Person("Haylee", 40)};
+            summaryList = new ArrayList<>(Arrays.asList(persons));
+        }
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_allocate, container, false);
 
-        // test data for listview
-        Person[] summaryData = {new Person("Kevin", 10),
-                                new Person("Melissa", 20),
-                                new Person("Andrew", 30),
-                                new Person("Haylee", 40)};
-        List<Person> summaryList = new ArrayList<Person>(Arrays.asList(summaryData));
+            if (summaryList != null) {
+                // initialize adapter
+                mPersonsAdapter = new PersonAdapter(getActivity(), R.layout.listview_item_person, summaryList);
 
-        if (mPersonsAdapter == null) {
-            // initialize adapter
-            mPersonsAdapter = new PersonAdapter(getActivity(), R.layout.listview_item_person, summaryList);
+                // find and hook up adapter
+                ListView personsListView = (ListView) rootView.findViewById(R.id.persons_listview);
+                personsListView.setAdapter(mPersonsAdapter);
 
-            // find and hook up adapter
-            ListView personsListView = (ListView)rootView.findViewById(R.id.persons_listview);
-            personsListView.setAdapter(mPersonsAdapter);
-
-            // set click listener
-            personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Person person = (Person)mPersonsAdapter.getItem(position);
-                    if (person != null) {
-                        startActivity(new Intent(getActivity(), DetailActivity.class)
-                                .putExtra(PARAM_NEW_PERSON, false)
-                                .putExtra(PARAM_POSITION_ID, position)
-                                .putExtra(PARAM_NAME, person.getName())
-                                .putExtra(PARAM_SUBTOTAL_PERSON, person.getSubtotal()));
+                // set click listener
+                personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Person person = (Person) mPersonsAdapter.getItem(position);
+                        if (person != null) {
+                            startActivity(new Intent(getActivity(), DetailActivity.class)
+                                    .putExtra(PARAM_NEW_PERSON, false)
+                                    .putExtra(PARAM_POSITION_ID, position)
+                                    .putExtra(PARAM_NAME, person.getName())
+                                    .putExtra(PARAM_SUBTOTAL_PERSON, person.getSubtotal())
+                                    .putExtra("Person", person));
+                        }
                     }
-                }
-            });
-        }
+                });
+            }
 
 
 
@@ -128,5 +148,20 @@ public class AllocateFragment extends Fragment {
         // set onItemClick to launch detail activity
 
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArray("Persons", getPersonsFromAdapter(mPersonsAdapter));
+        super.onSaveInstanceState(outState);
+    }
+
+    private Person[] getPersonsFromAdapter(PersonAdapter adapter) {
+        Person[] persons = new Person[adapter.getCount()];
+        for (int i = 0; i < adapter.getCount(); i++) {
+            persons[i] = (Person) adapter.getItem(i);
+            Log.v("AllocateFragment", "Name of Person parceled: " + persons[i].getName());
+        }
+        return persons;
     }
 }
