@@ -1,8 +1,10 @@
 package com.laudev.android.splitpea;
 
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,12 +18,14 @@ public class MainActivity extends AppCompatActivity {
     private final String PARAM_NEW_EVENT = "newEvent";
     private final String PARAM_SUBTOTAL = "mSubtotal";
     private final String PARAM_TOTAL = "mTotal";
+    private final String PARAM_EVENT_TOTAL = "mEventTotal";
 
     private boolean newEvent = true;
     private float mSubtotal;
     private float tax;
     private float tip;
     private float mTotal;
+    private Total mEventTotal;
 
     private EditText mSubtotalEditText;
     private EditText mTaxEditText;
@@ -34,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (savedInstanceState == null) {
+            mEventTotal = new Total();
+        }
 
         // find input fields
         mSubtotalEditText = (EditText)findViewById(R.id.subtotal);
@@ -49,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), AllocateActivity.class)
                         .putExtra(PARAM_NEW_EVENT, newEvent)
-                        .putExtra(PARAM_SUBTOTAL, mSubtotal)
-                        .putExtra(PARAM_TOTAL, mTotal);
+                        .putExtra(PARAM_EVENT_TOTAL, mEventTotal);
                 startActivity(intent);
             }
         });
@@ -72,13 +79,16 @@ public class MainActivity extends AppCompatActivity {
         */
     private void getParams() {
         if (mSubtotalEditText.getText() != null) {
-            mSubtotal = Float.parseFloat(mSubtotalEditText.getText().toString());
+            Float mSubtotal = Float.parseFloat(mSubtotalEditText.getText().toString());
+            mEventTotal.setSubtotal(mSubtotal);
         }
         if (mTaxEditText.getText() != null) {
-            tax = Float.parseFloat(mTaxEditText.getText().toString());
+            Float tax = Float.parseFloat(mTaxEditText.getText().toString());
+            mEventTotal.setTax(tax);
         }
         if (mTipEditText.getText() != null) {
-            tip = Float.parseFloat(mTipEditText.getText().toString());
+            Float tip = Float.parseFloat(mTipEditText.getText().toString());
+            mEventTotal.setTip(tip);
         }
     }
 
@@ -88,9 +98,16 @@ public class MainActivity extends AppCompatActivity {
     private void updateTotal() {
         //TODO update mTotal based on input parameters
         getParams();
-        mTotal = mSubtotal * ( 1 + tax ) * ( 1 + tip );
+        mEventTotal.updateTotal();
         DecimalFormat df = new DecimalFormat("#.00");
         df.setRoundingMode(RoundingMode.CEILING);
-        mTotalTextView.setText(df.format(mTotal));
+        mTotalTextView.setText(df.format(mEventTotal.getTotal()));
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        Log.v("MainActivity", "onSaveInstanceState called");
+        outState.putParcelable(PARAM_EVENT_TOTAL, mEventTotal);
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 }

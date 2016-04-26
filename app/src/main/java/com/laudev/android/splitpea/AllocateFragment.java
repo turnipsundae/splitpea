@@ -26,17 +26,15 @@ import java.util.List;
 public class AllocateFragment extends Fragment {
 
     private boolean newPerson;
-    private float mSubtotal;
-    private float mTotal;
+    private Total mEventTotal;
     private List<Person> summaryList;
 
     private final String PARAM_NEW_EVENT = "newEvent";
     private final String PARAM_NEW_PERSON = "newPerson";
     private final String PARAM_POSITION_ID = "positionId";
-    private final String PARAM_SUBTOTAL = "mSubtotal";
-    private final String PARAM_TOTAL = "mTotal";
     private final String PARAM_PERSON = "person";
     private final String PARAM_PERSONS_ARRAY = "persons";
+    private final String PARAM_EVENT_TOTAL = "mEventTotal";
     private final int PERSON_DETAIL_REQUEST = 1;
     private final int ADD_PERSON_REQUEST = 2;
 
@@ -79,18 +77,19 @@ public class AllocateFragment extends Fragment {
             Intent intent = getActivity().getIntent();
 
             // check if brand new activity
-            if (intent.hasExtra(PARAM_NEW_EVENT) && intent.getBooleanExtra(PARAM_NEW_EVENT, true)) {
-                mSubtotal = intent.getFloatExtra(PARAM_SUBTOTAL, 0f);
-                mTotal = intent.getFloatExtra(PARAM_TOTAL, 0f);
+            if (intent.hasExtra(PARAM_NEW_EVENT) && intent.hasExtra(PARAM_EVENT_TOTAL)) {
+                mEventTotal = intent.getParcelableExtra(PARAM_EVENT_TOTAL);
+                float mSubtotal = mEventTotal.getSubtotal();
+                float mTotal = mEventTotal.getTotal();
                 Log.v("AllocateFragment", "Subtotal/Total: " + mSubtotal + "/" + mTotal);
             }
 
             // test data for listview
-            Person[] persons = {new Person("Kevin", 10),
-                    new Person("Melissa", 20),
-                    new Person("Andrew", 30),
-                    new Person("Haylee", 40)};
-            summaryList = new ArrayList<>(Arrays.asList(persons));
+//            Person[] persons = {new Person("Kevin", 10),
+//                    new Person("Melissa", 20),
+//                    new Person("Andrew", 30),
+//                    new Person("Haylee", 40)};
+            summaryList = new ArrayList<>();
         }
         super.onCreate(savedInstanceState);
     }
@@ -120,6 +119,7 @@ public class AllocateFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (view.getId()) {
+                    // if existing person clicked, launch detail activity
                     case (R.id.listview_item_person):
                         Person person = (Person) mPersonsAdapter.getItem(position);
                         startActivityForResult(new Intent(getActivity(), DetailActivity.class)
@@ -128,6 +128,8 @@ public class AllocateFragment extends Fragment {
                                         .putExtra(PARAM_PERSON, person),
                                 PERSON_DETAIL_REQUEST);
                         break;
+
+                    // if footer clicked, launch main activity
                     case (R.id.listview_item_footer):
                         Toast.makeText(getActivity(), "You clicked on a footer", Toast.LENGTH_SHORT).show();
                         break;
@@ -147,21 +149,6 @@ public class AllocateFragment extends Fragment {
                 }
             });
         }
-//         inflate footer Views
-//        if (mSubtotalFooterView == null) {
-//            mSubtotalFooterView = inflater.inflate(R.layout.listview_item_person, container, false);
-//        }
-//        if (mTotalFooterView == null) {
-//            mTotalFooterView = inflater.inflate(R.layout.listview_item_person, container, false);
-//        }
-//         hook up footer data
-//        ((TextView)mSubtotalFooterView).setText("" + subtotal);
-//        ((TextView)mTotalFooterView).setText("" + total);
-//         attach total data as footers
-//        personsListView.addFooterView(mSubtotalFooterView);
-//        personsListView.addFooterView(mTotalFooterView);
-
-        // set onItemClick to launch detail activity
 
         return rootView;
     }
