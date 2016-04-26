@@ -12,6 +12,7 @@ public class AllocateActivity extends AppCompatActivity {
 
     private final String PARAM_NEW_PERSON = "newPerson";
     private final int ADD_PERSON_REQUEST = 2;
+    private final String ALLOCATE_FRAGMENT_TAG = "AllocateFragmentTag";
 
     private boolean newPerson = true;
 
@@ -21,16 +22,9 @@ public class AllocateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_allocate);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(new Intent(getApplicationContext(), DetailActivity.class)
-                        .putExtra(PARAM_NEW_PERSON, newPerson),
-                        ADD_PERSON_REQUEST);
-            }
-        });
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, new AllocateFragment(), ALLOCATE_FRAGMENT_TAG)
+                .commit();
     }
 
 }

@@ -89,10 +89,10 @@ public class DetailFragment extends Fragment {
     }
 
     private void updateParams() {
-        String name = mNameEditText.getText().toString();
-        float subtotalPerson = Float.parseFloat(mDetailedItemEditText.getText().toString());
-        person.setName(name);
-        person.setSubtotal(subtotalPerson);
+        person.setName(
+                mNameEditText.getText().toString());
+        person.setSubtotal(
+                Float.parseFloat(mDetailedItemEditText.getText().toString()));
     }
 
     @Override

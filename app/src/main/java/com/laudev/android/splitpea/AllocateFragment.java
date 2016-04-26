@@ -3,6 +3,7 @@ package com.laudev.android.splitpea;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -119,6 +120,18 @@ public class AllocateFragment extends Fragment {
             }
         });
 
+        // find FAB from parent
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivityForResult(new Intent(getActivity(), DetailActivity.class)
+                                    .putExtra(PARAM_NEW_PERSON, true),
+                            ADD_PERSON_REQUEST);
+                }
+            });
+        }
         // inflate footer Views
 //        if (mSubtotalFooterView == null) {
 //            mSubtotalFooterView = inflater.inflate(R.layout.listview_item_person, container, false);
