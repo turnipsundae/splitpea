@@ -1,6 +1,7 @@
 package com.laudev.android.splitpea;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -19,13 +20,13 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.zip.Inflater;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class AllocateFragment extends Fragment {
 
-    private boolean newPerson;
     private Total mEventTotal;
     private List<Person> summaryList;
 
@@ -84,11 +85,7 @@ public class AllocateFragment extends Fragment {
                 Log.v("AllocateFragment", "Subtotal/Total: " + mSubtotal + "/" + mTotal);
             }
 
-            // test data for listview
-//            Person[] persons = {new Person("Kevin", 10),
-//                    new Person("Melissa", 20),
-//                    new Person("Andrew", 30),
-//                    new Person("Haylee", 40)};
+            // initialize summaryList with no data
             summaryList = new ArrayList<>();
         }
         super.onCreate(savedInstanceState);
@@ -106,13 +103,9 @@ public class AllocateFragment extends Fragment {
         // find and hook up adapter
         ListView personsListView = (ListView) rootView.findViewById(R.id.persons_listview);
         personsListView.setAdapter(mPersonsAdapter);
+
         // add three footers for subtotal, tax + tip, total
-        for (int i = 0; i < 3; i++) {
-            View view = inflater.inflate(R.layout.listview_item_footer, container, false);
-            TextView title = (TextView) view.findViewById(R.id.name_textview);
-            title.setText(getString(R.string.subtotal));
-            personsListView.addFooterView(view);
-        }
+        updateFooterViews(getContext(), personsListView, R.layout.listview_item_footer, mEventTotal);
 
         // set click listener
         personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -151,6 +144,36 @@ public class AllocateFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    // update listview footer with eventTotal
+    private void updateFooterViews(Context context, ListView listView, int resLayoutId, Total eventTotal) {
+        // get inflater and inflate footer view
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        // inflate subtotal
+        View subtotalView = inflater.inflate(resLayoutId, null, false);
+        TextView subtotalName = (TextView) subtotalView.findViewById(R.id.name_textview);
+        subtotalName.setText(getString(R.string.subtotal));
+        TextView subtotalValue = (TextView) subtotalView.findViewById(R.id.subtotal_textview);
+        subtotalValue.setText(Float.toString(eventTotal.getSubtotal()));
+        listView.addFooterView(subtotalView);
+
+        // inflate tax
+        View taxView = inflater.inflate(resLayoutId, null, false);
+        TextView taxName = (TextView) taxView.findViewById(R.id.name_textview);
+        taxName.setText(getString(R.string.tax));
+        TextView taxValue = (TextView) taxView.findViewById(R.id.subtotal_textview);
+        taxValue.setText(Float.toString(eventTotal.getTax()));
+        listView.addFooterView(taxView);
+
+        // inflate total
+        View totalView = inflater.inflate(resLayoutId, null, false);
+        TextView totalName = (TextView) totalView.findViewById(R.id.name_textview);
+        totalName.setText(getString(R.string.total));
+        TextView totalValue = (TextView) totalView.findViewById(R.id.subtotal_textview);
+        totalValue.setText(Float.toString(eventTotal.getTotal()));
+        listView.addFooterView(totalView);
     }
 
     private void updatePersonsWithIntent(Intent intent) {

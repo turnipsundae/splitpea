@@ -7,12 +7,11 @@ import android.os.Parcelable;
  * manages subtotal, tax, tip, total and remaining unaccounted amounts for one event
  */
 public class Total implements Parcelable{
-    private float mRemainder;
     private float mSubtotal;
     private float mTax;
     private float mTip;
     private float mTotal;
-
+    private float mRemainder;
 
     public Total() {
         this(0f, 0f, 0f);
@@ -81,6 +80,7 @@ public class Total implements Parcelable{
         mSubtotal = parcel.readFloat();
         mTax = parcel.readFloat();
         mTip = parcel.readFloat();
+        mTotal = parcel.readFloat();
     }
 
     @Override
@@ -93,6 +93,7 @@ public class Total implements Parcelable{
         dest.writeFloat(mSubtotal);
         dest.writeFloat(mTax);
         dest.writeFloat(mTip);
+        dest.writeFloat(mTotal);
     }
 
     public static final Parcelable.Creator<Total> CREATOR = new Parcelable.Creator<Total>() {
