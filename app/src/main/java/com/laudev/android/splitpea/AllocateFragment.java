@@ -135,6 +135,7 @@ public class AllocateFragment extends Fragment {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    // pass a tax and tip pre-loaded person into new request
                     Person newPerson = new Person();
                     newPerson.setTax(mEventTotal.getTax());
                     newPerson.setTip(mEventTotal.getTip());

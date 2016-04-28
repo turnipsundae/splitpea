@@ -1,9 +1,7 @@
 package com.laudev.android.splitpea;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -37,7 +35,7 @@ public class DetailFragment extends Fragment {
     // references to XML views
     private EditText mNameEditText;
     private EditText mDetailedItemEditText;
-    private EditText mSubtotalEditText;
+    private TextView mSubtotalTextView;
     private EditText mTaxEditText;
     private EditText mTipEditText;
     private TextView mTotalTextView;
@@ -124,6 +122,7 @@ public class DetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         mNameEditText = (EditText)rootView.findViewById(R.id.name_edit_text);
         mDetailedItemEditText = (EditText)rootView.findViewById(R.id.detail_item_edit_text);
+        mSubtotalTextView = (TextView)rootView.findViewById(R.id.subtotal_text_view);
         mTaxEditText = (EditText)rootView.findViewById(R.id.tax_edit_text);
         mTipEditText = (EditText)rootView.findViewById(R.id.tip_edit_text);
         mTotalTextView = (TextView)rootView.findViewById(R.id.total_text_view);
@@ -135,14 +134,9 @@ public class DetailFragment extends Fragment {
         }
 
         if (newPerson) {
-            // if new person, create a new person
-//            person = new Person();
-//            mNameEditText.setText(person.getName());
-//            mDetailedItemEditText.setText(Float.toString(person.getSubtotal()));
+            // get person shell with tax and tip pre-entered
             mTaxEditText.setText(Float.toString(person.getTax()));
             mTipEditText.setText(Float.toString(person.getTip()));
-//            person.updateTotal();
-//            mTotalTextView.setText(Float.toString(person.getTotal()));
         } else {
             // initialize text views with existing person data
             mNameEditText.setText(person.getName());
@@ -160,24 +154,16 @@ public class DetailFragment extends Fragment {
         // is this new person or modify existing?
         if (intent.hasExtra(PARAM_NEW_PERSON)) {
             newPerson = intent.getBooleanExtra(PARAM_NEW_PERSON, true);
-            // get person object
-            if (intent.hasExtra(PARAM_PERSON)) {
-                person = intent.getParcelableExtra(PARAM_PERSON);
-            }
         }
-
-        if (!newPerson) {
-            // get position of item called so edits can be returned
-            if (intent.hasExtra(PARAM_POSITION_ID)) {
-                positionId = intent.getIntExtra(PARAM_POSITION_ID, 0);
-            }
-            // get person object
-            if (intent.hasExtra(PARAM_PERSON)) {
-                person = intent.getParcelableExtra(PARAM_PERSON);
-            }
-
-            Log.v("DetailFragment", "Extracted Parceled person. New? " + newPerson +
-                    " #" + positionId + " " + person.getName() + " " + person.getSubtotal());
+        // get position of item called so edits can be returned
+        if (intent.hasExtra(PARAM_POSITION_ID)) {
+            positionId = intent.getIntExtra(PARAM_POSITION_ID, 0);
         }
+        // get person object
+        if (intent.hasExtra(PARAM_PERSON)) {
+            person = intent.getParcelableExtra(PARAM_PERSON);
+        }
+        Log.v("DetailFragment", "Extracted Parceled person. New? " + newPerson +
+                " #" + positionId + " " + person.getName() + " " + person.getSubtotal());
     }
 }
