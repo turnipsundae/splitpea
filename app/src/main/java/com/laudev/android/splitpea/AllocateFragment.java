@@ -12,15 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.zip.Inflater;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -39,8 +36,8 @@ public class AllocateFragment extends Fragment {
     private final int PERSON_DETAIL_REQUEST = 1;
     private final int ADD_PERSON_REQUEST = 2;
 
-    private View mSubtotalFooterView;
-    private View mTotalFooterView;
+    private TextView mFooterSubtotalValue;
+    private TextView mFooterTotalValue;
 
     private PersonAdapter mPersonsAdapter;
 
@@ -58,12 +55,14 @@ public class AllocateFragment extends Fragment {
                     clickedPerson.setName(person.getName());
                     clickedPerson.setSubtotal(person.getSubtotal());
                     mPersonsAdapter.notifyDataSetChanged();
+                    updateFooterViews();
                 }
                 break;
             case ADD_PERSON_REQUEST:
                 if (resultCode == Activity.RESULT_OK) {
                     Person person = data.getParcelableExtra(PARAM_PERSON);
                     mPersonsAdapter.add(person);
+                    updateFooterViews();
                 }
                 break;
         }
@@ -105,7 +104,7 @@ public class AllocateFragment extends Fragment {
         personsListView.setAdapter(mPersonsAdapter);
 
         // add three footers for subtotal, tax + tip, total
-        updateFooterViews(getContext(), personsListView, R.layout.listview_item_footer, mEventTotal);
+        addFooterViews(getContext(), personsListView, R.layout.listview_item_footer, mEventTotal);
 
         // set click listener
         personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -146,34 +145,53 @@ public class AllocateFragment extends Fragment {
         return rootView;
     }
 
+    private void updateFooterViews() {
+        // get subtotals
+        float subtotal = getSubtotals();
+        mEventTotal.updateSubtotalRemainder(subtotal);
+        if (mFooterSubtotalValue != null) {
+            mFooterSubtotalValue.setText(this.getString(R.string.format_accounted_vs_original,
+                    subtotal, mEventTotal.getSubtotal()));
+        }
+
+        // get totals
+        float total = getTotals();
+        if (mFooterTotalValue != null) {
+            mFooterTotalValue.setText(this.getString(R.string.format_accounted_vs_original,
+                    total, mEventTotal.getTotal()));
+        }
+    }
+
     // update listview footer with eventTotal
-    private void updateFooterViews(Context context, ListView listView, int resLayoutId, Total eventTotal) {
+    private void addFooterViews(Context context, ListView listView, int resLayoutId, Total eventTotal) {
         // get inflater and inflate footer view
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // inflate subtotal
-        View subtotalView = inflater.inflate(resLayoutId, null, false);
-        TextView subtotalName = (TextView) subtotalView.findViewById(R.id.name_textview);
+        View footerSubtotalView = inflater.inflate(resLayoutId, null, false);
+        TextView subtotalName = (TextView) footerSubtotalView.findViewById(R.id.name_textview);
         subtotalName.setText(getString(R.string.subtotal));
-        TextView subtotalValue = (TextView) subtotalView.findViewById(R.id.subtotal_textview);
-        subtotalValue.setText(Float.toString(eventTotal.getSubtotal()));
-        listView.addFooterView(subtotalView);
+        mFooterSubtotalValue = (TextView) footerSubtotalView.findViewById(R.id.subtotal_textview);
+        mFooterSubtotalValue.setText(this.getString(R.string.format_accounted_vs_original,
+                getSubtotals(), mEventTotal.getSubtotal()));
+        listView.addFooterView(footerSubtotalView);
 
         // inflate tax
-        View taxView = inflater.inflate(resLayoutId, null, false);
-        TextView taxName = (TextView) taxView.findViewById(R.id.name_textview);
+        View footerTaxView = inflater.inflate(resLayoutId, null, false);
+        TextView taxName = (TextView) footerTaxView.findViewById(R.id.name_textview);
         taxName.setText(getString(R.string.tax));
-        TextView taxValue = (TextView) taxView.findViewById(R.id.subtotal_textview);
-        taxValue.setText(Float.toString(eventTotal.getTax()));
-        listView.addFooterView(taxView);
+        TextView taxValue = (TextView) footerTaxView.findViewById(R.id.subtotal_textview);
+        taxValue.setText(this.getString(R.string.format_tax_tip, mEventTotal.getTax()));
+        listView.addFooterView(footerTaxView);
 
         // inflate total
-        View totalView = inflater.inflate(resLayoutId, null, false);
-        TextView totalName = (TextView) totalView.findViewById(R.id.name_textview);
+        View footerTotalView = inflater.inflate(resLayoutId, null, false);
+        TextView totalName = (TextView) footerTotalView.findViewById(R.id.name_textview);
         totalName.setText(getString(R.string.total));
-        TextView totalValue = (TextView) totalView.findViewById(R.id.subtotal_textview);
-        totalValue.setText(Float.toString(eventTotal.getTotal()));
-        listView.addFooterView(totalView);
+        mFooterTotalValue = (TextView) footerTotalView.findViewById(R.id.subtotal_textview);
+        mFooterTotalValue.setText(this.getString(R.string.format_accounted_vs_original,
+                getTotals(), mEventTotal.getTotal()));
+        listView.addFooterView(footerTotalView);
     }
 
     private void updatePersonsWithIntent(Intent intent) {
@@ -195,6 +213,27 @@ public class AllocateFragment extends Fragment {
                 mPersonsAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    private float getTotals() {
+        float sum = 0f;
+        if (summaryList != null) {
+            for (Person person : summaryList) {
+                person.updateTotal();
+                sum += person.getTotal();
+            }
+        }
+        return sum;
+    }
+
+    private float getSubtotals() {
+        float sum = 0f;
+        if (summaryList != null) {
+            for (Person person : summaryList) {
+                sum += person.getSubtotal();
+            }
+        }
+        return sum;
     }
 
     @Override
