@@ -40,6 +40,7 @@ public class DetailFragment extends Fragment {
     private EditText mSubtotalEditText;
     private EditText mTaxEditText;
     private EditText mTipEditText;
+    private TextView mTotalTextView;
 
 
     public DetailFragment() {
@@ -95,11 +96,9 @@ public class DetailFragment extends Fragment {
         if (mNameEditText.getText() != null) {
             person.setName(mNameEditText.getText().toString());
         }
-
         if (mDetailedItemEditText.getText() != null) {
             person.setSubtotal(Float.parseFloat(mDetailedItemEditText.getText().toString()));
         }
-
         if (mTaxEditText.getText() != null) {
             person.setTax(Float.parseFloat(mTaxEditText.getText().toString()));
         }
@@ -127,6 +126,8 @@ public class DetailFragment extends Fragment {
         mDetailedItemEditText = (EditText)rootView.findViewById(R.id.detail_item_edit_text);
         mTaxEditText = (EditText)rootView.findViewById(R.id.tax_edit_text);
         mTipEditText = (EditText)rootView.findViewById(R.id.tip_edit_text);
+        mTotalTextView = (TextView)rootView.findViewById(R.id.total_text_view);
+
 
         Intent intent = getActivity().getIntent();
         if (intent != null) {
@@ -135,11 +136,21 @@ public class DetailFragment extends Fragment {
 
         if (newPerson) {
             // if new person, create a new person
-            person = new Person();
+//            person = new Person();
+//            mNameEditText.setText(person.getName());
+//            mDetailedItemEditText.setText(Float.toString(person.getSubtotal()));
+            mTaxEditText.setText(Float.toString(person.getTax()));
+            mTipEditText.setText(Float.toString(person.getTip()));
+//            person.updateTotal();
+//            mTotalTextView.setText(Float.toString(person.getTotal()));
         } else {
             // initialize text views with existing person data
             mNameEditText.setText(person.getName());
             mDetailedItemEditText.setText(Float.toString(person.getSubtotal()));
+            mTaxEditText.setText(Float.toString(person.getTax()));
+            mTipEditText.setText(Float.toString(person.getTip()));
+            person.updateTotal();
+            mTotalTextView.setText(Float.toString(person.getTotal()));
         }
 
         return rootView;
@@ -149,6 +160,10 @@ public class DetailFragment extends Fragment {
         // is this new person or modify existing?
         if (intent.hasExtra(PARAM_NEW_PERSON)) {
             newPerson = intent.getBooleanExtra(PARAM_NEW_PERSON, true);
+            // get person object
+            if (intent.hasExtra(PARAM_PERSON)) {
+                person = intent.getParcelableExtra(PARAM_PERSON);
+            }
         }
 
         if (!newPerson) {

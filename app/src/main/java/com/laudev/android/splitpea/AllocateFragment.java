@@ -135,8 +135,12 @@ public class AllocateFragment extends Fragment {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Person newPerson = new Person();
+                    newPerson.setTax(mEventTotal.getTax());
+                    newPerson.setTip(mEventTotal.getTip());
                     startActivityForResult(new Intent(getActivity(), DetailActivity.class)
-                                    .putExtra(PARAM_NEW_PERSON, true),
+                            .putExtra(PARAM_NEW_PERSON, true)
+                            .putExtra(PARAM_PERSON, newPerson),
                             ADD_PERSON_REQUEST);
                 }
             });
