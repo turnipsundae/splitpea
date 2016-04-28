@@ -1,5 +1,11 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
+
+    <!-- activity titles -->
     <string name="app_name">Split Pea</string>
+    <string name="title_activity_allocate">AllocateActivity</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_confirm_person">Confirm</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -45,10 +51,13 @@
 
     <!-- label for items default cost -->
     <string name="item_cost_default">25</string>
-    <string name="title_activity_allocate">AllocateActivity</string>
-    <string name="title_activity_detail">DetailActivity</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_confirm_person">Confirm</string>
 
+    <!-- 35.00 / 80.00 Accounted / Original format for Total values-->
+    <string name="format_accounted_vs_original"><xliff:g id="accounted">%1.00f</xliff:g> / <xliff:g id="original">%1.00f</xliff:g></string>
 
+    <!-- 15 % Percent format for tax and tip -->
+    <string name="format_tax_tip"><xliff:g id="percent">%1.0f</xliff:g> %%</string>
+
+    <!-- $ 1.00 Dollar amount format -->
+    <string name="format_dollar_amount">$ <xliff:g id="amount">%1.00f</xliff:g></string>
 </resources>

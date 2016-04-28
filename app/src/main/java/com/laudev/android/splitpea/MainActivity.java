@@ -16,15 +16,9 @@ import java.text.DecimalFormat;
 public class MainActivity extends AppCompatActivity {
 
     private final String PARAM_NEW_EVENT = "newEvent";
-    private final String PARAM_SUBTOTAL = "mSubtotal";
-    private final String PARAM_TOTAL = "mTotal";
     private final String PARAM_EVENT_TOTAL = "mEventTotal";
 
     private boolean newEvent = true;
-    private float mSubtotal;
-    private float tax;
-    private float tip;
-    private float mTotal;
     private Total mEventTotal;
 
     private EditText mSubtotalEditText;
@@ -99,9 +93,8 @@ public class MainActivity extends AppCompatActivity {
         //TODO update mTotal based on input parameters
         getParams();
         mEventTotal.updateTotal();
-        DecimalFormat df = new DecimalFormat("#.00");
-        df.setRoundingMode(RoundingMode.CEILING);
-        mTotalTextView.setText(df.format(mEventTotal.getTotal()));
+        String total = this.getString(R.string.format_dollar_amount, mEventTotal.getTotal());
+        mTotalTextView.setText(total);
     }
 
     @Override
