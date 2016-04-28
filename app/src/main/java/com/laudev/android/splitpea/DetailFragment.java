@@ -37,6 +37,9 @@ public class DetailFragment extends Fragment {
     // references to XML views
     private EditText mNameEditText;
     private EditText mDetailedItemEditText;
+    private EditText mSubtotalEditText;
+    private EditText mTaxEditText;
+    private EditText mTipEditText;
 
 
     public DetailFragment() {
@@ -89,10 +92,21 @@ public class DetailFragment extends Fragment {
     }
 
     private void updateParams() {
-        person.setName(
-                mNameEditText.getText().toString());
-        person.setSubtotal(
-                Float.parseFloat(mDetailedItemEditText.getText().toString()));
+        if (mNameEditText.getText() != null) {
+            person.setName(mNameEditText.getText().toString());
+        }
+
+        if (mDetailedItemEditText.getText() != null) {
+            person.setSubtotal(Float.parseFloat(mDetailedItemEditText.getText().toString()));
+        }
+
+        if (mTaxEditText.getText() != null) {
+            person.setTax(Float.parseFloat(mTaxEditText.getText().toString()));
+        }
+        if (mTipEditText.getText() != null) {
+            person.setTip(Float.parseFloat(mTipEditText.getText().toString()));
+        }
+        person.updateTotal();
     }
 
     @Override
@@ -111,6 +125,8 @@ public class DetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         mNameEditText = (EditText)rootView.findViewById(R.id.name_edit_text);
         mDetailedItemEditText = (EditText)rootView.findViewById(R.id.detail_item_edit_text);
+        mTaxEditText = (EditText)rootView.findViewById(R.id.tax_edit_text);
+        mTipEditText = (EditText)rootView.findViewById(R.id.tip_edit_text);
 
         Intent intent = getActivity().getIntent();
         if (intent != null) {
