@@ -194,27 +194,6 @@ public class AllocateFragment extends Fragment {
         listView.addFooterView(footerTotalView);
     }
 
-    private void updatePersonsWithIntent(Intent intent) {
-        // check if intent is null
-        if (intent != null && intent.hasExtra(PARAM_NEW_PERSON) && mPersonsAdapter != null) {
-
-            // get params
-            boolean newPerson = intent.getBooleanExtra(PARAM_NEW_PERSON, true);
-            int positionId = intent.getIntExtra(PARAM_POSITION_ID, 0);
-            Person person = intent.getParcelableExtra(PARAM_PERSON);
-
-            // if a new person was added, add to adapter, otherwise find the positionId and update
-            if (newPerson) {
-                mPersonsAdapter.add(person);
-            } else {
-                Person clickedPerson = (Person) mPersonsAdapter.getItem(positionId);
-                clickedPerson.setName(person.getName());
-                clickedPerson.setSubtotal(person.getSubtotal());
-                mPersonsAdapter.notifyDataSetChanged();
-            }
-        }
-    }
-
     private float getTotals() {
         float sum = 0f;
         if (summaryList != null) {
