@@ -11,7 +11,11 @@ public class Total implements Parcelable{
     private float mTax;
     private float mTip;
     private float mTotal;
-    private float mRemainder;
+    private float mSubtotalAllocated;
+    private float mTaxAllocated;
+    private float mTipAllocated;
+    private float mTotalAllocated;
+    private float mSubtotalRemainder;
 
     public Total() {
         this(0f, 0f, 0f);
@@ -33,7 +37,7 @@ public class Total implements Parcelable{
         mTax = tax;
         mTip = tip;
         updateTotal();
-        mRemainder = mTotal;
+        mSubtotalRemainder = mTotal;
     }
 
     public float getSubtotal() {
@@ -52,8 +56,8 @@ public class Total implements Parcelable{
         return mTotal;
     }
 
-    public float getRemainder() {
-        return mRemainder;
+    public float getSubtotalRemainder() {
+        return mSubtotalRemainder;
     }
 
     public void setSubtotal(float subtotal) {
@@ -68,8 +72,8 @@ public class Total implements Parcelable{
         mTip = tip;
     }
 
-    public void updateRemainder(float amtPaid) {
-        mRemainder -= amtPaid;
+    public void updateSubtotalRemainder(float amtPaid) {
+        mSubtotalRemainder -= amtPaid;
     }
 
     public void updateTotal() {
