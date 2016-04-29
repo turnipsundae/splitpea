@@ -1,6 +1,5 @@
 package com.laudev.android.splitpea;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,13 +9,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -134,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                     mTaxEditText.setText(CORRECT_DECIMAL_FORMAT);
                     mTaxEditText.setSelection(mTaxEditText.getText().length());
                 } else {
-                    mEventTotal.setTax(Float.parseFloat(s.toString()));
+                    mEventTotal.setTaxPercent(Float.parseFloat(s.toString()));
                     updateTotal();
                 }
             }
@@ -162,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                     mTipEditText.setText(CORRECT_DECIMAL_FORMAT);
                     mTipEditText.setSelection(mTipEditText.getText().length());
                 } else {
-                    mEventTotal.setTip(Float.parseFloat(s.toString()));
+                    mEventTotal.setTipPercent(Float.parseFloat(s.toString()));
                     updateTotal();
                 }
             }

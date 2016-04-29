@@ -8,8 +8,8 @@ import android.os.Parcelable;
  */
 public class Total implements Parcelable{
     private float mSubtotal;
-    private float mTax;
-    private float mTip;
+    private float mTaxPercent;
+    private float mTipPercent;
     private float mTotal;
     private float mSubtotalAllocated;
     private float mTaxAllocated;
@@ -32,10 +32,10 @@ public class Total implements Parcelable{
     /*
     * @param subtotal
     */
-    public Total(float subtotal, float tax, float tip) {
+    public Total(float subtotal, float taxPercent, float tipPercent) {
         mSubtotal = subtotal;
-        mTax = tax;
-        mTip = tip;
+        mTaxPercent = taxPercent;
+        mTipPercent = tipPercent;
         updateTotal();
         mSubtotalRemainder = mTotal;
     }
@@ -44,12 +44,20 @@ public class Total implements Parcelable{
         return mSubtotal;
     }
 
-    public float getTax() {
-        return mTax;
+    public float getTaxAmt() {
+        return mTaxPercent * mSubtotal;
     }
 
-    public float getTip() {
-        return mTip;
+    public float getTaxPercent() {
+        return mTaxPercent;
+    }
+
+    public float getTipAmt() {
+        return mTipPercent * mSubtotal;
+    }
+
+    public float getTipPercent() {
+        return mTipPercent;
     }
 
     public float getTotal() {
@@ -64,12 +72,12 @@ public class Total implements Parcelable{
         mSubtotal = subtotal;
     }
 
-    public void setTax(float tax) {
-        mTax = tax;
+    public void setTaxPercent(float tax) {
+        mTaxPercent = tax;
     }
 
-    public void setTip (float tip) {
-        mTip = tip;
+    public void setTipPercent(float tip) {
+        mTipPercent = tip;
     }
 
     public void updateSubtotalRemainder(float amtPaid) {
@@ -77,13 +85,13 @@ public class Total implements Parcelable{
     }
 
     public void updateTotal() {
-        mTotal = mSubtotal * ( 1 + mTax ) * ( 1 + mTip );
+        mTotal = mSubtotal + getTaxAmt() + getTipAmt();
     }
 
     public Total(Parcel parcel) {
         mSubtotal = parcel.readFloat();
-        mTax = parcel.readFloat();
-        mTip = parcel.readFloat();
+        mTaxPercent = parcel.readFloat();
+        mTipPercent = parcel.readFloat();
         mTotal = parcel.readFloat();
     }
 
@@ -95,8 +103,8 @@ public class Total implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeFloat(mSubtotal);
-        dest.writeFloat(mTax);
-        dest.writeFloat(mTip);
+        dest.writeFloat(mTaxPercent);
+        dest.writeFloat(mTipPercent);
         dest.writeFloat(mTotal);
     }
 
