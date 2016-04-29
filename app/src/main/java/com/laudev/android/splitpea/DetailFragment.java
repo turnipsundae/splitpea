@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -26,7 +30,9 @@ import android.widget.TextView;
 public class DetailFragment extends Fragment {
     private final String PARAM_NEW_PERSON = "newPerson";
     private final String PARAM_POSITION_ID = "positionId";
-    private static final String PARAM_PERSON = "person";
+    private final String PARAM_PERSON = "person";
+    private final String DECIMAL = ".";
+    private final String CORRECT_DECIMAL_FORMAT = "0.";
 
     private boolean newPerson;
     private int positionId;
@@ -94,13 +100,13 @@ public class DetailFragment extends Fragment {
         if (mNameEditText.getText() != null) {
             person.setName(mNameEditText.getText().toString());
         }
-        if (mDetailedItemEditText.getText() != null) {
+        if (mDetailedItemEditText.getText().toString().length() > 0) {
             person.setSubtotal(Float.parseFloat(mDetailedItemEditText.getText().toString()));
         }
-        if (mTaxEditText.getText() != null) {
+        if (mTaxEditText.getText().toString().length() > 0) {
             person.setTax(Float.parseFloat(mTaxEditText.getText().toString()));
         }
-        if (mTipEditText.getText() != null) {
+        if (mTipEditText.getText().toString().length() > 0) {
             person.setTip(Float.parseFloat(mTipEditText.getText().toString()));
         }
         person.updateTotal();
@@ -135,14 +141,20 @@ public class DetailFragment extends Fragment {
 
         if (newPerson) {
             // get person shell with tax and tip pre-entered
+            mDetailedItemEditText.addTextChangedListener(mItemTextWatcher);
             mTaxEditText.setText(Float.toString(person.getTax()));
+            mTaxEditText.addTextChangedListener(mTaxTextWatcher);
             mTipEditText.setText(Float.toString(person.getTip()));
+            mTipEditText.addTextChangedListener(mTipTextWatcher);
         } else {
             // initialize text views with existing person data
             mNameEditText.setText(person.getName());
             mDetailedItemEditText.setText(Float.toString(person.getSubtotal()));
+            mDetailedItemEditText.addTextChangedListener(mItemTextWatcher);
             mTaxEditText.setText(Float.toString(person.getTax()));
+            mTaxEditText.addTextChangedListener(mTaxTextWatcher);
             mTipEditText.setText(Float.toString(person.getTip()));
+            mTipEditText.addTextChangedListener(mTipTextWatcher);
             person.updateTotal();
             mTotalTextView.setText(Float.toString(person.getTotal()));
         }
@@ -165,5 +177,101 @@ public class DetailFragment extends Fragment {
         }
         Log.v("DetailFragment", "Extracted Parceled person. New? " + newPerson +
                 " #" + positionId + " " + person.getName() + " " + person.getSubtotal());
+    }
+
+    public TextWatcher mItemTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // check for blank string
+            if (s.toString().length() > 0) {
+
+                // Correct "." input to "0." before parsing
+                if (s.toString().equals(DECIMAL)) {
+                    mDetailedItemEditText.setText(CORRECT_DECIMAL_FORMAT);
+                    mDetailedItemEditText.setSelection(mDetailedItemEditText.getText().length());
+                } else {
+                    person.setSubtotal(Float.parseFloat(s.toString()));
+                    updateSubtotal();
+                    updateTotal();
+                }
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    public TextWatcher mTaxTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // check for blank string
+            if (s.toString().length() > 0) {
+
+                // Correct "." input to "0." before parsing
+                if (s.toString().equals(DECIMAL)) {
+                    mTaxEditText.setText(CORRECT_DECIMAL_FORMAT);
+                    mTaxEditText.setSelection(mTaxEditText.getText().length());
+                } else {
+                    person.setTax(Float.parseFloat(s.toString()));
+                    updateSubtotal();
+                    updateTotal();
+                }
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    public TextWatcher mTipTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // check for blank string
+            if (s.toString().length() > 0) {
+
+                // Correct "." input to "0." before parsing
+                if (s.toString().equals(DECIMAL)) {
+                    mTipEditText.setText(CORRECT_DECIMAL_FORMAT);
+                    mTipEditText.setSelection(mTipEditText.getText().length());
+                } else {
+                    person.setTip(Float.parseFloat(s.toString()));
+                    updateSubtotal();
+                    updateTotal();
+                }
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    private void updateSubtotal() {
+        mSubtotalTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getSubtotal()));
+    }
+
+    private void updateTotal() {
+        person.updateTotal();
+        mTotalTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getTotal()));
     }
 }
