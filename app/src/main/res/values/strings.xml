@@ -17,7 +17,7 @@
     <string name="detail_item">Item</string>
 
     <!-- label for detailed item default amount-->
-    <string name="detail_item_default">25</string>
+    <string name="detail_item_default">25.00</string>
 
     <!-- label for subtotal -->
     <string name="subtotal">Subtotal</string>
@@ -26,7 +26,7 @@
     <string name="tax">Tax</string>
 
     <!-- label for tax default % -->
-    <string name="tax_default">8.5%</string>
+    <string name="tax_default">2.50</string>
 
     <!-- label for tip -->
     <string name="tip">Tip</string>
@@ -50,14 +50,14 @@
     <string name="item">Item</string>
 
     <!-- label for items default cost -->
-    <string name="item_cost_default">25</string>
+    <string name="item_cost_default">25.00</string>
 
     <!-- 35.00 / 80.00 Accounted / Original format for Total values-->
-    <string name="format_accounted_vs_original"><xliff:g id="accounted">%1.00f</xliff:g> / <xliff:g id="original">%1.00f</xliff:g></string>
+    <string name="format_accounted_vs_original"><xliff:g id="accounted">%1.2f</xliff:g> / <xliff:g id="original">%1.2f</xliff:g></string>
 
     <!-- 15 % Percent format for tax and tip -->
-    <string name="format_tax_tip"><xliff:g id="percent">%1.0f</xliff:g> %%</string>
+    <string name="format_tax_tip"><xliff:g id="percent">%1.2f</xliff:g> %%</string>
 
     <!-- $ 1.00 Dollar amount format -->
-    <string name="format_dollar_amount">$ <xliff:g id="amount">%1.00f</xliff:g></string>
+    <string name="format_dollar_amount">$ <xliff:g id="amount">%1.2f</xliff:g></string>
 </resources>
