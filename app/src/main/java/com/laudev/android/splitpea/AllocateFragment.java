@@ -54,6 +54,8 @@ public class AllocateFragment extends Fragment {
                     Person clickedPerson = (Person)mPersonsAdapter.getItem(positionId);
                     clickedPerson.setName(person.getName());
                     clickedPerson.setSubtotal(person.getSubtotal());
+                    clickedPerson.setTaxPercent(person.getTaxPercent());
+                    clickedPerson.setTipPercent(person.getTipPercent());
                     mPersonsAdapter.notifyDataSetChanged();
                     updateFooterViews();
                 }
