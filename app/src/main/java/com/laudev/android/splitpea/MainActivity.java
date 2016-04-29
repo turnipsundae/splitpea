@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
     private final String PARAM_NEW_EVENT = "newEvent";
     private final String PARAM_EVENT_TOTAL = "mEventTotal";
 
+    private final String DECIMAL = ".";
+    private final String CORRECT_DECIMAL_FORMAT = "0.";
+
     private boolean newEvent = true;
     private Total mEventTotal;
 
@@ -26,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText mTipEditText;
     private TextView mTotalTextView;
     private Button mAllocate;
-    private Button mCalcTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +43,11 @@ public class MainActivity extends AppCompatActivity {
 
         // find input fields
         mSubtotalEditText = (EditText)findViewById(R.id.subtotal);
+        mSubtotalEditText.addTextChangedListener(mSubtotalTextWatcher);
         mTaxEditText = (EditText)findViewById(R.id.tax);
+        mTaxEditText.addTextChangedListener(mTaxTextWatcher);
         mTipEditText = (EditText)findViewById(R.id.tip);
+        mTipEditText.addTextChangedListener(mTipTextWatcher);
         mTotalTextView = (TextView)findViewById(R.id.total);
 
         // add button to allocate costs for now
@@ -55,46 +62,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        // add button to calculate mTotal for now
-        // remove this later
-        mCalcTotal = (Button)findViewById(R.id.calc_total);
-        mCalcTotal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateTotal();
-            }
-        });
-    }
-
-    /*
-        * get mSubtotal, tax and tip entries from screen
-        * if values are not filled out, assumes default values
-        */
-    private void getParams() {
-        if (mSubtotalEditText.getText() != null) {
-            Float mSubtotal = Float.parseFloat(mSubtotalEditText.getText().toString());
-            mEventTotal.setSubtotal(mSubtotal);
-        }
-        if (mTaxEditText.getText() != null) {
-            Float tax = Float.parseFloat(mTaxEditText.getText().toString());
-            mEventTotal.setTax(tax);
-        }
-        if (mTipEditText.getText() != null) {
-            Float tip = Float.parseFloat(mTipEditText.getText().toString());
-            mEventTotal.setTip(tip);
-        }
     }
 
     /*
     * update mTotal TextView based on input params
     */
     private void updateTotal() {
-        //TODO update mTotal based on input parameters
-        getParams();
         mEventTotal.updateTotal();
-        String total = this.getString(R.string.format_dollar_amount, mEventTotal.getTotal());
-        mTotalTextView.setText(total);
+        mTotalTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), mEventTotal.getTotal()));
     }
 
     @Override
@@ -103,4 +78,88 @@ public class MainActivity extends AppCompatActivity {
         outState.putParcelable(PARAM_EVENT_TOTAL, mEventTotal);
         super.onSaveInstanceState(outState, outPersistentState);
     }
+
+    public TextWatcher mSubtotalTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // check for blank string
+            if (s.toString().length() > 0) {
+
+                // Correct "." input to "0." before parsing
+                if (s.toString().equals(DECIMAL)) {
+                    mSubtotalEditText.setText(CORRECT_DECIMAL_FORMAT);
+                    mSubtotalEditText.setSelection(mSubtotalEditText.getText().length());
+                } else {
+                    mEventTotal.setSubtotal(Float.parseFloat(s.toString()));
+                    updateTotal();
+                }
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    public TextWatcher mTaxTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // check for blank string
+            if (s.toString().length() > 0) {
+
+                // Correct "." input to "0." before parsing
+                if (s.toString().equals(DECIMAL)) {
+                    mTaxEditText.setText(CORRECT_DECIMAL_FORMAT);
+                    mTaxEditText.setSelection(mTaxEditText.getText().length());
+                } else {
+                    mEventTotal.setTax(Float.parseFloat(s.toString()));
+                    updateTotal();
+                }
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    public TextWatcher mTipTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // check for blank string
+            if (s.toString().length() > 0) {
+
+                // Correct "." input to "0." before parsing
+                if (s.toString().equals(DECIMAL)) {
+                    mTipEditText.setText(CORRECT_DECIMAL_FORMAT);
+                    mTipEditText.setSelection(mTipEditText.getText().length());
+                } else {
+                    mEventTotal.setTip(Float.parseFloat(s.toString()));
+                    updateTotal();
+                }
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
 }
