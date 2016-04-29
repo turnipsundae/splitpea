@@ -58,7 +58,7 @@ public class Person implements Parcelable{
     }
 
     public float getTotal() {
-        return mTotal;
+        return mSubtotal + getTaxAmt() + getTipAmt();
     }
 
     public void setName(String name) {

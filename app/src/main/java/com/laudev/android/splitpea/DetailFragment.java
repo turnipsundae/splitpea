@@ -40,7 +40,7 @@ public class DetailFragment extends Fragment {
     private EditText mNameEditText;
     private EditText mDetailedItemEditText;
     private TextView mSubtotalTextView;
-    private EditText mTaxEditText;
+    private TextView mTaxTextView;
     private EditText mTipEditText;
     private TextView mTotalTextView;
 
@@ -84,8 +84,8 @@ public class DetailFragment extends Fragment {
 //        if (mDetailedItemEditText.getText().toString().length() > 0) {
 //            person.setSubtotal(Float.parseFloat(mDetailedItemEditText.getText().toString()));
 //        }
-//        if (mTaxEditText.getText().toString().length() > 0) {
-//            person.setTaxPercent(Float.parseFloat(mTaxEditText.getText().toString()));
+//        if (mTaxTextView.getText().toString().length() > 0) {
+//            person.setTaxPercent(Float.parseFloat(mTaxTextView.getText().toString()));
 //        }
 //        if (mTipEditText.getText().toString().length() > 0) {
 //            person.setTipPercent(Float.parseFloat(mTipEditText.getText().toString()));
@@ -110,7 +110,7 @@ public class DetailFragment extends Fragment {
         mNameEditText = (EditText)rootView.findViewById(R.id.name_edit_text);
         mDetailedItemEditText = (EditText)rootView.findViewById(R.id.detail_item_edit_text);
         mSubtotalTextView = (TextView)rootView.findViewById(R.id.subtotal_text_view);
-        mTaxEditText = (EditText)rootView.findViewById(R.id.tax_edit_text);
+        mTaxTextView = (TextView)rootView.findViewById(R.id.tax_text_view);
         mTipEditText = (EditText)rootView.findViewById(R.id.tip_edit_text);
         mTotalTextView = (TextView)rootView.findViewById(R.id.total_text_view);
 
@@ -122,8 +122,7 @@ public class DetailFragment extends Fragment {
 
         // get person shell with tax and tip pre-entered
         mDetailedItemEditText.addTextChangedListener(mItemTextWatcher);
-        mTaxEditText.setText(Float.toString(person.getTaxAmt()));
-        mTaxEditText.addTextChangedListener(mTaxTextWatcher);
+        mTaxTextView.setText(Float.toString(person.getTaxAmt()));
         mTipEditText.setText(Float.toString(person.getTipPercent()));
         mTipEditText.addTextChangedListener(mTipTextWatcher);
 
@@ -172,34 +171,7 @@ public class DetailFragment extends Fragment {
                 } else {
                     person.setSubtotal(Float.parseFloat(s.toString()));
                     updateSubtotal();
-                    updateTotal();
-                }
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
-
-    public TextWatcher mTaxTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // check for blank string
-            if (s.toString().length() > 0) {
-
-                // Correct "." input to "0." before parsing
-                if (s.toString().equals(DECIMAL)) {
-                    mTaxEditText.setText(CORRECT_DECIMAL_FORMAT);
-                    mTaxEditText.setSelection(mTaxEditText.getText().length());
-                } else {
-                    person.setTaxPercent(Float.parseFloat(s.toString()));
+                    updateTax();
                     updateTotal();
                 }
             }
@@ -243,8 +215,11 @@ public class DetailFragment extends Fragment {
         mSubtotalTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getSubtotal()));
     }
 
+    private void updateTax() {
+        mTaxTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getTaxAmt()));
+    }
+
     private void updateTotal() {
-        person.updateTotal();
         mTotalTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getTotal()));
     }
 }

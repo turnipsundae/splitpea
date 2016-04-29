@@ -62,13 +62,12 @@
             android:layout_weight="1"
             android:text="@string/tax" />
 
-        <EditText
-            android:id="@+id/tax_edit_text"
+        <TextView
+            android:id="@+id/tax_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/tax_default"
-            android:inputType="numberDecimal"/>
+            android:hint="@string/tax_default"/>
     </LinearLayout>
 
     <LinearLayout

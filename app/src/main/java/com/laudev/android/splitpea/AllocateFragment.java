@@ -203,7 +203,6 @@ public class AllocateFragment extends Fragment {
         float sum = 0f;
         if (summaryList != null) {
             for (Person person : summaryList) {
-                person.updateTotal();
                 sum += person.getTotal();
             }
         }
