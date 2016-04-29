@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /*
-    * update mTotal TextView based on input params
+    * update mAmt TextView based on input params
     */
     private void updateTotal() {
         mEventTotal.updateTotal();

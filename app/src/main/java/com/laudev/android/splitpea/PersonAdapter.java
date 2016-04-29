@@ -1,14 +1,11 @@
 package com.laudev.android.splitpea;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -57,7 +54,7 @@ public class PersonAdapter extends BaseAdapter {
     public void bindView(View view, Context context, Person person) {
         ListItemHolder holder = (ListItemHolder)view.getTag();
         holder.mName.setText(person.getName());
-        holder.mSubtotal.setText("" + person.getSubtotal());
+        holder.mAmt.setText(context.getString(R.string.format_dollar_amount, person.getTotal()));
     }
 
     public void add(Object object) {
