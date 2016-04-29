@@ -139,24 +139,22 @@ public class DetailFragment extends Fragment {
             getParamsFromIntent(intent);
         }
 
-        if (newPerson) {
-            // get person shell with tax and tip pre-entered
-            mDetailedItemEditText.addTextChangedListener(mItemTextWatcher);
-            mTaxEditText.setText(Float.toString(person.getTax()));
-            mTaxEditText.addTextChangedListener(mTaxTextWatcher);
-            mTipEditText.setText(Float.toString(person.getTip()));
-            mTipEditText.addTextChangedListener(mTipTextWatcher);
-        } else {
+        // get person shell with tax and tip pre-entered
+        mDetailedItemEditText.addTextChangedListener(mItemTextWatcher);
+        mTaxEditText.setText(Float.toString(person.getTax()));
+        mTaxEditText.addTextChangedListener(mTaxTextWatcher);
+        mTipEditText.setText(Float.toString(person.getTip()));
+        mTipEditText.addTextChangedListener(mTipTextWatcher);
+
+        if (!newPerson) {
             // initialize text views with existing person data
             mNameEditText.setText(person.getName());
             mDetailedItemEditText.setText(Float.toString(person.getSubtotal()));
-            mDetailedItemEditText.addTextChangedListener(mItemTextWatcher);
-            mTaxEditText.setText(Float.toString(person.getTax()));
-            mTaxEditText.addTextChangedListener(mTaxTextWatcher);
-            mTipEditText.setText(Float.toString(person.getTip()));
-            mTipEditText.addTextChangedListener(mTipTextWatcher);
-            person.updateTotal();
-            mTotalTextView.setText(Float.toString(person.getTotal()));
+//            mTaxEditText.setText(Float.toString(person.getTax()));
+//            mTaxEditText.addTextChangedListener(mTaxTextWatcher);
+//            mTipEditText.setText(Float.toString(person.getTip()));
+//            mTipEditText.addTextChangedListener(mTipTextWatcher);
+            updateTotal();
         }
 
         return rootView;
@@ -225,7 +223,6 @@ public class DetailFragment extends Fragment {
                     mTaxEditText.setSelection(mTaxEditText.getText().length());
                 } else {
                     person.setTax(Float.parseFloat(s.toString()));
-                    updateSubtotal();
                     updateTotal();
                 }
             }
@@ -254,7 +251,6 @@ public class DetailFragment extends Fragment {
                     mTipEditText.setSelection(mTipEditText.getText().length());
                 } else {
                     person.setTip(Float.parseFloat(s.toString()));
-                    updateSubtotal();
                     updateTotal();
                 }
             }
