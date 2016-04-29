@@ -85,10 +85,10 @@ public class DetailFragment extends Fragment {
 //            person.setSubtotal(Float.parseFloat(mDetailedItemEditText.getText().toString()));
 //        }
 //        if (mTaxEditText.getText().toString().length() > 0) {
-//            person.setTax(Float.parseFloat(mTaxEditText.getText().toString()));
+//            person.setTaxPercent(Float.parseFloat(mTaxEditText.getText().toString()));
 //        }
 //        if (mTipEditText.getText().toString().length() > 0) {
-//            person.setTip(Float.parseFloat(mTipEditText.getText().toString()));
+//            person.setTipPercent(Float.parseFloat(mTipEditText.getText().toString()));
 //        }
 //        person.updateTotal();
     }
@@ -122,9 +122,9 @@ public class DetailFragment extends Fragment {
 
         // get person shell with tax and tip pre-entered
         mDetailedItemEditText.addTextChangedListener(mItemTextWatcher);
-        mTaxEditText.setText(Float.toString(person.getTax()));
+        mTaxEditText.setText(Float.toString(person.getTaxAmt()));
         mTaxEditText.addTextChangedListener(mTaxTextWatcher);
-        mTipEditText.setText(Float.toString(person.getTip()));
+        mTipEditText.setText(Float.toString(person.getTipPercent()));
         mTipEditText.addTextChangedListener(mTipTextWatcher);
 
         if (!newPerson) {
@@ -199,7 +199,7 @@ public class DetailFragment extends Fragment {
                     mTaxEditText.setText(CORRECT_DECIMAL_FORMAT);
                     mTaxEditText.setSelection(mTaxEditText.getText().length());
                 } else {
-                    person.setTax(Float.parseFloat(s.toString()));
+                    person.setTaxPercent(Float.parseFloat(s.toString()));
                     updateTotal();
                 }
             }
@@ -227,7 +227,7 @@ public class DetailFragment extends Fragment {
                     mTipEditText.setText(CORRECT_DECIMAL_FORMAT);
                     mTipEditText.setSelection(mTipEditText.getText().length());
                 } else {
-                    person.setTip(Float.parseFloat(s.toString()));
+                    person.setTipPercent(Float.parseFloat(s.toString()));
                     updateTotal();
                 }
             }

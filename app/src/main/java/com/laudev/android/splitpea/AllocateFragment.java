@@ -137,8 +137,8 @@ public class AllocateFragment extends Fragment {
                 public void onClick(View view) {
                     // pass a tax and tip pre-loaded person into new request
                     Person newPerson = new Person();
-                    newPerson.setTax(mEventTotal.getTax());
-                    newPerson.setTip(mEventTotal.getTip());
+                    newPerson.setTaxPercent(mEventTotal.getTaxPercent());
+                    newPerson.setTipPercent(mEventTotal.getTipPercent());
                     startActivityForResult(new Intent(getActivity(), DetailActivity.class)
                             .putExtra(PARAM_NEW_PERSON, true)
                             .putExtra(PARAM_PERSON, newPerson),
@@ -186,7 +186,7 @@ public class AllocateFragment extends Fragment {
         TextView taxName = (TextView) footerTaxView.findViewById(R.id.name_textview);
         taxName.setText(getString(R.string.tax));
         TextView taxValue = (TextView) footerTaxView.findViewById(R.id.subtotal_textview);
-        taxValue.setText(this.getString(R.string.format_tax_tip, mEventTotal.getTax()));
+        taxValue.setText(this.getString(R.string.format_tax_tip, mEventTotal.getTaxPercent()));
         listView.addFooterView(footerTaxView);
 
         // inflate total

@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                     mTaxEditText.setText(CORRECT_DECIMAL_FORMAT);
                     mTaxEditText.setSelection(mTaxEditText.getText().length());
                 } else {
-                    mEventTotal.setTaxPercent(Float.parseFloat(s.toString()));
+                    mEventTotal.setTaxAmt(Float.parseFloat(s.toString()));
                     updateTotal();
                 }
             }

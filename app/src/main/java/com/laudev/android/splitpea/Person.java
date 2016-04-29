@@ -9,8 +9,8 @@ import android.os.Parcelable;
 public class Person implements Parcelable{
     private String mName;
     private float mSubtotal;
-    private float mTax;
-    private float mTip;
+    private float mTaxPercent;
+    private float mTipPercent;
     private float mTotal;
 
     public Person() {
@@ -25,11 +25,11 @@ public class Person implements Parcelable{
         this(name, subtotal, 0f, 0f);
     }
 
-    public Person(String name, float subtotal, float tax, float tip) {
+    public Person(String name, float subtotal, float taxPercent, float tipPercent) {
         mName = name;
         mSubtotal = subtotal;
-        mTax = tax;
-        mTip = tip;
+        mTaxPercent = taxPercent;
+        mTipPercent = tipPercent;
         updateTotal();
     }
 
@@ -41,12 +41,20 @@ public class Person implements Parcelable{
         return mSubtotal;
     }
 
-    public float getTax() {
-        return mTax;
+    public float getTaxAmt() {
+        return mTaxPercent * mSubtotal;
     }
 
-    public float getTip() {
-        return mTip;
+    public float getTaxPercent() {
+        return mTaxPercent;
+    }
+
+    public float getTipAmt() {
+        return mTipPercent * mSubtotal;
+    }
+
+    public float getTipPercent() {
+        return mTipPercent;
     }
 
     public float getTotal() {
@@ -61,23 +69,31 @@ public class Person implements Parcelable{
         mSubtotal = subtotal;
     }
 
-    public void setTax(float tax) {
-        mTax = tax;
+    public void setTaxAmt(float taxAmt) {
+        mTaxPercent = taxAmt / mSubtotal;
     }
 
-    public void setTip (float tip) {
-        mTip = tip;
+    public void setTaxPercent(float tax) {
+        mTaxPercent = tax;
+    }
+
+    public void setTipAmt(float tipAmt) {
+        mTipPercent = tipAmt / mSubtotal;
+    }
+
+    public void setTipPercent(float tip) {
+        mTipPercent = tip;
     }
 
     public void updateTotal() {
-        mTotal = mSubtotal * ( 1 + mTax ) * ( 1 + mTip );
+        mTotal = mSubtotal + getTaxAmt() + getTipAmt();
     }
 
     public Person(Parcel parcel) {
         mName = parcel.readString();
         mSubtotal = parcel.readFloat();
-        mTax = parcel.readFloat();
-        mTip = parcel.readFloat();
+        mTaxPercent = parcel.readFloat();
+        mTipPercent = parcel.readFloat();
         mTotal = parcel.readFloat();
     }
 
@@ -90,8 +106,8 @@ public class Person implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mName);
         dest.writeFloat(mSubtotal);
-        dest.writeFloat(mTax);
-        dest.writeFloat(mTip);
+        dest.writeFloat(mTaxPercent);
+        dest.writeFloat(mTipPercent);
         dest.writeFloat(mTotal);
     }
 

@@ -72,8 +72,16 @@ public class Total implements Parcelable{
         mSubtotal = subtotal;
     }
 
+    public void setTaxAmt(float taxAmt) {
+        mTaxPercent = taxAmt / mSubtotal;
+    }
+
     public void setTaxPercent(float tax) {
         mTaxPercent = tax;
+    }
+
+    public void setTipAmt(float tipAmt) {
+        mTipPercent = tipAmt / mSubtotal;
     }
 
     public void setTipPercent(float tip) {
