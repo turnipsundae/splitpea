@@ -1,5 +1,6 @@
 package com.laudev.android.splitpea;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText mTaxEditText;
     private EditText mTipEditText;
     private TextView mTotalTextView;
-    private Button mAllocate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,18 +52,6 @@ public class MainActivity extends AppCompatActivity {
         mTipEditText.addTextChangedListener(mTipTextWatcher);
         mTotalTextView = (TextView)findViewById(R.id.total);
 
-        // add button to allocate costs for now
-        // remove this later
-        mAllocate = (Button)findViewById(R.id.allocate);
-        mAllocate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), AllocateActivity.class)
-                        .putExtra(PARAM_NEW_EVENT, newEvent)
-                        .putExtra(PARAM_EVENT_TOTAL, mEventTotal);
-                startActivity(intent);
-            }
-        });
     }
 
     /*
@@ -70,6 +60,27 @@ public class MainActivity extends AppCompatActivity {
     private void updateTotal() {
         mEventTotal.updateTotal();
         mTotalTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), mEventTotal.getTotal()));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_mainactivity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_confirm:
+                Intent intent = new Intent(getApplicationContext(), AllocateActivity.class)
+                        .putExtra(PARAM_NEW_EVENT, newEvent)
+                        .putExtra(PARAM_EVENT_TOTAL, mEventTotal);
+                startActivity(intent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

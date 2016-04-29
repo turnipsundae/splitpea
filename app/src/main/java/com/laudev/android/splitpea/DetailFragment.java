@@ -16,8 +16,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,23 +50,6 @@ public class DetailFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param subtotal sum of all detailed items.
-     * @param total sum of subtotal and tax.
-     * @return A new instance of fragment DetailFragment.
-     */
-//    public static DetailFragment newInstance(float subtotal, float total) {
-//        DetailFragment fragment = new DetailFragment();
-//        Bundle args = new Bundle();
-//        args.putFloat(PARAM_SUBTOTAL, subtotal);
-//        args.putFloat(PARAM_TOTAL, total);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -80,7 +61,7 @@ public class DetailFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.action_confirm_person:
+            case R.id.action_confirm:
                 updateParams();
                 getActivity().setResult(Activity.RESULT_OK, confirmPersonDetailIntent());
                 getActivity().finish();
@@ -100,16 +81,16 @@ public class DetailFragment extends Fragment {
         if (mNameEditText.getText() != null) {
             person.setName(mNameEditText.getText().toString());
         }
-        if (mDetailedItemEditText.getText().toString().length() > 0) {
-            person.setSubtotal(Float.parseFloat(mDetailedItemEditText.getText().toString()));
-        }
-        if (mTaxEditText.getText().toString().length() > 0) {
-            person.setTax(Float.parseFloat(mTaxEditText.getText().toString()));
-        }
-        if (mTipEditText.getText().toString().length() > 0) {
-            person.setTip(Float.parseFloat(mTipEditText.getText().toString()));
-        }
-        person.updateTotal();
+//        if (mDetailedItemEditText.getText().toString().length() > 0) {
+//            person.setSubtotal(Float.parseFloat(mDetailedItemEditText.getText().toString()));
+//        }
+//        if (mTaxEditText.getText().toString().length() > 0) {
+//            person.setTax(Float.parseFloat(mTaxEditText.getText().toString()));
+//        }
+//        if (mTipEditText.getText().toString().length() > 0) {
+//            person.setTip(Float.parseFloat(mTipEditText.getText().toString()));
+//        }
+//        person.updateTotal();
     }
 
     @Override
@@ -150,10 +131,6 @@ public class DetailFragment extends Fragment {
             // initialize text views with existing person data
             mNameEditText.setText(person.getName());
             mDetailedItemEditText.setText(Float.toString(person.getSubtotal()));
-//            mTaxEditText.setText(Float.toString(person.getTax()));
-//            mTaxEditText.addTextChangedListener(mTaxTextWatcher);
-//            mTipEditText.setText(Float.toString(person.getTip()));
-//            mTipEditText.addTextChangedListener(mTipTextWatcher);
             updateTotal();
         }
 

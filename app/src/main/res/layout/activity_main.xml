@@ -96,10 +96,4 @@
             android:hint="@string/item_cost_default" />
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_friend"
-        android:id="@+id/allocate"/>
-
 </LinearLayout>
