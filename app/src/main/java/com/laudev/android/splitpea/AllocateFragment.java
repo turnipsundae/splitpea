@@ -33,6 +33,7 @@ public class AllocateFragment extends Fragment {
     private final String PARAM_PERSON = "person";
     private final String PARAM_PERSONS_ARRAY = "persons";
     private final String PARAM_EVENT_TOTAL = "mEventTotal";
+    private final String PARAM_SUBTOTAL_REMAINING = "mSubtotalRemaining";
     private final int PERSON_DETAIL_REQUEST = 1;
     private final int ADD_PERSON_REQUEST = 2;
 
@@ -119,7 +120,8 @@ public class AllocateFragment extends Fragment {
                         startActivityForResult(new Intent(getActivity(), DetailActivity.class)
                                         .putExtra(PARAM_NEW_PERSON, false)
                                         .putExtra(PARAM_POSITION_ID, position)
-                                        .putExtra(PARAM_PERSON, person),
+                                        .putExtra(PARAM_PERSON, person)
+                                        .putExtra(PARAM_SUBTOTAL_REMAINING, getSubtotalRemaining()),
                                 PERSON_DETAIL_REQUEST);
                         break;
 
@@ -143,7 +145,8 @@ public class AllocateFragment extends Fragment {
                     newPerson.setTipPercent(mEventTotal.getTipPercent());
                     startActivityForResult(new Intent(getActivity(), DetailActivity.class)
                             .putExtra(PARAM_NEW_PERSON, true)
-                            .putExtra(PARAM_PERSON, newPerson),
+                            .putExtra(PARAM_PERSON, newPerson)
+                            .putExtra(PARAM_SUBTOTAL_REMAINING, getSubtotalRemaining()),
                             ADD_PERSON_REQUEST);
                 }
             });
@@ -201,6 +204,10 @@ public class AllocateFragment extends Fragment {
         listView.addFooterView(footerTotalView);
     }
 
+    private float getSubtotalRemaining() {
+        return mEventTotal.getSubtotal() - getSubtotals();
+    }
+
     private float getTotals() {
         float sum = 0f;
         if (summaryList != null) {
@@ -213,7 +220,7 @@ public class AllocateFragment extends Fragment {
 
     private float getSubtotals() {
         float sum = 0f;
-        if (summaryList != null) {
+        if (summaryList.size() > 0) {
             for (Person person : summaryList) {
                 sum += person.getSubtotal();
             }

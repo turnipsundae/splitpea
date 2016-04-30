@@ -29,14 +29,17 @@ public class DetailFragment extends Fragment {
     private final String PARAM_NEW_PERSON = "newPerson";
     private final String PARAM_POSITION_ID = "positionId";
     private final String PARAM_PERSON = "person";
+    private final String PARAM_SUBTOTAL_REMAINING = "mSubtotalRemaining";
     private final String DECIMAL = ".";
     private final String CORRECT_DECIMAL_FORMAT = "0.";
 
     private boolean newPerson;
     private int positionId;
     private Person person;
+    private float mSubtotalRemaining;
 
     // references to XML views
+    private TextView mSubtotalRemainingTextView;
     private EditText mNameEditText;
     private EditText mDetailedItemEditText;
     private TextView mSubtotalTextView;
@@ -107,6 +110,7 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+        mSubtotalRemainingTextView = (TextView)rootView.findViewById(R.id.subtotal_remaining_text_view);
         mNameEditText = (EditText)rootView.findViewById(R.id.name_edit_text);
         mDetailedItemEditText = (EditText)rootView.findViewById(R.id.detail_item_edit_text);
         mSubtotalTextView = (TextView)rootView.findViewById(R.id.subtotal_text_view);
@@ -121,6 +125,7 @@ public class DetailFragment extends Fragment {
         }
 
         // get person shell with tax and tip pre-entered
+        mSubtotalRemainingTextView.setText(getString(R.string.format_dollar_amount, mSubtotalRemaining));
         mDetailedItemEditText.addTextChangedListener(mItemTextWatcher);
         mTaxTextView.setText(Float.toString(person.getTaxAmt()));
         mTipEditText.setText(Float.toString(person.getTipPercent()));
@@ -149,8 +154,13 @@ public class DetailFragment extends Fragment {
         if (intent.hasExtra(PARAM_PERSON)) {
             person = intent.getParcelableExtra(PARAM_PERSON);
         }
+        // get event totals
+        if (intent.hasExtra(PARAM_SUBTOTAL_REMAINING)) {
+            mSubtotalRemaining = intent.getFloatExtra(PARAM_SUBTOTAL_REMAINING, 0f);
+        }
         Log.v("DetailFragment", "Extracted Parceled person. New? " + newPerson +
-                " #" + positionId + " " + person.getName() + " " + person.getSubtotal());
+                " #" + positionId + " " + person.getName() + " " + person.getSubtotal() +
+                " Event subtotal: " + mSubtotalRemaining);
     }
 
     public TextWatcher mItemTextWatcher = new TextWatcher() {
@@ -170,6 +180,7 @@ public class DetailFragment extends Fragment {
                     mDetailedItemEditText.setSelection(mDetailedItemEditText.getText().length());
                 } else {
                     person.setSubtotal(Float.parseFloat(s.toString()));
+                    updateSubtotalRemaining();
                     updateSubtotal();
                     updateTax();
                     updateTotal();
@@ -210,6 +221,14 @@ public class DetailFragment extends Fragment {
 
         }
     };
+
+    private float getSubtotalRemaining() {
+        return mSubtotalRemaining - person.getSubtotal();
+    }
+
+    private void updateSubtotalRemaining() {
+        mSubtotalRemainingTextView.setText(getString(R.string.format_dollar_amount, getSubtotalRemaining()));
+    }
 
     private void updateSubtotal() {
         mSubtotalTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getSubtotal()));

@@ -43,6 +43,9 @@
     <!-- label for adding more people -->
     <string name="add_friend">+Friend</string>
 
+    <!-- label for remaining subtotal in Detail Fragment -->
+    <string name="subtotal_remaining">Subtotal remaining</string>
+
     <!-- label for additional people names-->
     <string name="name">Name</string>
 
