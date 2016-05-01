@@ -49,7 +49,7 @@ public class Total implements Parcelable{
     }
 
     public float getTaxPercent() {
-        return mTaxPercent;
+        return mTaxPercent * 100f;
     }
 
     public float getTipAmt() {
@@ -57,7 +57,7 @@ public class Total implements Parcelable{
     }
 
     public float getTipPercent() {
-        return mTipPercent;
+        return mTipPercent * 100f;
     }
 
     public float getTotal() {
@@ -77,7 +77,7 @@ public class Total implements Parcelable{
     }
 
     public void setTaxPercent(float tax) {
-        mTaxPercent = tax;
+        mTaxPercent = tax / 100f;
     }
 
     public void setTipAmt(float tipAmt) {
@@ -85,7 +85,7 @@ public class Total implements Parcelable{
     }
 
     public void setTipPercent(float tip) {
-        mTipPercent = tip;
+        mTipPercent = tip / 100f ;
     }
 
     public void updateSubtotalRemainder(float amtPaid) {

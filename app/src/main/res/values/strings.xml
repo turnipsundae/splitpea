@@ -59,7 +59,7 @@
     <string name="format_accounted_vs_original"><xliff:g id="accounted">%1.2f</xliff:g> / <xliff:g id="original">%1.2f</xliff:g></string>
 
     <!-- 15 % Percent format for tax and tip -->
-    <string name="format_tax_tip"><xliff:g id="percent">%1.2f</xliff:g> %%</string>
+    <string name="format_tax_tip"><xliff:g id="percent">%1.1f</xliff:g> %%</string>
 
     <!-- $ 1.00 Dollar amount format -->
     <string name="format_dollar_amount">$ <xliff:g id="amount">%1.2f</xliff:g></string>
