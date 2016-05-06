@@ -46,6 +46,9 @@ public class DetailFragment extends Fragment {
     private TextView mTaxTextView;
     private EditText mTipEditText;
     private TextView mTotalTextView;
+    private EditText mItemEditText1;
+    private EditText mItemEditText2;
+    private EditText mItemEditText3;
 
 
     public DetailFragment() {
@@ -117,6 +120,9 @@ public class DetailFragment extends Fragment {
         mTaxTextView = (TextView)rootView.findViewById(R.id.tax_text_view);
         mTipEditText = (EditText)rootView.findViewById(R.id.tip_edit_text);
         mTotalTextView = (TextView)rootView.findViewById(R.id.total_text_view);
+//        mItemEditText1 = (EditText)rootView.findViewById(R.id.detail_item_edit_text);
+        mItemEditText2 = (EditText)rootView.findViewById(R.id.detail_item_edit_text_2);
+        mItemEditText3 = (EditText)rootView.findViewById(R.id.detail_item_edit_text_3);
 
 
         Intent intent = getActivity().getIntent();
@@ -127,6 +133,8 @@ public class DetailFragment extends Fragment {
         // get person shell with tax and tip pre-entered
         mSubtotalRemainingTextView.setText(getString(R.string.format_dollar_amount, mSubtotalRemaining));
         mDetailedItemEditText.addTextChangedListener(mItemTextWatcher);
+        mItemEditText2.addTextChangedListener(mItemTextWatcher2);
+        mItemEditText3.addTextChangedListener(mItemTextWatcher3);
         mTaxTextView.setText(Float.toString(person.getTaxAmt()));
         mTipEditText.setText(Float.toString(person.getTipPercent()));
         mTipEditText.addTextChangedListener(mTipTextWatcher);
@@ -179,7 +187,69 @@ public class DetailFragment extends Fragment {
                     mDetailedItemEditText.setText(CORRECT_DECIMAL_FORMAT);
                     mDetailedItemEditText.setSelection(mDetailedItemEditText.getText().length());
                 } else {
-                    person.setSubtotal(Float.parseFloat(s.toString()));
+                    person.addItem(Float.parseFloat(s.toString()));
+                    updateSubtotalRemaining();
+                    updateSubtotal();
+                    updateTax();
+                    updateTotal();
+                }
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    public TextWatcher mItemTextWatcher2 = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // check for blank string
+            if (s.toString().length() > 0) {
+
+                // Correct "." input to "0." before parsing
+                if (s.toString().equals(DECIMAL)) {
+                    mItemEditText2.setText(CORRECT_DECIMAL_FORMAT);
+                    mItemEditText2.setSelection(mItemEditText2.getText().length());
+                } else {
+                    person.addItem(Float.parseFloat(s.toString()));
+                    updateSubtotalRemaining();
+                    updateSubtotal();
+                    updateTax();
+                    updateTotal();
+                }
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
+    public TextWatcher mItemTextWatcher3 = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // check for blank string
+            if (s.toString().length() > 0) {
+
+                // Correct "." input to "0." before parsing
+                if (s.toString().equals(DECIMAL)) {
+                    mItemEditText3.setText(CORRECT_DECIMAL_FORMAT);
+                    mItemEditText3.setSelection(mItemEditText3.getText().length());
+                } else {
+                    person.addItem(Float.parseFloat(s.toString()));
                     updateSubtotalRemaining();
                     updateSubtotal();
                     updateTax();

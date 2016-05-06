@@ -12,6 +12,7 @@ public class Person implements Parcelable{
     private float mTaxPercent;
     private float mTipPercent;
     private float mTotal;
+    private float[] mItems;
 
     public Person() {
         this("Name", 0f, 0f, 0f);
@@ -31,6 +32,7 @@ public class Person implements Parcelable{
         mTaxPercent = taxPercent;
         mTipPercent = tipPercent;
         updateTotal();
+        mItems = new float[] {mSubtotal};
     }
 
     public String getName() {
@@ -38,6 +40,12 @@ public class Person implements Parcelable{
     }
 
     public float getSubtotal() {
+        if (mItems != null) {
+            mSubtotal = 0;
+            for (float item : mItems) {
+                mSubtotal += item;
+            }
+        }
         return mSubtotal;
     }
 
@@ -59,6 +67,14 @@ public class Person implements Parcelable{
 
     public float getTotal() {
         return mSubtotal + getTaxAmt() + getTipAmt();
+    }
+
+    public float[] getItems() {
+        return mItems;
+    }
+
+    public float getItem(int position) {
+        return mItems[position];
     }
 
     public void setName(String name) {
@@ -85,6 +101,20 @@ public class Person implements Parcelable{
         mTipPercent = tip / 100f;
     }
 
+    public void setItems(float[] items) {
+        mItems = items.clone();
+    }
+
+    public void addItem(float item) {
+        float[] newItems = new float[mItems.length + 1];
+        System.arraycopy(mItems, 0, newItems, 0, mItems.length);
+//        for (int i = 0; i < mItems.length; i++) {
+//            newItems[i] = mItems[i];
+//        }
+        newItems[newItems.length - 1] = item;
+        mItems = newItems;
+    }
+
     public void updateTotal() {
         mTotal = mSubtotal + getTaxAmt() + getTipAmt();
     }
@@ -95,6 +125,7 @@ public class Person implements Parcelable{
         mTaxPercent = parcel.readFloat();
         mTipPercent = parcel.readFloat();
         mTotal = parcel.readFloat();
+        mItems = parcel.createFloatArray();
     }
 
     @Override
@@ -109,6 +140,7 @@ public class Person implements Parcelable{
         dest.writeFloat(mTaxPercent);
         dest.writeFloat(mTipPercent);
         dest.writeFloat(mTotal);
+        dest.writeFloatArray(mItems);
     }
 
     public static final Parcelable.Creator<Person> CREATOR = new Parcelable.Creator<Person>() {
