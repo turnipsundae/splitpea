@@ -16,12 +16,14 @@ public class ItemAdapter extends BaseAdapter {
     private int mResLayout;
     private float[] mData;
     private LayoutInflater mInflater;
+    private ItemAdapter mItemAdapter;
 
     public ItemAdapter (Context context, int resLayout, float[] data) {
         mContext = context;
         mResLayout = resLayout;
         mData = data.clone();
         mInflater = LayoutInflater.from(context);
+        mItemAdapter = this;
     }
 
     @Override
@@ -55,6 +57,12 @@ public class ItemAdapter extends BaseAdapter {
         ListItemDetailHolder holder = (ListItemDetailHolder)view.getTag();
         holder.mItem.setText(context.getString(R.string.item));
         holder.mAmt.setText(context.getString(R.string.format_dollar_amount, amount));
+        holder.mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItemAdapter.add(0f);
+            }
+        });
     }
 
     public void add(float item) {
