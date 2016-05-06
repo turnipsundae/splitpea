@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -37,6 +38,7 @@ public class DetailFragment extends Fragment {
     private int positionId;
     private Person person;
     private float mSubtotalRemaining;
+    private ItemAdapter mItemAdapter;
 
     // references to XML views
     private TextView mSubtotalRemainingTextView;
@@ -113,6 +115,12 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        Intent intent = getActivity().getIntent();
+        if (intent != null) {
+            getParamsFromIntent(intent);
+        }
+
         mSubtotalRemainingTextView = (TextView)rootView.findViewById(R.id.subtotal_remaining_text_view);
         mNameEditText = (EditText)rootView.findViewById(R.id.name_edit_text);
         mDetailedItemEditText = (EditText)rootView.findViewById(R.id.detail_item_edit_text);
@@ -124,11 +132,16 @@ public class DetailFragment extends Fragment {
         mItemEditText2 = (EditText)rootView.findViewById(R.id.detail_item_edit_text_2);
         mItemEditText3 = (EditText)rootView.findViewById(R.id.detail_item_edit_text_3);
 
-
-        Intent intent = getActivity().getIntent();
-        if (intent != null) {
-            getParamsFromIntent(intent);
+        // initialize adapter
+        if (!newPerson) {
+            mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, person.getItems());
+        } else {
+            mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, new float[]{0});
         }
+
+        // find and hook up adapter
+        ListView itemsListView = (ListView) rootView.findViewById(R.id.items_listview);
+        itemsListView.setAdapter(mItemAdapter);
 
         // get person shell with tax and tip pre-entered
         mSubtotalRemainingTextView.setText(getString(R.string.format_dollar_amount, mSubtotalRemaining));
