@@ -10,7 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/name"
-        android:id="@+id/name_edit_text"/>
+        android:id="@+id/name_edit_text"
+        android:inputType="textPersonName"
+        android:maxLines="1"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,68 +34,9 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/items_listview"></ListView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/detail_item" />
-
-        <EditText
-            android:id="@+id/detail_item_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="15"
-            android:inputType="numberDecimal"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/detail_item" />
-
-        <EditText
-            android:id="@+id/detail_item_edit_text_2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="7"
-            android:inputType="numberDecimal"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/detail_item" />
-
-        <EditText
-            android:id="@+id/detail_item_edit_text_3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="3"
-            android:inputType="numberDecimal"/>
-    </LinearLayout>
+        android:layout_height="0dp"
+        android:id="@+id/items_listview"
+        android:layout_weight="1"></ListView>
 
     <LinearLayout
         android:layout_width="match_parent"

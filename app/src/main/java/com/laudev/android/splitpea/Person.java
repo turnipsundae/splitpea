@@ -31,8 +31,8 @@ public class Person implements Parcelable{
         mSubtotal = subtotal;
         mTaxPercent = taxPercent;
         mTipPercent = tipPercent;
-        updateTotal();
-        mItems = new float[] {mSubtotal};
+        mTotal = getTotal();
+        mItems = new float[] {0};
     }
 
     public String getName() {
@@ -66,7 +66,7 @@ public class Person implements Parcelable{
     }
 
     public float getTotal() {
-        return mSubtotal + getTaxAmt() + getTipAmt();
+        return getSubtotal() + getTaxAmt() + getTipAmt();
     }
 
     public float[] getItems() {
@@ -116,7 +116,7 @@ public class Person implements Parcelable{
     }
 
     public void updateTotal() {
-        mTotal = mSubtotal + getTaxAmt() + getTipAmt();
+        mTotal = getSubtotal() + getTaxAmt() + getTipAmt();
     }
 
     public Person(Parcel parcel) {

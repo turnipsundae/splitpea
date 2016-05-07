@@ -116,27 +116,25 @@ public class DetailFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
+        // Get intent
         Intent intent = getActivity().getIntent();
         if (intent != null) {
             getParamsFromIntent(intent);
         }
 
+        // Find views that don't need to be initialized with Person details yet
         mSubtotalRemainingTextView = (TextView)rootView.findViewById(R.id.subtotal_remaining_text_view);
         mNameEditText = (EditText)rootView.findViewById(R.id.name_edit_text);
-        mDetailedItemEditText = (EditText)rootView.findViewById(R.id.detail_item_edit_text);
         mSubtotalTextView = (TextView)rootView.findViewById(R.id.subtotal_text_view);
         mTaxTextView = (TextView)rootView.findViewById(R.id.tax_text_view);
         mTipEditText = (EditText)rootView.findViewById(R.id.tip_edit_text);
         mTotalTextView = (TextView)rootView.findViewById(R.id.total_text_view);
-//        mItemEditText1 = (EditText)rootView.findViewById(R.id.detail_item_edit_text);
-        mItemEditText2 = (EditText)rootView.findViewById(R.id.detail_item_edit_text_2);
-        mItemEditText3 = (EditText)rootView.findViewById(R.id.detail_item_edit_text_3);
 
-        // initialize adapter
-        if (!newPerson) {
-            mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, person.getItems());
-        } else {
+        // initialize detail items adapter
+        if (newPerson) {
             mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, new float[]{0});
+        } else {
+            mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, person.getItems());
         }
 
         // find and hook up adapter
@@ -145,9 +143,6 @@ public class DetailFragment extends Fragment {
 
         // get person shell with tax and tip pre-entered
         mSubtotalRemainingTextView.setText(getString(R.string.format_dollar_amount, mSubtotalRemaining));
-        mDetailedItemEditText.addTextChangedListener(mItemTextWatcher);
-        mItemEditText2.addTextChangedListener(mItemTextWatcher2);
-        mItemEditText3.addTextChangedListener(mItemTextWatcher3);
         mTaxTextView.setText(Float.toString(person.getTaxAmt()));
         mTipEditText.setText(Float.toString(person.getTipPercent()));
         mTipEditText.addTextChangedListener(mTipTextWatcher);
@@ -155,7 +150,6 @@ public class DetailFragment extends Fragment {
         if (!newPerson) {
             // initialize text views with existing person data
             mNameEditText.setText(person.getName());
-            mDetailedItemEditText.setText(Float.toString(person.getSubtotal()));
             updateTotal();
         }
 
@@ -196,78 +190,16 @@ public class DetailFragment extends Fragment {
             if (s.toString().length() > 0) {
 
                 // Correct "." input to "0." before parsing
-                if (s.toString().equals(DECIMAL)) {
-                    mDetailedItemEditText.setText(CORRECT_DECIMAL_FORMAT);
-                    mDetailedItemEditText.setSelection(mDetailedItemEditText.getText().length());
-                } else {
+//                if (s.toString().equals(DECIMAL)) {
+//                    mDetailedItemEditText.setText(CORRECT_DECIMAL_FORMAT);
+//                    mDetailedItemEditText.setSelection(mDetailedItemEditText.getText().length());
+//                } else {
                     person.addItem(Float.parseFloat(s.toString()));
                     updateSubtotalRemaining();
                     updateSubtotal();
                     updateTax();
                     updateTotal();
-                }
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
-
-    public TextWatcher mItemTextWatcher2 = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // check for blank string
-            if (s.toString().length() > 0) {
-
-                // Correct "." input to "0." before parsing
-                if (s.toString().equals(DECIMAL)) {
-                    mItemEditText2.setText(CORRECT_DECIMAL_FORMAT);
-                    mItemEditText2.setSelection(mItemEditText2.getText().length());
-                } else {
-                    person.addItem(Float.parseFloat(s.toString()));
-                    updateSubtotalRemaining();
-                    updateSubtotal();
-                    updateTax();
-                    updateTotal();
-                }
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
-
-    public TextWatcher mItemTextWatcher3 = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // check for blank string
-            if (s.toString().length() > 0) {
-
-                // Correct "." input to "0." before parsing
-                if (s.toString().equals(DECIMAL)) {
-                    mItemEditText3.setText(CORRECT_DECIMAL_FORMAT);
-                    mItemEditText3.setSelection(mItemEditText3.getText().length());
-                } else {
-                    person.addItem(Float.parseFloat(s.toString()));
-                    updateSubtotalRemaining();
-                    updateSubtotal();
-                    updateTax();
-                    updateTotal();
-                }
+//                }
             }
         }
 
