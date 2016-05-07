@@ -68,5 +68,5 @@
     <string name="format_amount"><xliff:g>%1.2f</xliff:g></string>
 
     <!-- Item # detail list format -->
-    <string name="format_detail_item_label">@string/item<xliff:g > </xliff:g><xliff:g id="position">%d</xliff:g></string>
+    <string name="format_detail_item_label"><xliff:g>Item </xliff:g><xliff:g id="position">%d</xliff:g></string>
 </resources>
