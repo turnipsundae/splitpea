@@ -63,4 +63,10 @@
 
     <!-- $ 1.00 Dollar amount format -->
     <string name="format_dollar_amount">$ <xliff:g id="amount">%1.2f</xliff:g></string>
+
+    <!-- 1.00 Dollar amount format -->
+    <string name="format_amount"><xliff:g>%1.2f</xliff:g></string>
+
+    <!-- Item # detail list format -->
+    <string name="format_detail_item_label">@string/item<xliff:g > </xliff:g><xliff:g id="position">%d</xliff:g></string>
 </resources>

@@ -13,6 +13,7 @@ public class Person implements Parcelable{
     private float mTipPercent;
     private float mTotal;
     private float[] mItems;
+    private int mCurrentItemPosition;
 
     public Person() {
         this("Name", 0f, 0f, 0f);
@@ -33,6 +34,7 @@ public class Person implements Parcelable{
         mTipPercent = tipPercent;
         mTotal = getTotal();
         mItems = new float[] {0};
+        mCurrentItemPosition = 0;
     }
 
     public String getName() {
@@ -77,6 +79,10 @@ public class Person implements Parcelable{
         return mItems[position];
     }
 
+    public int getCurrentItemPosition() {
+        return mCurrentItemPosition;
+    }
+
     public void setName(String name) {
         mName = name;
     }
@@ -105,12 +111,17 @@ public class Person implements Parcelable{
         mItems = items.clone();
     }
 
+    public void setItem(int position, float item) {
+        mItems[position] = item;
+    }
+
+    public void setCurrentItemPosition(int position) {
+        mCurrentItemPosition = position;
+    }
+
     public void addItem(float item) {
         float[] newItems = new float[mItems.length + 1];
         System.arraycopy(mItems, 0, newItems, 0, mItems.length);
-//        for (int i = 0; i < mItems.length; i++) {
-//            newItems[i] = mItems[i];
-//        }
         newItems[newItems.length - 1] = item;
         mItems = newItems;
     }

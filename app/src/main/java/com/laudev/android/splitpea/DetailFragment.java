@@ -175,6 +175,7 @@ public class DetailFragment extends Fragment {
         }
         Log.v("DetailFragment", "Extracted Parceled person. New? " + newPerson +
                 " #" + positionId + " " + person.getName() + " " + person.getSubtotal() +
+                " items: " + person.getItems() +
                 " Event subtotal: " + mSubtotalRemaining);
     }
 

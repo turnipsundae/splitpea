@@ -1,6 +1,9 @@
 package com.laudev.android.splitpea;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +17,6 @@ import java.util.List;
 public class ItemAdapter extends BaseAdapter {
     private Context mContext;
     private int mResLayout;
-    private float[] mData;
     private Person mPerson;
     private LayoutInflater mInflater;
     private ItemAdapter mItemAdapter;
@@ -42,7 +44,7 @@ public class ItemAdapter extends BaseAdapter {
         }
 
         // bind view with new data
-        bindView(view, mContext, mPerson.getItem(position));
+        bindView(view, mContext, mPerson.getItem(position), position);
 
         return view;
     }
@@ -54,10 +56,31 @@ public class ItemAdapter extends BaseAdapter {
         return view;
     }
 
-    public void bindView(View view, Context context, float amount) {
+    public void bindView(View view, Context context, float amount, int position) {
         ListItemDetailHolder holder = (ListItemDetailHolder)view.getTag();
-        holder.mItem.setText(context.getString(R.string.item));
-        holder.mAmt.setText(context.getString(R.string.format_dollar_amount, amount));
+        mPerson.setCurrentItemPosition(position);
+        holder.mItem.setText(context.getString(R.string.format_detail_item_label, position));
+        holder.mAmt.setText(context.getString(R.string.format_amount, amount));
+        holder.mAmt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.v("ItemAdapter", "afterTextChanged called position " + mPerson.getCurrentItemPosition());
+                mPerson.setItem(mPerson.getCurrentItemPosition(), Float.parseFloat(s.toString()));
+                mPerson.updateTotal();
+                notifyDataSetChanged();
+            }
+        });
+
         holder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,10 +90,6 @@ public class ItemAdapter extends BaseAdapter {
     }
 
     public void add(float item) {
-//        float[] newItems = new float[mData.length + 1];
-//        System.arraycopy(mData, 0, newItems, 0, mData.length);
-//        newItems[newItems.length - 1] = item;
-//        mData = newItems;
         mPerson.addItem(item);
         notifyDataSetChanged();
     }
@@ -82,6 +101,6 @@ public class ItemAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return mData[position];
+        return mPerson.getItem(position);
     }
 }
