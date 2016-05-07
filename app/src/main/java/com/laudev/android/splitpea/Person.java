@@ -108,7 +108,7 @@ public class Person implements Parcelable{
     }
 
     public void setItems(float[] items) {
-        mItems = items.clone();
+        mItems = items;
     }
 
     public void setItem(int position, float item) {

@@ -1,6 +1,7 @@
 package com.laudev.android.splitpea;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,15 +18,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DetailFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link DetailFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class DetailFragment extends Fragment {
     private final String PARAM_NEW_PERSON = "newPerson";
     private final String PARAM_POSITION_ID = "positionId";
@@ -51,6 +43,9 @@ public class DetailFragment extends Fragment {
     private EditText mItemEditText1;
     private EditText mItemEditText2;
     private EditText mItemEditText3;
+
+    private TextView mFooterSubtotalValue;
+    private TextView mFooterTotalValue;
 
 
     public DetailFragment() {
@@ -89,25 +84,6 @@ public class DetailFragment extends Fragment {
         if (mNameEditText.getText() != null) {
             person.setName(mNameEditText.getText().toString());
         }
-//        if (mDetailedItemEditText.getText().toString().length() > 0) {
-//            person.setSubtotal(Float.parseFloat(mDetailedItemEditText.getText().toString()));
-//        }
-//        if (mTaxTextView.getText().toString().length() > 0) {
-//            person.setTaxPercent(Float.parseFloat(mTaxTextView.getText().toString()));
-//        }
-//        if (mTipEditText.getText().toString().length() > 0) {
-//            person.setTipPercent(Float.parseFloat(mTipEditText.getText().toString()));
-//        }
-//        person.updateTotal();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            subtotal = getArguments().getFloat(PARAM_SUBTOTAL);
-//            total = getArguments().getFloat(PARAM_TOTAL);
-        }
     }
 
     @Override
@@ -124,28 +100,18 @@ public class DetailFragment extends Fragment {
 
         // Find views that don't need to be initialized with Person details yet
         mSubtotalRemainingTextView = (TextView)rootView.findViewById(R.id.subtotal_remaining_text_view);
+        mSubtotalRemainingTextView.setText(getString(R.string.format_dollar_amount, mSubtotalRemaining));
         mNameEditText = (EditText)rootView.findViewById(R.id.name_edit_text);
-        mSubtotalTextView = (TextView)rootView.findViewById(R.id.subtotal_text_view);
-        mTaxTextView = (TextView)rootView.findViewById(R.id.tax_text_view);
-        mTipEditText = (EditText)rootView.findViewById(R.id.tip_edit_text);
-        mTotalTextView = (TextView)rootView.findViewById(R.id.total_text_view);
 
         // initialize detail items adapter
-        if (newPerson) {
-            mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, person);
-        } else {
-            mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, person);
-        }
+        mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, person);
 
         // find and hook up adapter
         ListView itemsListView = (ListView) rootView.findViewById(R.id.items_listview);
         itemsListView.setAdapter(mItemAdapter);
 
         // get person shell with tax and tip pre-entered
-        mSubtotalRemainingTextView.setText(getString(R.string.format_dollar_amount, mSubtotalRemaining));
-        mTaxTextView.setText(Float.toString(person.getTaxAmt()));
-        mTipEditText.setText(Float.toString(person.getTipPercent()));
-        mTipEditText.addTextChangedListener(mTipTextWatcher);
+        addFooterViews(getContext(), itemsListView, R.layout.listview_item_footer, person);
 
         if (!newPerson) {
             // initialize text views with existing person data
@@ -173,10 +139,10 @@ public class DetailFragment extends Fragment {
         if (intent.hasExtra(PARAM_SUBTOTAL_REMAINING)) {
             mSubtotalRemaining = intent.getFloatExtra(PARAM_SUBTOTAL_REMAINING, 0f);
         }
-        Log.v("DetailFragment", "Extracted Parceled person. New? " + newPerson +
-                " #" + positionId + " " + person.getName() + " " + person.getSubtotal() +
-                " items: " + person.getItems() +
-                " Event subtotal: " + mSubtotalRemaining);
+//        Log.v("DetailFragment", "Extracted Parceled person. New? " + newPerson +
+//                " #" + positionId + " " + person.getName() + " " + person.getSubtotal() +
+//                " items: " + person.getItems() +
+//                " Event subtotal: " + mSubtotalRemaining);
     }
 
     public TextWatcher mItemTextWatcher = new TextWatcher() {
@@ -195,11 +161,11 @@ public class DetailFragment extends Fragment {
 //                    mDetailedItemEditText.setText(CORRECT_DECIMAL_FORMAT);
 //                    mDetailedItemEditText.setSelection(mDetailedItemEditText.getText().length());
 //                } else {
-                    person.addItem(Float.parseFloat(s.toString()));
-                    updateSubtotalRemaining();
-                    updateSubtotal();
-                    updateTax();
-                    updateTotal();
+//                    person.addItem(Float.parseFloat(s.toString()));
+//                    updateSubtotalRemaining();
+//                    updateSubtotal();
+//                    updateTax();
+//                    updateTotal();
 //                }
             }
         }
@@ -237,6 +203,44 @@ public class DetailFragment extends Fragment {
 
         }
     };
+
+    // update listview footer with eventTotal
+    private void addFooterViews(Context context, ListView listView, int resLayoutId, Person person) {
+        // get inflater and inflate footer view
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        // inflate subtotal
+        View footerSubtotalView = inflater.inflate(resLayoutId, null, false);
+        TextView subtotalName = (TextView) footerSubtotalView.findViewById(R.id.name_textview);
+        subtotalName.setText(getString(R.string.subtotal));
+        mFooterSubtotalValue = (TextView) footerSubtotalView.findViewById(R.id.amt_textview);
+        mFooterSubtotalValue.setText(context.getString(R.string.format_dollar_amount, person.getSubtotal()));
+        listView.addFooterView(footerSubtotalView);
+
+        // inflate tax
+        View footerTaxView = inflater.inflate(resLayoutId, null, false);
+        TextView taxName = (TextView) footerTaxView.findViewById(R.id.name_textview);
+        taxName.setText(getString(R.string.tax));
+        TextView taxValue = (TextView) footerTaxView.findViewById(R.id.amt_textview);
+        taxValue.setText(context.getString(R.string.format_tax_tip, person.getTaxPercent()));
+        listView.addFooterView(footerTaxView);
+
+        // inflate tip
+        View footerTipView = inflater.inflate(resLayoutId, null, false);
+        TextView tipName = (TextView) footerTipView.findViewById(R.id.name_textview);
+        tipName.setText(getString(R.string.tip));
+        TextView tipValue = (TextView) footerTipView.findViewById(R.id.amt_textview);
+        tipValue.setText(context.getString(R.string.format_tax_tip, person.getTipPercent()));
+        listView.addFooterView(footerTipView);
+
+        // inflate total
+        View footerTotalView = inflater.inflate(resLayoutId, null, false);
+        TextView totalName = (TextView) footerTotalView.findViewById(R.id.name_textview);
+        totalName.setText(getString(R.string.total));
+        mFooterTotalValue = (TextView) footerTotalView.findViewById(R.id.amt_textview);
+        mFooterTotalValue.setText(this.getString(R.string.format_dollar_amount, person.getTotal()));
+        listView.addFooterView(footerTotalView);
+    }
 
     private float getSubtotalRemaining() {
         return mSubtotalRemaining - person.getSubtotal();

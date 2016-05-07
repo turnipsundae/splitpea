@@ -58,28 +58,28 @@ public class ItemAdapter extends BaseAdapter {
 
     public void bindView(View view, Context context, float amount, int position) {
         ListItemDetailHolder holder = (ListItemDetailHolder)view.getTag();
-        mPerson.setCurrentItemPosition(position);
+//        mPerson.setCurrentItemPosition(position);
         holder.mItem.setText(context.getString(R.string.format_detail_item_label, position));
         holder.mAmt.setText(context.getString(R.string.format_amount, amount));
-        holder.mAmt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                Log.v("ItemAdapter", "afterTextChanged called position " + mPerson.getCurrentItemPosition());
-                mPerson.setItem(mPerson.getCurrentItemPosition(), Float.parseFloat(s.toString()));
-                mPerson.updateTotal();
-                notifyDataSetChanged();
-            }
-        });
+//        holder.mAmt.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                Log.v("ItemAdapter", "afterTextChanged called position " + mPerson.getCurrentItemPosition());
+//                mPerson.setItem(mPerson.getCurrentItemPosition(), Float.parseFloat(s.toString()));
+//                mPerson.updateTotal();
+//                notifyDataSetChanged();
+//            }
+//        });
 
         holder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
