@@ -15,33 +15,34 @@ public class ItemAdapter extends BaseAdapter {
     private Context mContext;
     private int mResLayout;
     private float[] mData;
+    private Person mPerson;
     private LayoutInflater mInflater;
     private ItemAdapter mItemAdapter;
 
-    public ItemAdapter (Context context, int resLayout, float[] data) {
+    public ItemAdapter (Context context, int resLayout, Person person) {
         mContext = context;
         mResLayout = resLayout;
-        mData = data.clone();
+        mPerson = person;
         mInflater = LayoutInflater.from(context);
         mItemAdapter = this;
     }
 
     @Override
     public int getCount() {
-        return mData.length;
+        return mPerson.getItems().length;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         if (convertView == null) {
-            view = newView(mContext, mData, parent);
+            view = newView(mContext, mPerson.getItems(), parent);
         } else {
             view = convertView;
         }
 
         // bind view with new data
-        bindView(view, mContext, mData[position]);
+        bindView(view, mContext, mPerson.getItem(position));
 
         return view;
     }
@@ -66,10 +67,11 @@ public class ItemAdapter extends BaseAdapter {
     }
 
     public void add(float item) {
-        float[] newItems = new float[mData.length + 1];
-        System.arraycopy(mData, 0, newItems, 0, mData.length);
-        newItems[newItems.length - 1] = item;
-        mData = newItems;
+//        float[] newItems = new float[mData.length + 1];
+//        System.arraycopy(mData, 0, newItems, 0, mData.length);
+//        newItems[newItems.length - 1] = item;
+//        mData = newItems;
+        mPerson.addItem(item);
         notifyDataSetChanged();
     }
 

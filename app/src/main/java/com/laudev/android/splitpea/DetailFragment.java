@@ -132,9 +132,9 @@ public class DetailFragment extends Fragment {
 
         // initialize detail items adapter
         if (newPerson) {
-            mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, new float[]{0});
+            mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, person);
         } else {
-            mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, person.getItems());
+            mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, person);
         }
 
         // find and hook up adapter
