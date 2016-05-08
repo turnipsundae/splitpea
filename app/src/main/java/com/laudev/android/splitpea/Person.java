@@ -2,17 +2,21 @@ package com.laudev.android.splitpea;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kevin on 4/21/16.
  */
 public class Person implements Parcelable{
     private String mName;
+    private List<Item> mItems = new ArrayList<>();
     private float mSubtotal;
     private float mTaxPercent;
     private float mTipPercent;
     private float mTotal;
-    private float[] mItems;
     private int mCurrentItemPosition;
 
     public Person() {
@@ -29,11 +33,11 @@ public class Person implements Parcelable{
 
     public Person(String name, float subtotal, float taxPercent, float tipPercent) {
         mName = name;
+//        mItems = new ArrayList<Item>();
         mSubtotal = subtotal;
         mTaxPercent = taxPercent;
         mTipPercent = tipPercent;
         mTotal = getTotal();
-        mItems = new float[] {0};
         mCurrentItemPosition = 0;
     }
 
@@ -44,8 +48,8 @@ public class Person implements Parcelable{
     public float getSubtotal() {
         if (mItems != null) {
             mSubtotal = 0;
-            for (float item : mItems) {
-                mSubtotal += item;
+            for (Item item : mItems) {
+                mSubtotal += item.getAmt();
             }
         }
         return mSubtotal;
@@ -71,12 +75,12 @@ public class Person implements Parcelable{
         return getSubtotal() + getTaxAmt() + getTipAmt();
     }
 
-    public float[] getItems() {
+    public List<Item> getItems() {
         return mItems;
     }
 
-    public float getItem(int position) {
-        return mItems[position];
+    public Item getItem(int position) {
+        return mItems.get(position);
     }
 
     public int getCurrentItemPosition() {
@@ -107,23 +111,16 @@ public class Person implements Parcelable{
         mTipPercent = tip / 100f;
     }
 
-    public void setItems(float[] items) {
+    public void setItems(List items) {
         mItems = items;
-    }
-
-    public void setItem(int position, float item) {
-        mItems[position] = item;
     }
 
     public void setCurrentItemPosition(int position) {
         mCurrentItemPosition = position;
     }
 
-    public void addItem(float item) {
-        float[] newItems = new float[mItems.length + 1];
-        System.arraycopy(mItems, 0, newItems, 0, mItems.length);
-        newItems[newItems.length - 1] = item;
-        mItems = newItems;
+    public void addItem(Item item) {
+        mItems.add(item);
     }
 
     public void updateTotal() {
@@ -131,12 +128,13 @@ public class Person implements Parcelable{
     }
 
     public Person(Parcel parcel) {
+        Log.v("Person", "reading parcel");
         mName = parcel.readString();
         mSubtotal = parcel.readFloat();
         mTaxPercent = parcel.readFloat();
         mTipPercent = parcel.readFloat();
         mTotal = parcel.readFloat();
-        mItems = parcel.createFloatArray();
+        parcel.readTypedList(mItems, Item.CREATOR);
     }
 
     @Override
@@ -146,12 +144,13 @@ public class Person implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        Log.v("Person", "writing parcel");
         dest.writeString(mName);
         dest.writeFloat(mSubtotal);
         dest.writeFloat(mTaxPercent);
         dest.writeFloat(mTipPercent);
         dest.writeFloat(mTotal);
-        dest.writeFloatArray(mItems);
+        dest.writeTypedList(mItems);
     }
 
     public static final Parcelable.Creator<Person> CREATOR = new Parcelable.Creator<Person>() {

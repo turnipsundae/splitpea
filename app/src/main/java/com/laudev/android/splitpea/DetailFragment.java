@@ -154,6 +154,7 @@ public class DetailFragment extends Fragment {
         // get person object
         if (intent.hasExtra(PARAM_PERSON)) {
             person = intent.getParcelableExtra(PARAM_PERSON);
+            mItemList = person.getItems();
         }
         // get event totals
         if (intent.hasExtra(PARAM_SUBTOTAL_REMAINING)) {
@@ -240,6 +241,9 @@ public class DetailFragment extends Fragment {
             public void onClick(View v) {
                 Log.v("DetailFragment", "AddPersonButton pressed");
                 mItemAdapter.add(new Item("Item", Float.parseFloat(mFooterAddItemValue.getText().toString())));
+
+                updateSubtotal();
+                updateTotal();
             }
         });
         listView.addFooterView(footerAddItemView);
@@ -265,7 +269,7 @@ public class DetailFragment extends Fragment {
         TextView tipName = (TextView) footerTipView.findViewById(R.id.detail_item_textview);
         tipName.setText(getString(R.string.tip));
         TextView tipValue = (TextView) footerTipView.findViewById(R.id.detail_item_edit_text);
-        tipValue.setText(context.getString(R.string.format_tax_tip, person.getTipPercent()));
+        tipValue.setText(context.getString(R.string.format_amount, person.getTipPercent()));
         listView.addFooterView(footerTipView);
 
         // inflate total
@@ -286,7 +290,7 @@ public class DetailFragment extends Fragment {
     }
 
     private void updateSubtotal() {
-        mSubtotalTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getSubtotal()));
+        mFooterSubtotalValue.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getSubtotal()));
     }
 
     private void updateTax() {
