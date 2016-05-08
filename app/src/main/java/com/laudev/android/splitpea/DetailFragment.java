@@ -241,9 +241,11 @@ public class DetailFragment extends Fragment {
             public void onClick(View v) {
                 Log.v("DetailFragment", "AddPersonButton pressed");
                 mItemAdapter.add(new Item("Item", Float.parseFloat(mFooterAddItemValue.getText().toString())));
-
                 updateSubtotal();
                 updateTotal();
+                mFooterAddItemValue.setText("");
+                mFooterAddItemValue.requestFocus();
+                mFooterAddItemValue.setSelection(0);
             }
         });
         listView.addFooterView(footerAddItemView);
