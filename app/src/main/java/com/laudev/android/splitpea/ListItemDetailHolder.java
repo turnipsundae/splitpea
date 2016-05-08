@@ -5,19 +5,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by kevin on 5/6/16.
  */
 public class ListItemDetailHolder {
-    public int mPosition;
+//    public int mPosition;
     public final TextView mItem;
-    public final EditText mAmt;
+    public final TextView mAmt;
     public final Button mButton;
 
     public ListItemDetailHolder(View view) {
-        mPosition = view.getId();
+//        mPosition = view.getId();
         mItem = (TextView)view.findViewById(R.id.detail_item_textview);
-        mAmt = (EditText)view.findViewById(R.id.detail_item_edit_text);
+        mAmt = (TextView)view.findViewById(R.id.detail_item_value_textview);
         mButton = (Button)view.findViewById(R.id.detail_item_button);
     }
 }

@@ -3,24 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:id="@+id/listview_item_detail"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall">
+    android:id="@+id/listview_item_footer_edit"
+    android:minHeight="?android:attr/listPreferredItemHeight">
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:id="@+id/detail_item_textview"/>
-    <TextView
+    <EditText
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:id="@+id/detail_item_value_textview"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="?android:buttonStyleSmall"
-        android:text="-"
-        android:id="@+id/detail_item_button"/>
+        android:id="@+id/detail_item_edit_text"
+        android:inputType="numberDecimal"/>
 
 </LinearLayout>

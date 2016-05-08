@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,9 +15,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DetailFragment extends Fragment {
     private final String PARAM_NEW_PERSON = "newPerson";
@@ -31,6 +36,7 @@ public class DetailFragment extends Fragment {
     private Person person;
     private float mSubtotalRemaining;
     private ItemAdapter mItemAdapter;
+    private List<Item> mItemList;
 
     // references to XML views
     private TextView mSubtotalRemainingTextView;
@@ -44,6 +50,7 @@ public class DetailFragment extends Fragment {
     private EditText mItemEditText2;
     private EditText mItemEditText3;
 
+    private EditText mFooterAddItemValue;
     private TextView mFooterSubtotalValue;
     private TextView mFooterTotalValue;
 
@@ -87,6 +94,18 @@ public class DetailFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.v("DetailFragment", "onCreate called");
+
+        // if new instance
+        if (savedInstanceState == null) {
+            // initialize summaryList with no data
+            mItemList = new ArrayList<>();
+        }
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -104,14 +123,15 @@ public class DetailFragment extends Fragment {
         mNameEditText = (EditText)rootView.findViewById(R.id.name_edit_text);
 
         // initialize detail items adapter
-        mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, person);
+//        mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, person);
+        mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, mItemList);
 
         // find and hook up adapter
         ListView itemsListView = (ListView) rootView.findViewById(R.id.items_listview);
         itemsListView.setAdapter(mItemAdapter);
 
         // get person shell with tax and tip pre-entered
-        addFooterViews(getContext(), itemsListView, R.layout.listview_item_footer, person);
+        addFooterViews(getContext(), itemsListView, person);
 
         if (!newPerson) {
             // initialize text views with existing person data
@@ -205,12 +225,27 @@ public class DetailFragment extends Fragment {
     };
 
     // update listview footer with eventTotal
-    private void addFooterViews(Context context, ListView listView, int resLayoutId, Person person) {
+    private void addFooterViews(Context context, ListView listView, Person person) {
         // get inflater and inflate footer view
         LayoutInflater inflater = LayoutInflater.from(context);
 
+        // inflate item adder
+        View footerAddItemView = inflater.inflate(R.layout.listview_add_item, null, false);
+        TextView addItemName = (TextView)footerAddItemView.findViewById(R.id.detail_item_textview);
+        addItemName.setText(getString(R.string.item));
+        mFooterAddItemValue = (EditText)footerAddItemView.findViewById(R.id.detail_item_edit_text);
+        Button addItemButton = (Button)footerAddItemView.findViewById(R.id.detail_item_button);
+        addItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("DetailFragment", "AddPersonButton pressed");
+                mItemAdapter.add(new Item("Item", Float.parseFloat(mFooterAddItemValue.getText().toString())));
+            }
+        });
+        listView.addFooterView(footerAddItemView);
+
         // inflate subtotal
-        View footerSubtotalView = inflater.inflate(resLayoutId, null, false);
+        View footerSubtotalView = inflater.inflate(R.layout.listview_item_footer, null, false);
         TextView subtotalName = (TextView) footerSubtotalView.findViewById(R.id.name_textview);
         subtotalName.setText(getString(R.string.subtotal));
         mFooterSubtotalValue = (TextView) footerSubtotalView.findViewById(R.id.amt_textview);
@@ -218,7 +253,7 @@ public class DetailFragment extends Fragment {
         listView.addFooterView(footerSubtotalView);
 
         // inflate tax
-        View footerTaxView = inflater.inflate(resLayoutId, null, false);
+        View footerTaxView = inflater.inflate(R.layout.listview_item_footer, null, false);
         TextView taxName = (TextView) footerTaxView.findViewById(R.id.name_textview);
         taxName.setText(getString(R.string.tax));
         TextView taxValue = (TextView) footerTaxView.findViewById(R.id.amt_textview);
@@ -226,15 +261,15 @@ public class DetailFragment extends Fragment {
         listView.addFooterView(footerTaxView);
 
         // inflate tip
-        View footerTipView = inflater.inflate(resLayoutId, null, false);
-        TextView tipName = (TextView) footerTipView.findViewById(R.id.name_textview);
+        View footerTipView = inflater.inflate(R.layout.listview_item_footer_edit, null, false);
+        TextView tipName = (TextView) footerTipView.findViewById(R.id.detail_item_textview);
         tipName.setText(getString(R.string.tip));
-        TextView tipValue = (TextView) footerTipView.findViewById(R.id.amt_textview);
+        TextView tipValue = (TextView) footerTipView.findViewById(R.id.detail_item_edit_text);
         tipValue.setText(context.getString(R.string.format_tax_tip, person.getTipPercent()));
         listView.addFooterView(footerTipView);
 
         // inflate total
-        View footerTotalView = inflater.inflate(resLayoutId, null, false);
+        View footerTotalView = inflater.inflate(R.layout.listview_item_footer, null, false);
         TextView totalName = (TextView) footerTotalView.findViewById(R.id.name_textview);
         totalName.setText(getString(R.string.total));
         mFooterTotalValue = (TextView) footerTotalView.findViewById(R.id.amt_textview);
@@ -259,6 +294,7 @@ public class DetailFragment extends Fragment {
     }
 
     private void updateTotal() {
-        mTotalTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getTotal()));
+//        mTotalTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getTotal()));
+        mFooterTotalValue.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getTotal()));
     }
 }

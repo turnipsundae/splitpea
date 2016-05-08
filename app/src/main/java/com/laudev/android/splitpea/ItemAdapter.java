@@ -17,80 +17,53 @@ import java.util.List;
 public class ItemAdapter extends BaseAdapter {
     private Context mContext;
     private int mResLayout;
-    private Person mPerson;
+    private List mData;
     private LayoutInflater mInflater;
-    private ItemAdapter mItemAdapter;
 
-    public ItemAdapter (Context context, int resLayout, Person person) {
+    public ItemAdapter (Context context, int resLayout, List data) {
         mContext = context;
         mResLayout = resLayout;
-        mPerson = person;
+        mData = data;
         mInflater = LayoutInflater.from(context);
-        mItemAdapter = this;
     }
 
     @Override
     public int getCount() {
-        return mPerson.getItems().length;
+        return mData.size();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         if (convertView == null) {
-            view = newView(mContext, mPerson.getItems(), parent);
+            view = newView(mContext, mData, parent);
         } else {
             view = convertView;
         }
 
         // bind view with new data
-        bindView(view, mContext, mPerson.getItem(position), position);
+        bindView(view, mContext, (Item)mData.get(position));
 
         return view;
     }
 
-    public View newView(Context context, float[] data, ViewGroup parent) {
+    public View newView(Context context, List data, ViewGroup parent) {
         View view = mInflater.inflate(mResLayout, parent, false);
         ListItemDetailHolder holder = new ListItemDetailHolder(view);
         view.setTag(holder);
         return view;
     }
 
-    public void bindView(View view, Context context, float amount, int position) {
+    public void bindView(View view, Context context, Item item) {
         ListItemDetailHolder holder = (ListItemDetailHolder)view.getTag();
-//        mPerson.setCurrentItemPosition(position);
-        holder.mItem.setText(context.getString(R.string.format_detail_item_label, position));
-        holder.mAmt.setText(context.getString(R.string.format_amount, amount));
-//        holder.mAmt.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                Log.v("ItemAdapter", "afterTextChanged called position " + mPerson.getCurrentItemPosition());
-//                mPerson.setItem(mPerson.getCurrentItemPosition(), Float.parseFloat(s.toString()));
-//                mPerson.updateTotal();
-//                notifyDataSetChanged();
-//            }
-//        });
-
-        holder.mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mItemAdapter.add(0f);
-            }
-        });
+        holder.mItem.setText(item.getName());
+        holder.mAmt.setText(context.getString(R.string.format_amount, item.getAmt()));
     }
 
-    public void add(float item) {
-        mPerson.addItem(item);
+    public void add(Object object) {
+        if (object instanceof Item) {
+            mData.add(object);
+        }
         notifyDataSetChanged();
     }
 
@@ -101,6 +74,6 @@ public class ItemAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return mPerson.getItem(position);
+        return mData.get(position);
     }
 }
