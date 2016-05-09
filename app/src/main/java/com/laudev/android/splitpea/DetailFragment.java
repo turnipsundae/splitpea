@@ -178,38 +178,20 @@ public class DetailFragment extends Fragment {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // check for blank string
-            if (s.toString().length() > 0) {
 
-                // Correct "." input to "0." before parsing
-//                if (s.toString().equals(DECIMAL)) {
-//                    mDetailedItemEditText.setText(CORRECT_DECIMAL_FORMAT);
-//                    mDetailedItemEditText.setSelection(mDetailedItemEditText.getText().length());
-//                } else {
-//                    person.addItem(Float.parseFloat(s.toString()));
-//                    updateSubtotalRemaining();
-//                    updateSubtotal();
-//                    updateTax();
-//                    updateTotal();
-//                }
-            }
         }
 
         @Override
         public void afterTextChanged(Editable s) {
-//            int count = 0;
-//            while (count < s.length()) {
-//                if (s.toString().charAt(count) == '.') {
-//                    if (count - 1 < 0) {
-//                        s.insert(count, );
-//                    }
-//                }
-//                count++;
-//            }
             Log.v("TextWatcher", "Editable contains " + s.toString());
+            // Check for blank string before auto calculate totals
             if (!s.toString().equals("")) {
                 if (s.toString().charAt(0) == '.') {
                     s.insert(0, "0");
+                } else {
+                    float tempAmt = Float.parseFloat(s.toString());
+                    updateSubtotal(tempAmt);
+                    updateTotal(tempAmt);
                 }
             }
         }
@@ -314,12 +296,23 @@ public class DetailFragment extends Fragment {
         mFooterSubtotalValue.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getSubtotal()));
     }
 
+    private void updateSubtotal(float tempAmt) {
+        mFooterSubtotalValue.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getSubtotal() + tempAmt));
+    }
+
     private void updateTax() {
         mTaxTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getTaxAmt()));
     }
 
     private void updateTotal() {
-//        mTotalTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getTotal()));
         mFooterTotalValue.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getTotal()));
+    }
+
+    private void updateTotal(float tempAmt) {
+        mFooterTotalValue.setText(String.format(getResources().getString(R.string.format_dollar_amount),
+                person.getTotal() +
+                        tempAmt +
+                        (tempAmt * person.getTaxPercent() / 100f) +
+                        (tempAmt * person.getTipPercent() / 100f)));
     }
 }
