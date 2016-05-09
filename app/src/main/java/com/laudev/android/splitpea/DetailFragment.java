@@ -88,8 +88,12 @@ public class DetailFragment extends Fragment {
     }
 
     private void updateParams() {
-        if (mNameEditText.getText() != null) {
+        if (!mNameEditText.getText().toString().equals("")) {
             person.setName(mNameEditText.getText().toString());
+        }
+        if (!mFooterAddItemValue.getText().toString().equals("")) {
+            person.addItem(new Item("Item", Float.parseFloat(mFooterAddItemValue.getText().toString())));
+            person.updateTotal();
         }
     }
 
@@ -193,7 +197,21 @@ public class DetailFragment extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-
+//            int count = 0;
+//            while (count < s.length()) {
+//                if (s.toString().charAt(count) == '.') {
+//                    if (count - 1 < 0) {
+//                        s.insert(count, );
+//                    }
+//                }
+//                count++;
+//            }
+            Log.v("TextWatcher", "Editable contains " + s.toString());
+            if (!s.toString().equals("")) {
+                if (s.toString().charAt(0) == '.') {
+                    s.insert(0, "0");
+                }
+            }
         }
     };
 
@@ -235,6 +253,7 @@ public class DetailFragment extends Fragment {
         TextView addItemName = (TextView)footerAddItemView.findViewById(R.id.detail_item_textview);
         addItemName.setText(getString(R.string.item));
         mFooterAddItemValue = (EditText)footerAddItemView.findViewById(R.id.detail_item_edit_text);
+        mFooterAddItemValue.addTextChangedListener(mItemTextWatcher);
         Button addItemButton = (Button)footerAddItemView.findViewById(R.id.detail_item_button);
         addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
