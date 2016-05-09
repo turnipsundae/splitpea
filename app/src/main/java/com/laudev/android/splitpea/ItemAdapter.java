@@ -1,9 +1,6 @@
 package com.laudev.android.splitpea;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +39,7 @@ public class ItemAdapter extends BaseAdapter {
         }
 
         // bind view with new data
-        bindView(view, mContext, (Item)mData.get(position));
+        bindView(view, mContext, (Item)mData.get(position), position);
 
         return view;
     }
@@ -54,10 +51,24 @@ public class ItemAdapter extends BaseAdapter {
         return view;
     }
 
-    public void bindView(View view, Context context, Item item) {
+    public void bindView(View view, Context context, Item item, int position) {
         ListItemDetailHolder holder = (ListItemDetailHolder)view.getTag();
         holder.mItem.setText(item.getName());
         holder.mAmt.setText(context.getString(R.string.format_amount, item.getAmt()));
+        holder.mButton.setOnClickListener(new RemoveItemClick(position));
+    }
+
+    public class RemoveItemClick implements View.OnClickListener {
+        private int position;
+        public RemoveItemClick(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public void onClick(View v) {
+            mData.remove(position);
+            notifyDataSetChanged();
+        }
     }
 
     public void add(Object object) {
