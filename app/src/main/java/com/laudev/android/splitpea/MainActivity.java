@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText mTaxEditText;
     private EditText mTipEditText;
     private TextView mTotalTextView;
+    private RadioGroup mRadioGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +45,32 @@ public class MainActivity extends AppCompatActivity {
         mSubtotalEditText.addTextChangedListener(mSubtotalTextWatcher);
         mTaxEditText = (EditText)findViewById(R.id.tax);
         mTaxEditText.addTextChangedListener(mTaxTextWatcher);
-        mTipEditText = (EditText)findViewById(R.id.tip);
-        mTipEditText.addTextChangedListener(mTipTextWatcher);
+//        mTipEditText = (EditText)findViewById(R.id.tip);
+        mRadioGroup = (RadioGroup)findViewById(R.id.radio_group);
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton radioButton = (RadioButton)group.findViewById(checkedId);
+                switch (checkedId) {
+                    case R.id.low_radio_button:
+                        mEventTotal.setTipPercent(getResources().getInteger(R.integer.tip_low_defaul_value));
+                        updateTotal();
+                        break;
+                    case R.id.mid_radio_button:
+                        mEventTotal.setTipPercent(18f);
+                        updateTotal();
+                        break;
+                    case R.id.high_radio_button:
+                        mEventTotal.setTipPercent(20f);
+                        updateTotal();
+                        break;
+                    default:
+                        mEventTotal.setTipPercent(15f);
+                        updateTotal();
+                }
+            }
+        });
+//        mTipEditText.addTextChangedListener(mTipTextWatcher);
         mTotalTextView = (TextView)findViewById(R.id.total);
 
     }

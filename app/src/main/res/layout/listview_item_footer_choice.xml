@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical">
     <TextView
         android:layout_width="0dp"
@@ -11,26 +11,27 @@
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/radio_group">
         <RadioButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/tip_low_default"
-            android:id="@+id/lowestRadioButton" />
+            android:id="@+id/low_radio_button" />
 
         <RadioButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/tip_mid_default"
-            android:id="@+id/midRadioButton" />
+            android:id="@+id/mid_radio_button" />
 
         <RadioButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/tip_high_default"
-            android:id="@+id/highRadioButton" />
+            android:id="@+id/high_radio_button" />
     </RadioGroup>
 </LinearLayout>

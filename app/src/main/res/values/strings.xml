@@ -37,6 +37,9 @@
     <!-- label for tip default 15% -->
     <string name="tip_low_default">15%</string>
 
+    <!-- value for tip default 15 -->
+    <integer name="tip_low_defaul_value">15</integer>
+
     <!-- label for tip default 18% -->
     <string name="tip_mid_default">18%</string>
 
