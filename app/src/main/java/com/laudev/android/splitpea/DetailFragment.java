@@ -190,6 +190,7 @@ public class DetailFragment extends Fragment {
                     s.insert(0, "0");
                 } else {
                     float tempAmt = Float.parseFloat(s.toString());
+                    updateSubtotalRemaining(tempAmt);
                     updateSubtotal(tempAmt);
                     updateTotal(tempAmt);
                 }
@@ -242,6 +243,7 @@ public class DetailFragment extends Fragment {
             public void onClick(View v) {
                 Log.v("DetailFragment", "AddPersonButton pressed");
                 mItemAdapter.add(new Item("Item", Float.parseFloat(mFooterAddItemValue.getText().toString())));
+                updateSubtotalRemaining();
                 updateSubtotal();
                 updateTotal();
                 mFooterAddItemValue.setText("");
@@ -284,12 +286,12 @@ public class DetailFragment extends Fragment {
         listView.addFooterView(footerTotalView);
     }
 
-    private float getSubtotalRemaining() {
-        return mSubtotalRemaining - person.getSubtotal();
+    private void updateSubtotalRemaining() {
+        mSubtotalRemainingTextView.setText(getString(R.string.format_dollar_amount, mSubtotalRemaining - person.getSubtotal()));
     }
 
-    private void updateSubtotalRemaining() {
-        mSubtotalRemainingTextView.setText(getString(R.string.format_dollar_amount, getSubtotalRemaining()));
+    private void updateSubtotalRemaining(float tempAmt) {
+        mSubtotalRemainingTextView.setText(getString(R.string.format_dollar_amount, mSubtotalRemaining - tempAmt));
     }
 
     private void updateSubtotal() {

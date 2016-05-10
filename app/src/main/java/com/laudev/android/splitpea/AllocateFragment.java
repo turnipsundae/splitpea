@@ -122,7 +122,7 @@ public class AllocateFragment extends Fragment {
                                         .putExtra(PARAM_NEW_PERSON, false)
                                         .putExtra(PARAM_POSITION_ID, position)
                                         .putExtra(PARAM_PERSON, person)
-                                        .putExtra(PARAM_SUBTOTAL_REMAINING, getSubtotalRemaining() + person.getSubtotal()),
+                                        .putExtra(PARAM_SUBTOTAL_REMAINING, getSubtotalRemaining()),
                                 PERSON_DETAIL_REQUEST);
                         break;
 
