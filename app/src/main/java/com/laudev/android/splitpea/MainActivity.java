@@ -27,9 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText mSubtotalEditText;
     private EditText mTaxEditText;
-    private EditText mTipEditText;
+    private RadioGroup mTipRadioGroup;
     private TextView mTotalTextView;
-    private RadioGroup mRadioGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,32 +44,29 @@ public class MainActivity extends AppCompatActivity {
         mSubtotalEditText.addTextChangedListener(mSubtotalTextWatcher);
         mTaxEditText = (EditText)findViewById(R.id.tax);
         mTaxEditText.addTextChangedListener(mTaxTextWatcher);
-//        mTipEditText = (EditText)findViewById(R.id.tip);
-        mRadioGroup = (RadioGroup)findViewById(R.id.radio_group);
-        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        mTipRadioGroup = (RadioGroup)findViewById(R.id.radio_group);
+        mTipRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton radioButton = (RadioButton)group.findViewById(checkedId);
                 switch (checkedId) {
-                    case R.id.low_radio_button:
-                        mEventTotal.setTipPercent(getResources().getInteger(R.integer.tip_low_defaul_value));
-                        updateTotal();
-                        break;
                     case R.id.mid_radio_button:
-                        mEventTotal.setTipPercent(18f);
+                        mEventTotal.setTipPercent(getResources().getInteger(R.integer.tip_mid_default_value));
                         updateTotal();
                         break;
                     case R.id.high_radio_button:
-                        mEventTotal.setTipPercent(20f);
+                        mEventTotal.setTipPercent(getResources().getInteger(R.integer.tip_high_default_value));
                         updateTotal();
                         break;
                     default:
-                        mEventTotal.setTipPercent(15f);
+                        mEventTotal.setTipPercent(getResources().getInteger(R.integer.tip_low_default_value));
                         updateTotal();
+                        break;
                 }
             }
         });
-//        mTipEditText.addTextChangedListener(mTipTextWatcher);
+//        if (mTipRadioGroup.getCheckedRadioButtonId() < 0) {
+//            mTipRadioGroup.check(R.id.low_radio_button);
+//        }
         mTotalTextView = (TextView)findViewById(R.id.total);
 
     }
@@ -119,23 +115,25 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // check for blank string
-            if (s.toString().length() > 0) {
 
-                // Correct "." input to "0." before parsing
-                if (s.toString().equals(DECIMAL)) {
-                    mSubtotalEditText.setText(CORRECT_DECIMAL_FORMAT);
-                    mSubtotalEditText.setSelection(mSubtotalEditText.getText().length());
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // If blank string set total to 0
+            if (s.toString().equals("") && mEventTotal.getSubtotal() != 0f) {
+                mEventTotal.setSubtotal(0f);
+                updateTotal();
+            }
+            // Check for blank string before auto calculate totals
+            if (!s.toString().equals("")) {
+                if (s.toString().charAt(0) == '.') {
+                    s.insert(0, "0");
                 } else {
                     mEventTotal.setSubtotal(Float.parseFloat(s.toString()));
                     updateTotal();
                 }
             }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
         }
     };
 
@@ -147,51 +145,25 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // check for blank string
-            if (s.toString().length() > 0) {
 
-                // Correct "." input to "0." before parsing
-                if (s.toString().equals(DECIMAL)) {
-                    mTaxEditText.setText(CORRECT_DECIMAL_FORMAT);
-                    mTaxEditText.setSelection(mTaxEditText.getText().length());
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // If blank string set total to 0
+            if (s.toString().equals("") && mEventTotal.getTaxAmt() != 0f) {
+                mEventTotal.setTaxAmt(0f);
+                updateTotal();
+            }
+            // Check for blank string before auto calculate totals
+            if (!s.toString().equals("")) {
+                if (s.toString().charAt(0) == '.') {
+                    s.insert(0, "0");
                 } else {
                     mEventTotal.setTaxAmt(Float.parseFloat(s.toString()));
                     updateTotal();
                 }
             }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
-
-    public TextWatcher mTipTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // check for blank string
-            if (s.toString().length() > 0) {
-
-                // Correct "." input to "0." before parsing
-                if (s.toString().equals(DECIMAL)) {
-                    mTipEditText.setText(CORRECT_DECIMAL_FORMAT);
-                    mTipEditText.setSelection(mTipEditText.getText().length());
-                } else {
-                    mEventTotal.setTipPercent(Float.parseFloat(s.toString()));
-                    updateTotal();
-                }
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
         }
     };
 }

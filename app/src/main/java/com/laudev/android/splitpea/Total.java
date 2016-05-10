@@ -61,7 +61,7 @@ public class Total implements Parcelable{
     }
 
     public float getTotal() {
-        return mTotal;
+        return getSubtotal() + getTaxAmt() + getTipAmt();
     }
 
     public float getSubtotalRemainder() {
