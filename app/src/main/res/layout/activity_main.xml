@@ -55,26 +55,6 @@
             android:inputType="numberDecimal"/>
     </LinearLayout>
 
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-
-        <!--<TextView-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="@string/tip" />-->
-
-        <!--<EditText-->
-            <!--android:id="@+id/tip"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:hint="@string/tip_default"-->
-            <!--android:inputType="numberDecimal"/>-->
-    <!--</LinearLayout>-->
-
     <include layout="@layout/listview_item_footer_choice"/>
 
     <LinearLayout

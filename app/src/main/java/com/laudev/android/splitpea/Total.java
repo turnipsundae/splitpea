@@ -11,10 +11,6 @@ public class Total implements Parcelable{
     private float mTaxPercent;
     private float mTipPercent;
     private float mTotal;
-    private float mSubtotalAllocated;
-    private float mTaxAllocated;
-    private float mTipAllocated;
-    private float mTotalAllocated;
     private float mSubtotalRemainder;
 
     public Total() {
@@ -34,9 +30,9 @@ public class Total implements Parcelable{
     */
     public Total(float subtotal, float taxPercent, float tipPercent) {
         mSubtotal = subtotal;
-        mTaxPercent = taxPercent;
-        mTipPercent = tipPercent;
-        updateTotal();
+        setTaxPercent(taxPercent);
+        setTipPercent(tipPercent);
+        mTotal = getTotal();
         mSubtotalRemainder = mTotal;
     }
 
@@ -90,10 +86,6 @@ public class Total implements Parcelable{
 
     public void updateSubtotalRemainder(float amtPaid) {
         mSubtotalRemainder -= amtPaid;
-    }
-
-    public void updateTotal() {
-        mTotal = mSubtotal + getTaxAmt() + getTipAmt();
     }
 
     public Total(Parcel parcel) {

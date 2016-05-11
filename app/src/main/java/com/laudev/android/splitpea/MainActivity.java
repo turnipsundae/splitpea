@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
     * update mAmt TextView based on input params
     */
     private void updateTotal() {
-        mEventTotal.updateTotal();
         mTotalTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), mEventTotal.getTotal()));
     }
 
