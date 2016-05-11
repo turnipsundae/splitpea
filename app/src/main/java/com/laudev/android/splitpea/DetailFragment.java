@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -55,6 +56,7 @@ public class DetailFragment extends Fragment {
     private TextView mFooterSubtotalValue;
     private TextView mFooterTaxValue;
     private TextView mFooterTipValue;
+    private TextView mFooterTipPercent;
     private RadioGroup mFooterTipRadioGroup;
     private TextView mFooterTotalValue;
 
@@ -278,8 +280,8 @@ public class DetailFragment extends Fragment {
 
         // inflate tip
         View footerTipView = inflater.inflate(R.layout.listview_item_footer, null, false);
-        TextView tipName = (TextView) footerTipView.findViewById(R.id.name_textview);
-        tipName.setText(getString(R.string.format_text_pct_label, getString(R.string.tip), person.getTipPercent()));
+        mFooterTipPercent = (TextView) footerTipView.findViewById(R.id.name_textview);
+        mFooterTipPercent.setText(getString(R.string.format_text_pct_label, getString(R.string.tip), person.getTipPercent()));
         mFooterTipValue = (TextView) footerTipView.findViewById(R.id.amt_textview);
         mFooterTipValue.setText(context.getString(R.string.format_dollar_amount, person.getTipAmt()));
         listView.addFooterView(footerTipView);
@@ -293,6 +295,7 @@ public class DetailFragment extends Fragment {
                 switch (checkedId) {
                     case R.id.low_radio_button:
                         person.setTipPercent(getResources().getInteger(R.integer.tip_low_default_value));
+                        mFooterTipPercent.setText(getString(R.string.format_text_pct_label, getString(R.string.tip), person.getTipPercent()));
                         if (mFooterAddItemValue.getText().toString().length() > 0) {
                             float tempAmt = Float.parseFloat(mFooterAddItemValue.getText().toString());
                             updateTip(tempAmt);
@@ -304,6 +307,7 @@ public class DetailFragment extends Fragment {
                         break;
                     case R.id.mid_radio_button:
                         person.setTipPercent(getResources().getInteger(R.integer.tip_mid_default_value));
+                        mFooterTipPercent.setText(getString(R.string.format_text_pct_label, getString(R.string.tip), person.getTipPercent()));
                         if (mFooterAddItemValue.getText().toString().length() > 0) {
                             float tempAmt = Float.parseFloat(mFooterAddItemValue.getText().toString());
                             updateTip(tempAmt);
@@ -315,6 +319,7 @@ public class DetailFragment extends Fragment {
                         break;
                     case R.id.high_radio_button:
                         person.setTipPercent(getResources().getInteger(R.integer.tip_high_default_value));
+                        mFooterTipPercent.setText(getString(R.string.format_text_pct_label, getString(R.string.tip), person.getTipPercent()));
                         if (mFooterAddItemValue.getText().toString().length() > 0) {
                             float tempAmt = Float.parseFloat(mFooterAddItemValue.getText().toString());
                             updateTip(tempAmt);
@@ -336,6 +341,17 @@ public class DetailFragment extends Fragment {
         mFooterTotalValue = (TextView) footerTotalView.findViewById(R.id.amt_textview);
         mFooterTotalValue.setText(this.getString(R.string.format_dollar_amount, person.getTotal()));
         listView.addFooterView(footerTotalView);
+
+        // check default tip radio button
+        if (Math.abs(person.getTipPercent() - getResources().getInteger(R.integer.tip_low_default_value)) < 0.001f) {
+            mFooterTipRadioGroup.check(R.id.low_radio_button);
+        }
+        if (Math.abs(person.getTipPercent() - getResources().getInteger(R.integer.tip_mid_default_value)) < 0.001f) {
+            mFooterTipRadioGroup.check(R.id.mid_radio_button);
+        }
+        if (Math.abs(person.getTipPercent() - getResources().getInteger(R.integer.tip_high_default_value)) < 0.001f) {
+            mFooterTipRadioGroup.check(R.id.high_radio_button);
+        }
     }
 
     private void updateSubtotalRemaining() {
