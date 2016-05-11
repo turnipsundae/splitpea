@@ -52,6 +52,8 @@ public class DetailFragment extends Fragment {
 
     private EditText mFooterAddItemValue;
     private TextView mFooterSubtotalValue;
+    private TextView mFooterTaxValue;
+    private TextView mFooterTipValue;
     private TextView mFooterTotalValue;
 
 
@@ -127,7 +129,6 @@ public class DetailFragment extends Fragment {
         mNameEditText = (EditText)rootView.findViewById(R.id.name_edit_text);
 
         // initialize detail items adapter
-//        mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, person);
         mItemAdapter = new ItemAdapter(getActivity(), R.layout.listview_item_detail, mItemList);
 
         // find and hook up adapter
@@ -192,6 +193,8 @@ public class DetailFragment extends Fragment {
                     float tempAmt = Float.parseFloat(s.toString());
                     updateSubtotalRemaining(tempAmt);
                     updateSubtotal(tempAmt);
+                    updateTax(tempAmt);
+                    updateTip(tempAmt);
                     updateTotal(tempAmt);
                 }
             }
@@ -234,7 +237,7 @@ public class DetailFragment extends Fragment {
         // inflate item adder
         View footerAddItemView = inflater.inflate(R.layout.listview_add_item, null, false);
         TextView addItemName = (TextView)footerAddItemView.findViewById(R.id.detail_item_textview);
-        addItemName.setText(getString(R.string.item));
+        addItemName.setText(getString(R.string.new_item));
         mFooterAddItemValue = (EditText)footerAddItemView.findViewById(R.id.detail_item_edit_text);
         mFooterAddItemValue.addTextChangedListener(mItemTextWatcher);
         Button addItemButton = (Button)footerAddItemView.findViewById(R.id.detail_item_button);
@@ -245,6 +248,8 @@ public class DetailFragment extends Fragment {
                 mItemAdapter.add(new Item("Item", Float.parseFloat(mFooterAddItemValue.getText().toString())));
                 updateSubtotalRemaining();
                 updateSubtotal();
+                updateTax();
+                updateTip();
                 updateTotal();
                 mFooterAddItemValue.setText("");
                 mFooterAddItemValue.requestFocus();
@@ -264,17 +269,17 @@ public class DetailFragment extends Fragment {
         // inflate tax
         View footerTaxView = inflater.inflate(R.layout.listview_item_footer, null, false);
         TextView taxName = (TextView) footerTaxView.findViewById(R.id.name_textview);
-        taxName.setText(getString(R.string.tax));
-        TextView taxValue = (TextView) footerTaxView.findViewById(R.id.amt_textview);
-        taxValue.setText(context.getString(R.string.format_tax_tip, person.getTaxPercent()));
+        taxName.setText(getString(R.string.format_text_pct_label, getString(R.string.tax), person.getTaxPercent()));
+        mFooterTaxValue = (TextView) footerTaxView.findViewById(R.id.amt_textview);
+        mFooterTaxValue.setText(context.getString(R.string.format_dollar_amount, person.getTaxAmt()));
         listView.addFooterView(footerTaxView);
 
         // inflate tip
-        View footerTipView = inflater.inflate(R.layout.listview_item_footer_edit, null, false);
-        TextView tipName = (TextView) footerTipView.findViewById(R.id.detail_item_textview);
-        tipName.setText(getString(R.string.tip));
-        TextView tipValue = (TextView) footerTipView.findViewById(R.id.detail_item_edit_text);
-        tipValue.setText(context.getString(R.string.format_amount, person.getTipPercent()));
+        View footerTipView = inflater.inflate(R.layout.listview_item_footer, null, false);
+        TextView tipName = (TextView) footerTipView.findViewById(R.id.name_textview);
+        tipName.setText(getString(R.string.format_text_pct_label, getString(R.string.tip), person.getTipPercent()));
+        mFooterTipValue = (TextView) footerTipView.findViewById(R.id.amt_textview);
+        mFooterTipValue.setText(context.getString(R.string.format_dollar_amount, person.getTipAmt()));
         listView.addFooterView(footerTipView);
 
         // inflate total
@@ -303,7 +308,19 @@ public class DetailFragment extends Fragment {
     }
 
     private void updateTax() {
-        mTaxTextView.setText(String.format(getResources().getString(R.string.format_dollar_amount), person.getTaxAmt()));
+        mFooterTaxValue.setText(getString(R.string.format_amount, person.getTaxAmt()));
+    }
+
+    private void updateTax(float tempAmt) {
+        mFooterTaxValue.setText(getString(R.string.format_amount, person.getTaxAmt() + tempAmt * person.getTaxPercent() / 100f));
+    }
+
+    private void updateTip() {
+        mFooterTipValue.setText(getString(R.string.format_amount, person.getTipAmt()));
+    }
+
+    private void updateTip(float tempAmt) {
+        mFooterTipValue.setText(getString(R.string.format_amount, person.getTipAmt() + tempAmt * person.getTipPercent() / 100f));
     }
 
     private void updateTotal() {

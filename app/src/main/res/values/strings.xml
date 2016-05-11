@@ -73,6 +73,9 @@
     <!-- label for items default cost -->
     <string name="item_cost_default">$25.00</string>
 
+    <!-- label for items in detail activity-->
+    <string name="new_item">New item</string>
+
     <!-- 35.00 / 80.00 Accounted / Original format for Total values-->
     <string name="format_accounted_vs_original"><xliff:g id="accounted">%1.2f</xliff:g> / <xliff:g id="original">%1.2f</xliff:g></string>
 

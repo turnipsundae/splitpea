@@ -38,6 +38,8 @@ public class AllocateFragment extends Fragment {
     private final int ADD_PERSON_REQUEST = 2;
 
     private TextView mFooterSubtotalValue;
+    private TextView mFooterTaxValue;
+    private TextView mFooterTipValue;
     private TextView mFooterTotalValue;
 
     private PersonAdapter mPersonsAdapter;
@@ -160,17 +162,20 @@ public class AllocateFragment extends Fragment {
         // get subtotals
         float subtotal = getSubtotals();
         mEventTotal.updateSubtotalRemainder(subtotal);
-        if (mFooterSubtotalValue != null) {
-            mFooterSubtotalValue.setText(this.getString(R.string.format_accounted_vs_original,
-                    subtotal, mEventTotal.getSubtotal()));
-        }
+        mFooterSubtotalValue.setText(getString(R.string.format_accounted_vs_original,
+                subtotal, mEventTotal.getSubtotal()));
+
+        // get taxes
+        mFooterTaxValue.setText(getString(R.string.format_accounted_vs_original,
+                getTaxes(), mEventTotal.getTaxAmt()));
+
+        // get tips
+        mFooterTipValue.setText(getString(R.string.format_accounted_vs_original,
+                getTips(), mEventTotal.getTipAmt()));
 
         // get totals
-        float total = getTotals();
-        if (mFooterTotalValue != null) {
-            mFooterTotalValue.setText(this.getString(R.string.format_accounted_vs_original,
-                    total, mEventTotal.getTotal()));
-        }
+            mFooterTotalValue.setText(getString(R.string.format_accounted_vs_original,
+                    getTotals(), mEventTotal.getTotal()));
     }
 
     // update listview footer with eventTotal
@@ -191,8 +196,8 @@ public class AllocateFragment extends Fragment {
         View footerTaxView = inflater.inflate(resLayoutId, null, false);
         TextView taxName = (TextView) footerTaxView.findViewById(R.id.name_textview);
         taxName.setText(getString(R.string.format_text_pct_label, getString(R.string.tax), mEventTotal.getTaxPercent()));
-        TextView taxValue = (TextView) footerTaxView.findViewById(R.id.amt_textview);
-        taxValue.setText(this.getString(R.string.format_accounted_vs_original,
+        mFooterTaxValue = (TextView) footerTaxView.findViewById(R.id.amt_textview);
+        mFooterTaxValue.setText(this.getString(R.string.format_accounted_vs_original,
                 getTaxes(), mEventTotal.getTaxPercent()));
         listView.addFooterView(footerTaxView);
 
@@ -200,8 +205,8 @@ public class AllocateFragment extends Fragment {
         View footerTipView = inflater.inflate(resLayoutId, null, false);
         TextView tipName = (TextView) footerTipView.findViewById(R.id.name_textview);
         tipName.setText(getString(R.string.format_text_pct_label, getString(R.string.tip), mEventTotal.getTipPercent()));
-        TextView tipValue = (TextView) footerTipView.findViewById(R.id.amt_textview);
-        tipValue.setText(context.getString(R.string.format_accounted_vs_original,
+        mFooterTipValue = (TextView) footerTipView.findViewById(R.id.amt_textview);
+        mFooterTipValue.setText(context.getString(R.string.format_accounted_vs_original,
                 getTips(), mEventTotal.getTipAmt()));
         listView.addFooterView(footerTipView);
 
