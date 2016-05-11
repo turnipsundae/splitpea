@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class DetailFragment extends Fragment {
     private TextView mFooterSubtotalValue;
     private TextView mFooterTaxValue;
     private TextView mFooterTipValue;
+    private RadioGroup mFooterTipRadioGroup;
     private TextView mFooterTotalValue;
 
 
@@ -136,7 +138,7 @@ public class DetailFragment extends Fragment {
         itemsListView.setAdapter(mItemAdapter);
 
         // get person shell with tax and tip pre-entered
-        addFooterViews(getContext(), itemsListView, person);
+        addFooterViews(getContext(), itemsListView);
 
         if (!newPerson) {
             // initialize text views with existing person data
@@ -230,7 +232,7 @@ public class DetailFragment extends Fragment {
     };
 
     // update listview footer with eventTotal
-    private void addFooterViews(Context context, ListView listView, Person person) {
+    private void addFooterViews(Context context, ListView listView) {
         // get inflater and inflate footer view
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -281,6 +283,51 @@ public class DetailFragment extends Fragment {
         mFooterTipValue = (TextView) footerTipView.findViewById(R.id.amt_textview);
         mFooterTipValue.setText(context.getString(R.string.format_dollar_amount, person.getTipAmt()));
         listView.addFooterView(footerTipView);
+
+        // inflate tip editor
+        View footerTipRadioGroupView = inflater.inflate(R.layout.listview_item_footer_choice, null, false);
+        mFooterTipRadioGroup = (RadioGroup) footerTipRadioGroupView.findViewById(R.id.radio_group);
+        mFooterTipRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.low_radio_button:
+                        person.setTipPercent(getResources().getInteger(R.integer.tip_low_default_value));
+                        if (mFooterAddItemValue.getText().toString().length() > 0) {
+                            float tempAmt = Float.parseFloat(mFooterAddItemValue.getText().toString());
+                            updateTip(tempAmt);
+                            updateTotal(tempAmt);
+                        } else {
+                            updateTip();
+                            updateTotal();
+                        }
+                        break;
+                    case R.id.mid_radio_button:
+                        person.setTipPercent(getResources().getInteger(R.integer.tip_mid_default_value));
+                        if (mFooterAddItemValue.getText().toString().length() > 0) {
+                            float tempAmt = Float.parseFloat(mFooterAddItemValue.getText().toString());
+                            updateTip(tempAmt);
+                            updateTotal(tempAmt);
+                        } else {
+                            updateTip();
+                            updateTotal();
+                        }
+                        break;
+                    case R.id.high_radio_button:
+                        person.setTipPercent(getResources().getInteger(R.integer.tip_high_default_value));
+                        if (mFooterAddItemValue.getText().toString().length() > 0) {
+                            float tempAmt = Float.parseFloat(mFooterAddItemValue.getText().toString());
+                            updateTip(tempAmt);
+                            updateTotal(tempAmt);
+                        } else {
+                            updateTip();
+                            updateTotal();
+                        }
+                        break;
+                }
+            }
+        });
+        listView.addFooterView(footerTipRadioGroupView);
 
         // inflate total
         View footerTotalView = inflater.inflate(R.layout.listview_item_footer, null, false);
