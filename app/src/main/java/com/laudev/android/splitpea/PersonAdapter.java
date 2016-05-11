@@ -54,7 +54,7 @@ public class PersonAdapter extends BaseAdapter {
     public void bindView(View view, Context context, Person person) {
         ListItemHolder holder = (ListItemHolder)view.getTag();
         holder.mName.setText(person.getName());
-        holder.mAmt.setText(context.getString(R.string.format_dollar_amount, person.getTotal()));
+        holder.mAmt.setText(context.getString(R.string.format_dollar_amount, person.getSubtotal() + person.getTaxAmt()));
     }
 
     public void add(Object object) {

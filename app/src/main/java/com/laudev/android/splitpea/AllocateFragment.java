@@ -198,7 +198,7 @@ public class AllocateFragment extends Fragment {
         taxName.setText(getString(R.string.format_text_pct_label, getString(R.string.tax), mEventTotal.getTaxPercent()));
         mFooterTaxValue = (TextView) footerTaxView.findViewById(R.id.amt_textview);
         mFooterTaxValue.setText(this.getString(R.string.format_accounted_vs_original,
-                getTaxes(), mEventTotal.getTaxPercent()));
+                getTaxes(), mEventTotal.getTaxAmt()));
         listView.addFooterView(footerTaxView);
 
         // inflate tip
