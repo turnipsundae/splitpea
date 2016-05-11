@@ -87,4 +87,7 @@
 
     <!-- Item # detail list format -->
     <string name="format_detail_item_label"><xliff:g>Item </xliff:g><xliff:g id="position">%d</xliff:g></string>
+
+    <!-- Tip 15% format -->
+    <string name="format_text_pct_label"><xliff:g id="label">%s </xliff:g><xliff:g id="pct">%1.0f</xliff:g>%%</string>
 </resources>

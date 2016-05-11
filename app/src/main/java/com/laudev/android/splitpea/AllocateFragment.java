@@ -190,10 +190,20 @@ public class AllocateFragment extends Fragment {
         // inflate tax
         View footerTaxView = inflater.inflate(resLayoutId, null, false);
         TextView taxName = (TextView) footerTaxView.findViewById(R.id.name_textview);
-        taxName.setText(getString(R.string.tax));
+        taxName.setText(getString(R.string.format_text_pct_label, getString(R.string.tax), mEventTotal.getTaxPercent()));
         TextView taxValue = (TextView) footerTaxView.findViewById(R.id.amt_textview);
-        taxValue.setText(this.getString(R.string.format_tax_tip, mEventTotal.getTaxPercent()));
+        taxValue.setText(this.getString(R.string.format_accounted_vs_original,
+                getTaxes(), mEventTotal.getTaxPercent()));
         listView.addFooterView(footerTaxView);
+
+        // inflate tip
+        View footerTipView = inflater.inflate(resLayoutId, null, false);
+        TextView tipName = (TextView) footerTipView.findViewById(R.id.name_textview);
+        tipName.setText(getString(R.string.format_text_pct_label, getString(R.string.tip), mEventTotal.getTipPercent()));
+        TextView tipValue = (TextView) footerTipView.findViewById(R.id.amt_textview);
+        tipValue.setText(context.getString(R.string.format_accounted_vs_original,
+                getTips(), mEventTotal.getTipAmt()));
+        listView.addFooterView(footerTipView);
 
         // inflate total
         View footerTotalView = inflater.inflate(resLayoutId, null, false);
@@ -224,6 +234,26 @@ public class AllocateFragment extends Fragment {
         if (summaryList.size() > 0) {
             for (Person person : summaryList) {
                 sum += person.getSubtotal();
+            }
+        }
+        return sum;
+    }
+
+    private float getTips() {
+        float sum = 0f;
+        if (summaryList != null) {
+            for (Person person : summaryList) {
+                sum+= person.getTipAmt();
+            }
+        }
+        return sum;
+    }
+
+    private float getTaxes() {
+        float sum = 0f;
+        if (summaryList != null) {
+            for (Person person : summaryList) {
+                sum+= person.getTaxAmt();
             }
         }
         return sum;
