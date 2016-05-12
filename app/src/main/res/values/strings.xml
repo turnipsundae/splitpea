@@ -2,8 +2,9 @@
 
     <!-- activity titles -->
     <string name="app_name">Split Pea</string>
-    <string name="title_activity_allocate">AllocateActivity</string>
-    <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_main">Party Summary</string>
+    <string name="title_activity_allocate">Breakdown</string>
+    <string name="title_activity_detail">Details</string>
     <string name="action_settings">Settings</string>
     <string name="action_confirm">Confirm</string>
 
