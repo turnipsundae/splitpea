@@ -20,7 +20,6 @@
         <activity
             android:name=".AllocateActivity"
             android:label="@string/title_activity_allocate"
-            android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTop"/>
         <activity
             android:name=".DetailActivity"

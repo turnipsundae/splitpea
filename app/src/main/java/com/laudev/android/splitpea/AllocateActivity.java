@@ -16,11 +16,11 @@ public class AllocateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allocate);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, new AllocateFragment(), ALLOCATE_FRAGMENT_TAG)
-                .commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.activity_allocate_container, new AllocateFragment(), ALLOCATE_FRAGMENT_TAG)
+                    .commit();
+        }
     }
 
 }
