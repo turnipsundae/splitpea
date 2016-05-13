@@ -9,6 +9,8 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -77,6 +79,7 @@ public class AllocateFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Log.v("AllocateFragment", "onCreate called");
+        setHasOptionsMenu(true);
 
         // if new instance
         if (savedInstanceState == null) {
@@ -156,6 +159,12 @@ public class AllocateFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_allocatefragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private void updateFooterViews() {

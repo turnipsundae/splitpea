@@ -63,7 +63,6 @@ public class DetailFragment extends Fragment {
 
     public DetailFragment() {
         // Required empty public constructor
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -106,6 +105,7 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Log.v("DetailFragment", "onCreate called");
+        setHasOptionsMenu(true);
 
         // if new instance
         if (savedInstanceState == null) {
