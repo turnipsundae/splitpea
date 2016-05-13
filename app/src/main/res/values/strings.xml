@@ -78,6 +78,9 @@
     <!-- label for items in detail activity-->
     <string name="new_item">New item</string>
 
+    <!--  label for empty item list -->
+    <string name="no_items">Empty list</string>
+
     <!-- 35.00 / 80.00 -->
     <string name="format_accounted_vs_original"><xliff:g id="accounted">%1.2f</xliff:g> / <xliff:g id="original">%1.2f</xliff:g></string>
 
@@ -124,5 +127,12 @@
         <xliff:g id="tip">$%1.2f</xliff:g>
         <xliff:g>=</xliff:g>
         <xliff:g id="final">$%1.2f</xliff:g>
+    </string>
+
+    <!--  Label + label -->
+    <string name="format_two_labels">
+        <xliff:g id="labelOne">%s</xliff:g>
+        <xliff:g>+</xliff:g>
+        <xliff:g id="labelTwo">%s</xliff:g>
     </string>
 </resources>

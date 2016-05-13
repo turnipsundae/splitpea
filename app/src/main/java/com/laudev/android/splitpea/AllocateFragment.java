@@ -42,10 +42,12 @@ public class AllocateFragment extends Fragment {
     private final int PERSON_DETAIL_REQUEST = 1;
     private final int ADD_PERSON_REQUEST = 2;
 
+    private TextView mHeaderSettingValue;
     private TextView mFooterSubtotalValue;
     private TextView mFooterTaxValue;
     private TextView mFooterTipValue;
     private TextView mFooterTotalValue;
+    private View mHeaderPlaceholderView;
 
     private PersonAdapter mPersonsAdapter;
     private ShareActionProvider mShareActionProvider;
@@ -117,6 +119,9 @@ public class AllocateFragment extends Fragment {
         // find and hook up adapter
         ListView personsListView = (ListView) rootView.findViewById(R.id.persons_listview);
         personsListView.setAdapter(mPersonsAdapter);
+
+        // add headers
+        addHeaderView(getContext(), personsListView, R.layout.listview_item_header);
 
         // add three footers for subtotal, tax + tip, total
         addFooterViews(getContext(), personsListView, R.layout.listview_item_footer, mEventTotal);
@@ -201,6 +206,35 @@ public class AllocateFragment extends Fragment {
         }
         shareIntent.putExtra(Intent.EXTRA_TEXT, stringBuilder.toString());
         return shareIntent;
+    }
+
+    private void updateHeaderView(ListView listView) {
+        // get settings
+        mHeaderSettingValue.setText(getString(R.string.subtotal));
+
+//        if (summaryList.size() > 0 && listView.getHeaderViewsCount() > 1) {
+//            listView.removeHeaderView(mHeaderPlaceholderView);
+//        }
+    }
+
+    // add listview header with new people added
+    private void addHeaderView(Context context, ListView listView, int resLayoutId) {
+        // get inflater and inflate footer view
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        // inflate heading
+        View headerRowView = inflater.inflate(resLayoutId, null, false);
+        TextView nameColumn = (TextView) headerRowView.findViewById(R.id.label_textview);
+        nameColumn.setText(getString(R.string.name));
+        mHeaderSettingValue = (TextView) headerRowView.findViewById(R.id.display_setting_textview);
+        mHeaderSettingValue.setText(getString(R.string.format_two_labels, getString(R.string.subtotal), getString(R.string.tax)));
+        listView.addHeaderView(headerRowView);
+
+        // inflate placeholder item
+//        mHeaderPlaceholderView = inflater.inflate(resLayoutId, null, false);
+//        TextView placeholderName = (TextView) mHeaderPlaceholderView.findViewById(R.id.label_textview);
+//        placeholderName.setText(getString(R.string.no_items));
+//        listView.addHeaderView(mHeaderPlaceholderView);
     }
 
     private void updateFooterViews() {
