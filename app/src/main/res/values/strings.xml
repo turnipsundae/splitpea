@@ -78,29 +78,51 @@
     <!-- label for items in detail activity-->
     <string name="new_item">New item</string>
 
-    <!-- 35.00 / 80.00 Accounted / Original format for Total values-->
+    <!-- 35.00 / 80.00 -->
     <string name="format_accounted_vs_original"><xliff:g id="accounted">%1.2f</xliff:g> / <xliff:g id="original">%1.2f</xliff:g></string>
 
-    <!-- 15 % Percent format for tax and tip -->
+    <!-- 15 % -->
     <string name="format_tax_tip"><xliff:g id="percent">%1.1f</xliff:g> %%</string>
 
-    <!-- $ 1.00 Dollar amount format -->
+    <!-- $ 1.00 -->
     <string name="format_dollar_amount">$ <xliff:g id="amount">%1.2f</xliff:g></string>
 
-    <!-- 1.00 Dollar amount format -->
+    <!-- 1.00 -->
     <string name="format_amount"><xliff:g>%1.2f</xliff:g></string>
 
-    <!-- Item # detail list format -->
-    <string name="format_detail_item_label"><xliff:g>Item </xliff:g><xliff:g id="position">%d</xliff:g></string>
+    <!-- Item # -->
+    <string name="format_detail_item_label">
+        <xliff:g>Item </xliff:g>
+        <xliff:g id="position">%d</xliff:g>
+    </string>
 
-    <!-- Tip 15% format -->
-    <string name="format_text_pct_label"><xliff:g id="label">%s </xliff:g><xliff:g id="pct">%1.0f</xliff:g>%%</string>
+    <!-- Tip 15% -->
+    <string name="format_text_pct_label">
+        <xliff:g id="label">%s </xliff:g>
+        <xliff:g id="pct">%1.0f</xliff:g>
+        %%</string>
 
     <!-- Name total + tip -->
     <string name="format_share_name_total_tip">
-        <xliff:g id="name">%s </xliff:g>
+        <xliff:g id="name">%s</xliff:g>
         <xliff:g id="subtotal_and_tax">$%1.2f</xliff:g>
         <xliff:g>+</xliff:g>
         <xliff:g id="tip">$%1.2f</xliff:g>
+    </string>
+
+    <!-- Total $1.00 -->
+    <string name="format_text_amt_label">
+        <xliff:g id="label">%s</xliff:g>
+        <xliff:g id="amt">$%1.2f</xliff:g>
+    </string>
+
+    <!-- Label total + tip = total -->
+    <string name="format_share_label_total_tip_final">
+        <xliff:g id="label">%s</xliff:g>
+        <xliff:g id="subtotal_and_tax">$%1.2f</xliff:g>
+        <xliff:g>+</xliff:g>
+        <xliff:g id="tip">$%1.2f</xliff:g>
+        <xliff:g>=</xliff:g>
+        <xliff:g id="final">$%1.2f</xliff:g>
     </string>
 </resources>

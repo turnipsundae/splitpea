@@ -180,12 +180,20 @@ public class AllocateFragment extends Fragment {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         StringBuilder stringBuilder = new StringBuilder("");
+        // put party summary info
+        stringBuilder.append(getString(R.string.format_share_label_total_tip_final,
+                getString(R.string.title_activity_main),
+                mEventTotal.getSubtotal() + mEventTotal.getTaxAmt(),
+                mEventTotal.getTipAmt(),
+                mEventTotal.getTotal()))
+                .append("\n");
         if (summaryList .size() > 0) {
             for (Person person : summaryList) {
-                stringBuilder.append(getString(R.string.format_share_name_total_tip,
+                stringBuilder.append(getString(R.string.format_share_label_total_tip_final,
                         person.getName(),
                         person.getSubtotal() + person.getTaxAmt(),
-                        person.getTipAmt()))
+                        person.getTipAmt(),
+                        person.getTotal()))
                         .append("\n");
             }
         } else {
