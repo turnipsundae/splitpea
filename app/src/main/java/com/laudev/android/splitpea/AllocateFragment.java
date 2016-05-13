@@ -7,10 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -45,6 +48,7 @@ public class AllocateFragment extends Fragment {
     private TextView mFooterTotalValue;
 
     private PersonAdapter mPersonsAdapter;
+    private ShareActionProvider mShareActionProvider;
 
     public AllocateFragment() {
     }
@@ -64,6 +68,7 @@ public class AllocateFragment extends Fragment {
                     clickedPerson.setItems(person.getItems());
                     mPersonsAdapter.notifyDataSetChanged();
                     updateFooterViews();
+                    mShareActionProvider.setShareIntent(createShareTotalsIntent());
                 }
                 break;
             case ADD_PERSON_REQUEST:
@@ -71,6 +76,7 @@ public class AllocateFragment extends Fragment {
                     Person person = data.getParcelableExtra(PARAM_PERSON);
                     mPersonsAdapter.add(person);
                     updateFooterViews();
+                    mShareActionProvider.setShareIntent(createShareTotalsIntent());
                 }
                 break;
         }
@@ -164,7 +170,29 @@ public class AllocateFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_allocatefragment, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        mShareActionProvider.setShareIntent(createShareTotalsIntent());
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private Intent createShareTotalsIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        StringBuilder stringBuilder = new StringBuilder("");
+        if (summaryList .size() > 0) {
+            for (Person person : summaryList) {
+                stringBuilder.append(getString(R.string.format_share_name_total_tip,
+                        person.getName(),
+                        person.getSubtotal() + person.getTaxAmt(),
+                        person.getTipAmt()))
+                        .append("\n");
+            }
+        } else {
+            Log.v("AllocateFragment", "summarylist null");
+        }
+        shareIntent.putExtra(Intent.EXTRA_TEXT, stringBuilder.toString());
+        return shareIntent;
     }
 
     private void updateFooterViews() {
