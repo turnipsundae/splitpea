@@ -31,6 +31,7 @@ public class AllocateFragment extends Fragment {
 
     private Total mEventTotal;
     private List<Person> summaryList;
+    private int mDisplayMode;
 
     private final String PARAM_NEW_EVENT = "newEvent";
     private final String PARAM_NEW_PERSON = "newPerson";
@@ -103,6 +104,9 @@ public class AllocateFragment extends Fragment {
 
             // initialize summaryList with no data
             summaryList = new ArrayList<>();
+
+            // default display mode
+            mDisplayMode = PersonAdapter.SUBTOTAL_AND_TAX;
         }
         super.onCreate(savedInstanceState);
     }
@@ -114,7 +118,11 @@ public class AllocateFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_allocate, container, false);
 
         // initialize adapter
-        mPersonsAdapter = new PersonAdapter(getActivity(), R.layout.listview_item_person, summaryList);
+        mPersonsAdapter = new PersonAdapter(
+                getActivity(),
+                R.layout.listview_item_person,
+                summaryList,
+                PersonAdapter.SUBTOTAL_AND_TAX); // default display mode
 
         // find and hook up adapter
         ListView personsListView = (ListView) rootView.findViewById(R.id.persons_listview);
@@ -131,6 +139,36 @@ public class AllocateFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (view.getId()) {
+                    // if header, switch display mode
+                    case (R.id.listview_item_header):
+                        int displayMode = mPersonsAdapter.getDisplayMode();
+                        if (displayMode == PersonAdapter.TOTAL_ONLY) {
+                            displayMode = PersonAdapter.SUBTOTAL_ONLY;
+                        } else {
+                            displayMode += 1;
+                        }
+                        mPersonsAdapter.setDisplayMode(displayMode);
+                        switch (displayMode) {
+                            case PersonAdapter.SUBTOTAL_ONLY:
+                                mHeaderSettingValue.setText(getString(R.string.subtotal));
+                                break;
+                            case PersonAdapter.SUBTOTAL_AND_TAX:
+                                mHeaderSettingValue.setText(getString(R.string.format_two_labels,
+                                        getString(R.string.subtotal),
+                                        getString(R.string.tax)));
+                                break;
+                            case PersonAdapter.SUBTOTAL_AND_TAX_PLUS_TIP:
+                                mHeaderSettingValue.setText(getString(R.string.format_two_labels,
+                                        getString(R.string.total),
+                                        getString(R.string.tip)));
+                                break;
+                            case PersonAdapter.TOTAL_ONLY:
+                                mHeaderSettingValue.setText(getString(R.string.grand_total));
+                                break;
+                        }
+                        mPersonsAdapter.notifyDataSetChanged();
+                        break;
+
                     // if existing person clicked, launch detail activity
                     case (R.id.listview_item_person):
                         Person person = (Person) mPersonsAdapter.getItem(position);

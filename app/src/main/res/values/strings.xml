@@ -57,6 +57,9 @@
     <!-- simple label for total -->
     <string name="total">Total</string>
 
+    <!--  label for grand total -->
+    <string name="grand_total">Grand total</string>
+
     <!-- label for accounted vs original total -->
     <string name="total_accounted_unaccounted">Total (accounted/original)</string>
 
@@ -108,6 +111,13 @@
     <!-- Name total + tip -->
     <string name="format_share_name_total_tip">
         <xliff:g id="name">%s</xliff:g>
+        <xliff:g id="subtotal_and_tax">$%1.2f</xliff:g>
+        <xliff:g>+</xliff:g>
+        <xliff:g id="tip">$%1.2f</xliff:g>
+    </string>
+
+    <!-- total + tip -->
+    <string name="format_share_total_tip">
         <xliff:g id="subtotal_and_tax">$%1.2f</xliff:g>
         <xliff:g>+</xliff:g>
         <xliff:g id="tip">$%1.2f</xliff:g>

@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
-    public TextWatcher mSubtotalTextWatcher = new TextWatcher() {
+    private TextWatcher mSubtotalTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public TextWatcher mTaxTextWatcher = new TextWatcher() {
+    private TextWatcher mTaxTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
