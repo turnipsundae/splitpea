@@ -277,7 +277,25 @@ public class AllocateFragment extends Fragment {
     }
 
     private void updateFooterViews() {
-        updateFooterValue(mFooterValue);
+//        updateFooterValue(mFooterValue);
+        // get subtotals
+        float subtotal = getSubtotals();
+        mEventTotal.updateSubtotalRemainder(subtotal);
+        mFooterSubtotalValue.setText(getString(R.string.format_dollar_amount,
+                mEventTotal.getSubtotal() - subtotal));
+
+        // get taxes
+        mFooterTaxValue.setText(getString(R.string.format_dollar_amount,
+                mEventTotal.getTaxAmt() - getTaxes()));
+
+        // get tips
+        mFooterTipValue.setText(getString(R.string.format_dollar_amount,
+                mEventTotal.getTipAmt() - getTips()));
+
+        // get totals
+        mFooterTotalValue.setText(getString(R.string.format_dollar_amount,
+                mEventTotal.getTotal() - getTotals()));
+
         // get subtotals
 //        float subtotal = getSubtotals();
 //        mEventTotal.updateSubtotalRemainder(subtotal);
@@ -305,16 +323,52 @@ public class AllocateFragment extends Fragment {
         // inflate Allocated Amount / Original Amount
         View footerRowView = inflater.inflate(resLayoutId, null, false);
         TextView titleColumn = (TextView) footerRowView.findViewById(R.id.name_textview);
-        titleColumn.setText(getString(R.string.allocated_amt_original_amt));
+        titleColumn.setText(getString(R.string.remaining_amount_label));
         listView.addFooterView(footerRowView);
 
+        // inflate subtotal
+        View footerSubtotalView = inflater.inflate(resLayoutId, null, false);
+        TextView subtotalName = (TextView) footerSubtotalView.findViewById(R.id.name_textview);
+        subtotalName.setText(getString(R.string.subtotal));
+        mFooterSubtotalValue = (TextView) footerSubtotalView.findViewById(R.id.amt_textview);
+        mFooterSubtotalValue.setText(getString(R.string.format_dollar_amount,
+                mEventTotal.getSubtotal() - getSubtotals()));
+        listView.addFooterView(footerSubtotalView);
+
+        // inflate tax
+        View footerTaxView = inflater.inflate(resLayoutId, null, false);
+        TextView taxName = (TextView) footerTaxView.findViewById(R.id.name_textview);
+        taxName.setText(getString(R.string.format_text_pct_label, getString(R.string.tax), mEventTotal.getTaxPercent()));
+        mFooterTaxValue = (TextView) footerTaxView.findViewById(R.id.amt_textview);
+        mFooterTaxValue.setText(getString(R.string.format_dollar_amount,
+                mEventTotal.getTaxAmt() - getTaxes()));
+        listView.addFooterView(footerTaxView);
+
+        // inflate tip
+        View footerTipView = inflater.inflate(resLayoutId, null, false);
+        TextView tipName = (TextView) footerTipView.findViewById(R.id.name_textview);
+        tipName.setText(getString(R.string.format_text_pct_label, getString(R.string.tip), mEventTotal.getTipPercent()));
+        mFooterTipValue = (TextView) footerTipView.findViewById(R.id.amt_textview);
+        mFooterTipValue.setText(context.getString(R.string.format_dollar_amount,
+                mEventTotal.getTipAmt() - getTips()));
+        listView.addFooterView(footerTipView);
+
+        // inflate total
+        View footerTotalView = inflater.inflate(resLayoutId, null, false);
+        TextView totalName = (TextView) footerTotalView.findViewById(R.id.name_textview);
+        totalName.setText(getString(R.string.total));
+        mFooterTotalValue = (TextView) footerTotalView.findViewById(R.id.amt_textview);
+        mFooterTotalValue.setText(getString(R.string.format_dollar_amount,
+                mEventTotal.getTotal() - getTotals()));
+        listView.addFooterView(footerTotalView);
+
         // inflate <DisplayMode> <Allocated> / <Original>
-        View footerTotalsView = inflater.inflate(resLayoutId, null, false);
-        mFooterDisplay = (TextView) footerTotalsView.findViewById(R.id.name_textview);
-        mFooterDisplay.setText(getDisplaySettingText());
-        mFooterValue = (TextView) footerTotalsView.findViewById(R.id.amt_textview);
-        updateFooterValue(mFooterValue);
-        listView.addFooterView(footerTotalsView);
+//        View footerTotalsView = inflater.inflate(resLayoutId, null, false);
+//        mFooterDisplay = (TextView) footerTotalsView.findViewById(R.id.name_textview);
+//        mFooterDisplay.setText(getDisplaySettingText());
+//        mFooterValue = (TextView) footerTotalsView.findViewById(R.id.amt_textview);
+//        updateFooterValue(mFooterValue);
+//        listView.addFooterView(footerTotalsView);
 
         // inflate subtotal
 //        View footerSubtotalView = inflater.inflate(resLayoutId, null, false);
