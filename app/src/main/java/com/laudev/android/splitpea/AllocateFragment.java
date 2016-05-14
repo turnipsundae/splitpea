@@ -31,7 +31,6 @@ public class AllocateFragment extends Fragment {
 
     private Total mEventTotal;
     private List<Person> summaryList;
-    private int mDisplayMode;
 
     private final String PARAM_NEW_EVENT = "newEvent";
     private final String PARAM_NEW_PERSON = "newPerson";
@@ -48,6 +47,8 @@ public class AllocateFragment extends Fragment {
     private TextView mFooterTaxValue;
     private TextView mFooterTipValue;
     private TextView mFooterTotalValue;
+    private TextView mFooterDisplay;
+    private TextView mFooterValue;
     private View mHeaderPlaceholderView;
 
     private PersonAdapter mPersonsAdapter;
@@ -104,9 +105,6 @@ public class AllocateFragment extends Fragment {
 
             // initialize summaryList with no data
             summaryList = new ArrayList<>();
-
-            // default display mode
-            mDisplayMode = PersonAdapter.SUBTOTAL_AND_TAX;
         }
         super.onCreate(savedInstanceState);
     }
@@ -166,6 +164,9 @@ public class AllocateFragment extends Fragment {
                                 mHeaderSettingValue.setText(getString(R.string.grand_total));
                                 break;
                         }
+                        mFooterDisplay.setText(getDisplaySettingText());
+                        updateFooterViews();
+
                         mPersonsAdapter.notifyDataSetChanged();
                         break;
 
@@ -276,23 +277,24 @@ public class AllocateFragment extends Fragment {
     }
 
     private void updateFooterViews() {
+        updateFooterValue(mFooterValue);
         // get subtotals
-        float subtotal = getSubtotals();
-        mEventTotal.updateSubtotalRemainder(subtotal);
-        mFooterSubtotalValue.setText(getString(R.string.format_accounted_vs_original,
-                subtotal, mEventTotal.getSubtotal()));
+//        float subtotal = getSubtotals();
+//        mEventTotal.updateSubtotalRemainder(subtotal);
+//        mFooterSubtotalValue.setText(getString(R.string.format_accounted_vs_original,
+//                subtotal, mEventTotal.getSubtotal()));
 
         // get taxes
-        mFooterTaxValue.setText(getString(R.string.format_accounted_vs_original,
-                getTaxes(), mEventTotal.getTaxAmt()));
+//        mFooterTaxValue.setText(getString(R.string.format_accounted_vs_original,
+//                getTaxes(), mEventTotal.getTaxAmt()));
 
         // get tips
-        mFooterTipValue.setText(getString(R.string.format_accounted_vs_original,
-                getTips(), mEventTotal.getTipAmt()));
+//        mFooterTipValue.setText(getString(R.string.format_accounted_vs_original,
+//                getTips(), mEventTotal.getTipAmt()));
 
         // get totals
-            mFooterTotalValue.setText(getString(R.string.format_accounted_vs_original,
-                    getTotals(), mEventTotal.getTotal()));
+//            mFooterTotalValue.setText(getString(R.string.format_accounted_vs_original,
+//                    getTotals(), mEventTotal.getTotal()));
     }
 
     // update listview footer with eventTotal
@@ -300,41 +302,96 @@ public class AllocateFragment extends Fragment {
         // get inflater and inflate footer view
         LayoutInflater inflater = LayoutInflater.from(context);
 
+        // inflate Allocated Amount / Original Amount
+        View footerRowView = inflater.inflate(resLayoutId, null, false);
+        TextView titleColumn = (TextView) footerRowView.findViewById(R.id.name_textview);
+        titleColumn.setText(getString(R.string.allocated_amt_original_amt));
+        listView.addFooterView(footerRowView);
+
+        // inflate <DisplayMode> <Allocated> / <Original>
+        View footerTotalsView = inflater.inflate(resLayoutId, null, false);
+        mFooterDisplay = (TextView) footerTotalsView.findViewById(R.id.name_textview);
+        mFooterDisplay.setText(getDisplaySettingText());
+        mFooterValue = (TextView) footerTotalsView.findViewById(R.id.amt_textview);
+        updateFooterValue(mFooterValue);
+        listView.addFooterView(footerTotalsView);
+
         // inflate subtotal
-        View footerSubtotalView = inflater.inflate(resLayoutId, null, false);
-        TextView subtotalName = (TextView) footerSubtotalView.findViewById(R.id.name_textview);
-        subtotalName.setText(getString(R.string.subtotal));
-        mFooterSubtotalValue = (TextView) footerSubtotalView.findViewById(R.id.amt_textview);
-        mFooterSubtotalValue.setText(this.getString(R.string.format_accounted_vs_original,
-                getSubtotals(), mEventTotal.getSubtotal()));
-        listView.addFooterView(footerSubtotalView);
+//        View footerSubtotalView = inflater.inflate(resLayoutId, null, false);
+//        TextView subtotalName = (TextView) footerSubtotalView.findViewById(R.id.name_textview);
+//        subtotalName.setText(getString(R.string.subtotal));
+//        mFooterSubtotalValue = (TextView) footerSubtotalView.findViewById(R.id.amt_textview);
+//        mFooterSubtotalValue.setText(this.getString(R.string.format_accounted_vs_original,
+//                getSubtotals(), mEventTotal.getSubtotal()));
+//        listView.addFooterView(footerSubtotalView);
 
         // inflate tax
-        View footerTaxView = inflater.inflate(resLayoutId, null, false);
-        TextView taxName = (TextView) footerTaxView.findViewById(R.id.name_textview);
-        taxName.setText(getString(R.string.format_text_pct_label, getString(R.string.tax), mEventTotal.getTaxPercent()));
-        mFooterTaxValue = (TextView) footerTaxView.findViewById(R.id.amt_textview);
-        mFooterTaxValue.setText(this.getString(R.string.format_accounted_vs_original,
-                getTaxes(), mEventTotal.getTaxAmt()));
-        listView.addFooterView(footerTaxView);
+//        View footerTaxView = inflater.inflate(resLayoutId, null, false);
+//        TextView taxName = (TextView) footerTaxView.findViewById(R.id.name_textview);
+//        taxName.setText(getString(R.string.format_text_pct_label, getString(R.string.tax), mEventTotal.getTaxPercent()));
+//        mFooterTaxValue = (TextView) footerTaxView.findViewById(R.id.amt_textview);
+//        mFooterTaxValue.setText(this.getString(R.string.format_accounted_vs_original,
+//                getTaxes(), mEventTotal.getTaxAmt()));
+//        listView.addFooterView(footerTaxView);
 
         // inflate tip
-        View footerTipView = inflater.inflate(resLayoutId, null, false);
-        TextView tipName = (TextView) footerTipView.findViewById(R.id.name_textview);
-        tipName.setText(getString(R.string.format_text_pct_label, getString(R.string.tip), mEventTotal.getTipPercent()));
-        mFooterTipValue = (TextView) footerTipView.findViewById(R.id.amt_textview);
-        mFooterTipValue.setText(context.getString(R.string.format_accounted_vs_original,
-                getTips(), mEventTotal.getTipAmt()));
-        listView.addFooterView(footerTipView);
+//        View footerTipView = inflater.inflate(resLayoutId, null, false);
+//        TextView tipName = (TextView) footerTipView.findViewById(R.id.name_textview);
+//        tipName.setText(getString(R.string.format_text_pct_label, getString(R.string.tip), mEventTotal.getTipPercent()));
+//        mFooterTipValue = (TextView) footerTipView.findViewById(R.id.amt_textview);
+//        mFooterTipValue.setText(context.getString(R.string.format_accounted_vs_original,
+//                getTips(), mEventTotal.getTipAmt()));
+//        listView.addFooterView(footerTipView);
 
         // inflate total
-        View footerTotalView = inflater.inflate(resLayoutId, null, false);
-        TextView totalName = (TextView) footerTotalView.findViewById(R.id.name_textview);
-        totalName.setText(getString(R.string.total));
-        mFooterTotalValue = (TextView) footerTotalView.findViewById(R.id.amt_textview);
-        mFooterTotalValue.setText(this.getString(R.string.format_accounted_vs_original,
-                getTotals(), mEventTotal.getTotal()));
-        listView.addFooterView(footerTotalView);
+//        View footerTotalView = inflater.inflate(resLayoutId, null, false);
+//        TextView totalName = (TextView) footerTotalView.findViewById(R.id.name_textview);
+//        totalName.setText(getString(R.string.total));
+//        mFooterTotalValue = (TextView) footerTotalView.findViewById(R.id.amt_textview);
+//        mFooterTotalValue.setText(this.getString(R.string.format_accounted_vs_original,
+//                getTotals(), mEventTotal.getTotal()));
+//        listView.addFooterView(footerTotalView);
+    }
+
+    private String getDisplaySettingText() {
+        switch (mPersonsAdapter.getDisplayMode()) {
+            case PersonAdapter.SUBTOTAL_ONLY:
+                return getString(R.string.subtotal);
+            case PersonAdapter.SUBTOTAL_AND_TAX:
+                return getString(R.string.format_two_labels,
+                        getString(R.string.subtotal),
+                        getString(R.string.tax));
+            case PersonAdapter.SUBTOTAL_AND_TAX_PLUS_TIP:
+                return getString(R.string.format_two_labels,
+                        getString(R.string.total),
+                        getString(R.string.tip));
+            case PersonAdapter.TOTAL_ONLY:
+                return getString(R.string.grand_total);
+            default:
+                return getString(R.string.subtotal);
+        }
+    }
+
+    private void updateFooterValue(TextView textView) {
+        switch (mPersonsAdapter.getDisplayMode()) {
+            case PersonAdapter.SUBTOTAL_ONLY:
+                textView.setText(getString(R.string.format_accounted_vs_original,
+                        getSubtotals(), mEventTotal.getSubtotal()));
+                break;
+            case PersonAdapter.SUBTOTAL_AND_TAX:
+                textView.setText(getString(R.string.format_accounted_vs_original,
+                        getSubtotals() + getTaxes(),
+                        mEventTotal.getSubtotal() + mEventTotal.getTaxAmt()));
+                break;
+            case PersonAdapter.SUBTOTAL_AND_TAX_PLUS_TIP:
+//                textView.setText(getString(R.string.format_accounted_vs_original,
+//                        getTotals(), mEventTotal.getTotal()));
+//                break;
+            case PersonAdapter.TOTAL_ONLY:
+                textView.setText(getString(R.string.format_accounted_vs_original,
+                        getTotals(), mEventTotal.getTotal()));
+                break;
+        }
     }
 
     private float getSubtotalRemaining() {

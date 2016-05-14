@@ -60,8 +60,8 @@
     <!--  label for grand total -->
     <string name="grand_total">Grand total</string>
 
-    <!-- label for accounted vs original total -->
-    <string name="total_accounted_unaccounted">Total (accounted/original)</string>
+    <!-- label for Allocated Amount / Original Amount -->
+    <string name="allocated_amt_original_amt">Allocated Amount / Original Amount</string>
 
     <!-- label for adding more people -->
     <string name="add_friend">+Friend</string>
