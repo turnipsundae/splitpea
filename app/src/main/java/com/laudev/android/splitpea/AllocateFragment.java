@@ -42,6 +42,7 @@ public class AllocateFragment extends Fragment {
     private final int PERSON_DETAIL_REQUEST = 1;
     private final int ADD_PERSON_REQUEST = 2;
 
+    private ListView mPersonListView;
     private TextView mHeaderSettingValue;
     private TextView mFooterSubtotalValue;
     private TextView mFooterTaxValue;
@@ -64,7 +65,7 @@ public class AllocateFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     int positionId = data.getIntExtra(PARAM_POSITION_ID, 0);
                     Person person = data.getParcelableExtra(PARAM_PERSON);
-                    Person clickedPerson = (Person)mPersonsAdapter.getItem(positionId);
+                    Person clickedPerson = (Person)mPersonListView.getItemAtPosition(positionId);
                     clickedPerson.setName(person.getName());
                     clickedPerson.setSubtotal(person.getSubtotal());
                     clickedPerson.setTaxPercent(person.getTaxPercent());
@@ -123,17 +124,19 @@ public class AllocateFragment extends Fragment {
                 PersonAdapter.SUBTOTAL_AND_TAX); // default display mode
 
         // find and hook up adapter
-        ListView personsListView = (ListView) rootView.findViewById(R.id.persons_listview);
-        personsListView.setAdapter(mPersonsAdapter);
+        mPersonListView = (ListView) rootView.findViewById(R.id.persons_listview);
+        mPersonListView.setAdapter(mPersonsAdapter);
 
         // add headers
-        addHeaderView(getContext(), personsListView, R.layout.listview_item_header);
+        addHeaderView(getContext(), mPersonListView, R.layout.listview_item_header);
 
         // add three footers for subtotal, tax + tip, total
-        addFooterViews(getContext(), personsListView, R.layout.listview_item_footer, mEventTotal);
+        addFooterViews(getContext(), mPersonListView, R.layout.listview_item_footer, mEventTotal);
+
+        mPersonListView.setFooterDividersEnabled(false);
 
         // set click listener
-        personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mPersonListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (view.getId()) {
@@ -164,7 +167,7 @@ public class AllocateFragment extends Fragment {
                                 mHeaderSettingValue.setText(getString(R.string.grand_total));
                                 break;
                         }
-                        mFooterDisplay.setText(getDisplaySettingText());
+//                        mFooterDisplay.setText(getDisplaySettingText());
                         updateFooterViews();
 
                         mPersonsAdapter.notifyDataSetChanged();
@@ -172,7 +175,7 @@ public class AllocateFragment extends Fragment {
 
                     // if existing person clicked, launch detail activity
                     case (R.id.listview_item_person):
-                        Person person = (Person) mPersonsAdapter.getItem(position);
+                        Person person = (Person) parent.getItemAtPosition(position);
                         startActivityForResult(new Intent(getActivity(), DetailActivity.class)
                                         .putExtra(PARAM_NEW_PERSON, false)
                                         .putExtra(PARAM_POSITION_ID, position)
@@ -320,7 +323,7 @@ public class AllocateFragment extends Fragment {
         // get inflater and inflate footer view
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        // inflate Allocated Amount / Original Amount
+        // inflate Remaining Amount
         View footerRowView = inflater.inflate(resLayoutId, null, false);
         TextView titleColumn = (TextView) footerRowView.findViewById(R.id.name_textview);
         titleColumn.setText(getString(R.string.remaining_amount_label));

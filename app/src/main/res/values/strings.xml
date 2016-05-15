@@ -33,6 +33,9 @@
     <!-- label for tip -->
     <string name="tip">Tip</string>
 
+    <!-- label for override tip -->
+    <string name="custom_tip">Custom tip</string>
+
     <!-- label for tip default % -->
     <string name="tip_default">15%</string>
 
@@ -107,7 +110,7 @@
 
     <!-- Tip 15% -->
     <string name="format_text_pct_label">
-        <xliff:g id="label">%s </xliff:g>
+        <xliff:g id="label">%s</xliff:g>
         <xliff:g id="pct">%1.0f</xliff:g>
         %%</string>
 

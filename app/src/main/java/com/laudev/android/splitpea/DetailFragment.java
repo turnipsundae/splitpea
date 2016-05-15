@@ -286,8 +286,18 @@ public class DetailFragment extends Fragment {
         mFooterTipValue.setText(context.getString(R.string.format_dollar_amount, person.getTipAmt()));
         listView.addFooterView(footerTipView);
 
+        // inflate total
+        View footerTotalView = inflater.inflate(R.layout.listview_item_footer, null, false);
+        TextView totalName = (TextView) footerTotalView.findViewById(R.id.name_textview);
+        totalName.setText(getString(R.string.total));
+        mFooterTotalValue = (TextView) footerTotalView.findViewById(R.id.amt_textview);
+        mFooterTotalValue.setText(this.getString(R.string.format_dollar_amount, person.getTotal()));
+        listView.addFooterView(footerTotalView);
+
         // inflate tip editor
         View footerTipRadioGroupView = inflater.inflate(R.layout.listview_item_footer_choice, null, false);
+        TextView footerTipRadioTextView = (TextView) footerTipRadioGroupView.findViewById(R.id.radio_group_label);
+        footerTipRadioTextView.setText(getString(R.string.custom_tip));
         mFooterTipRadioGroup = (RadioGroup) footerTipRadioGroupView.findViewById(R.id.radio_group);
         mFooterTipRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -333,14 +343,6 @@ public class DetailFragment extends Fragment {
             }
         });
         listView.addFooterView(footerTipRadioGroupView);
-
-        // inflate total
-        View footerTotalView = inflater.inflate(R.layout.listview_item_footer, null, false);
-        TextView totalName = (TextView) footerTotalView.findViewById(R.id.name_textview);
-        totalName.setText(getString(R.string.total));
-        mFooterTotalValue = (TextView) footerTotalView.findViewById(R.id.amt_textview);
-        mFooterTotalValue.setText(this.getString(R.string.format_dollar_amount, person.getTotal()));
-        listView.addFooterView(footerTotalView);
 
         // check default tip radio button
         if (Math.abs(person.getTipPercent() - getResources().getInteger(R.integer.tip_low_default_value)) < 0.001f) {
