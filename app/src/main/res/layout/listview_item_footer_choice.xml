@@ -8,11 +8,13 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="@string/tip"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:id="@+id/radio_group_label"/>
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:id="@+id/radio_group">
         <RadioButton
             android:layout_width="0dp"

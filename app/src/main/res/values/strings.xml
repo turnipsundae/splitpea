@@ -24,6 +24,9 @@
     <!-- label for subtotal -->
     <string name="subtotal">Subtotal</string>
 
+    <!-- default hint value for subtotal -->
+    <string name="subtotal_hint_value">$25.00</string>
+
     <!-- label for tax -->
     <string name="tax">Tax</string>
 
@@ -63,6 +66,9 @@
     <!--  label for grand total -->
     <string name="grand_total">Grand total</string>
 
+    <!-- default hint value for grand total -->
+    <string name="grand_total_hint_value">$27.50</string>
+
     <!-- label for Allocated Amount / Original Amount -->
     <string name="allocated_amt_original_amt">Allocated Amount / Original Amount</string>
 
@@ -80,9 +86,6 @@
 
     <!-- label for items in detail activity-->
     <string name="item">Item</string>
-
-    <!-- label for items default cost -->
-    <string name="item_cost_default">$25.00</string>
 
     <!-- label for items in detail activity-->
     <string name="new_item">New item</string>

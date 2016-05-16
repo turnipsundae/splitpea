@@ -3,16 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:id="@+id/listview_item_footer">
+    android:id="@+id/listview_item_footer_title"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:background="@color/colorAccent">
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:id="@+id/label_textview"
+        android:gravity="center_vertical"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:id="@+id/name_textview"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:id="@+id/amt_textview"/>
+        android:textColor="@android:color/white"/>
 </LinearLayout>

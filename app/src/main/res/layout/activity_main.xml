@@ -31,7 +31,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/item_cost_default"
+            android:hint="@string/subtotal_hint_value"
+            android:gravity="center_horizontal"
             android:inputType="numberDecimal"/>
     </LinearLayout>
 
@@ -52,10 +53,47 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="@string/tax_default"
+            android:gravity="center_horizontal"
             android:inputType="numberDecimal"/>
     </LinearLayout>
 
-    <include layout="@layout/listview_item_footer_choice"/>
+    <LinearLayout
+        android:orientation="horizontal" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/tip"
+            android:id="@+id/radio_group_label"/>
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/radio_group">
+            <RadioButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tip_low_default"
+                android:id="@+id/low_radio_button" />
+
+            <RadioButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tip_mid_default"
+                android:id="@+id/mid_radio_button" />
+
+            <RadioButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tip_high_default"
+                android:id="@+id/high_radio_button" />
+        </RadioGroup>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,14 +106,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/total" />
+            android:text="@string/grand_total" />
 
         <TextView
             android:id="@+id/total"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/item_cost_default" />
+            android:gravity="center_horizontal"
+            android:hint="@string/grand_total_hint_value" />
     </LinearLayout>
 
 </LinearLayout>

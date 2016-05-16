@@ -121,7 +121,7 @@ public class AllocateFragment extends Fragment {
                 getActivity(),
                 R.layout.listview_item_person,
                 summaryList,
-                PersonAdapter.SUBTOTAL_AND_TAX); // default display mode
+                PersonAdapter.SUBTOTAL_AND_TAX_PLUS_TIP); // default display mode
 
         // find and hook up adapter
         mPersonListView = (ListView) rootView.findViewById(R.id.persons_listview);
@@ -269,7 +269,7 @@ public class AllocateFragment extends Fragment {
         TextView nameColumn = (TextView) headerRowView.findViewById(R.id.label_textview);
         nameColumn.setText(getString(R.string.name));
         mHeaderSettingValue = (TextView) headerRowView.findViewById(R.id.display_setting_textview);
-        mHeaderSettingValue.setText(getString(R.string.format_two_labels, getString(R.string.subtotal), getString(R.string.tax)));
+        mHeaderSettingValue.setText(getString(R.string.format_two_labels, getString(R.string.total), getString(R.string.tip)));
         listView.addHeaderView(headerRowView);
 
         // inflate placeholder item
@@ -324,8 +324,8 @@ public class AllocateFragment extends Fragment {
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // inflate Remaining Amount
-        View footerRowView = inflater.inflate(resLayoutId, null, false);
-        TextView titleColumn = (TextView) footerRowView.findViewById(R.id.name_textview);
+        View footerRowView = inflater.inflate(R.layout.listview_item_footer_title, null, false);
+        TextView titleColumn = (TextView) footerRowView.findViewById(R.id.label_textview);
         titleColumn.setText(getString(R.string.remaining_amount_label));
         listView.addFooterView(footerRowView);
 

@@ -289,7 +289,7 @@ public class DetailFragment extends Fragment {
         // inflate total
         View footerTotalView = inflater.inflate(R.layout.listview_item_footer, null, false);
         TextView totalName = (TextView) footerTotalView.findViewById(R.id.name_textview);
-        totalName.setText(getString(R.string.total));
+        totalName.setText(getString(R.string.grand_total));
         mFooterTotalValue = (TextView) footerTotalView.findViewById(R.id.amt_textview);
         mFooterTotalValue.setText(this.getString(R.string.format_dollar_amount, person.getTotal()));
         listView.addFooterView(footerTotalView);
