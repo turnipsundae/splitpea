@@ -121,7 +121,7 @@ public class AllocateFragment extends Fragment {
                 getActivity(),
                 R.layout.listview_item_person,
                 summaryList,
-                PersonAdapter.SUBTOTAL_AND_TAX_PLUS_TIP); // default display mode
+                PersonAdapter.TOTAL_PLUS_TIP); // default display mode
 
         // find and hook up adapter
         mPersonListView = (ListView) rootView.findViewById(R.id.persons_listview);
@@ -143,7 +143,7 @@ public class AllocateFragment extends Fragment {
                     // if header, switch display mode
                     case (R.id.listview_item_header):
                         int displayMode = mPersonsAdapter.getDisplayMode();
-                        if (displayMode == PersonAdapter.TOTAL_ONLY) {
+                        if (displayMode == PersonAdapter.GRAND_TOTAL_ONLY) {
                             displayMode = PersonAdapter.SUBTOTAL_ONLY;
                         } else {
                             displayMode += 1;
@@ -153,17 +153,15 @@ public class AllocateFragment extends Fragment {
                             case PersonAdapter.SUBTOTAL_ONLY:
                                 mHeaderSettingValue.setText(getString(R.string.subtotal));
                                 break;
-                            case PersonAdapter.SUBTOTAL_AND_TAX:
-                                mHeaderSettingValue.setText(getString(R.string.format_two_labels,
-                                        getString(R.string.subtotal),
-                                        getString(R.string.tax)));
+                            case PersonAdapter.TOTAL_ONLY:
+                                mHeaderSettingValue.setText(getString(R.string.total));
                                 break;
-                            case PersonAdapter.SUBTOTAL_AND_TAX_PLUS_TIP:
+                            case PersonAdapter.TOTAL_PLUS_TIP:
                                 mHeaderSettingValue.setText(getString(R.string.format_two_labels,
                                         getString(R.string.total),
                                         getString(R.string.tip)));
                                 break;
-                            case PersonAdapter.TOTAL_ONLY:
+                            case PersonAdapter.GRAND_TOTAL_ONLY:
                                 mHeaderSettingValue.setText(getString(R.string.grand_total));
                                 break;
                         }
@@ -414,15 +412,13 @@ public class AllocateFragment extends Fragment {
         switch (mPersonsAdapter.getDisplayMode()) {
             case PersonAdapter.SUBTOTAL_ONLY:
                 return getString(R.string.subtotal);
-            case PersonAdapter.SUBTOTAL_AND_TAX:
-                return getString(R.string.format_two_labels,
-                        getString(R.string.subtotal),
-                        getString(R.string.tax));
-            case PersonAdapter.SUBTOTAL_AND_TAX_PLUS_TIP:
+            case PersonAdapter.TOTAL_ONLY:
+                return getString(R.string.total);
+            case PersonAdapter.TOTAL_PLUS_TIP:
                 return getString(R.string.format_two_labels,
                         getString(R.string.total),
                         getString(R.string.tip));
-            case PersonAdapter.TOTAL_ONLY:
+            case PersonAdapter.GRAND_TOTAL_ONLY:
                 return getString(R.string.grand_total);
             default:
                 return getString(R.string.subtotal);
@@ -435,16 +431,16 @@ public class AllocateFragment extends Fragment {
                 textView.setText(getString(R.string.format_accounted_vs_original,
                         getSubtotals(), mEventTotal.getSubtotal()));
                 break;
-            case PersonAdapter.SUBTOTAL_AND_TAX:
+            case PersonAdapter.TOTAL_ONLY:
                 textView.setText(getString(R.string.format_accounted_vs_original,
                         getSubtotals() + getTaxes(),
                         mEventTotal.getSubtotal() + mEventTotal.getTaxAmt()));
                 break;
-            case PersonAdapter.SUBTOTAL_AND_TAX_PLUS_TIP:
+            case PersonAdapter.TOTAL_PLUS_TIP:
 //                textView.setText(getString(R.string.format_accounted_vs_original,
 //                        getTotals(), mEventTotal.getTotal()));
 //                break;
-            case PersonAdapter.TOTAL_ONLY:
+            case PersonAdapter.GRAND_TOTAL_ONLY:
                 textView.setText(getString(R.string.format_accounted_vs_original,
                         getTotals(), mEventTotal.getTotal()));
                 break;

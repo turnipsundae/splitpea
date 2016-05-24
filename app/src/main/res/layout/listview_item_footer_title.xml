@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:id="@+id/listview_item_footer_title"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:background="@color/colorAccent">
+    android:background="@color/colorPrimaryLight">
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"

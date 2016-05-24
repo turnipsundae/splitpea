@@ -20,9 +20,9 @@ public class PersonAdapter extends BaseAdapter {
     private int mDisplayMode;
 
     public static final int SUBTOTAL_ONLY = 0;
-    public static final int SUBTOTAL_AND_TAX = 1;
-    public static final int SUBTOTAL_AND_TAX_PLUS_TIP = 2;
-    public static final int TOTAL_ONLY = 3;
+    public static final int TOTAL_ONLY = 1;
+    public static final int TOTAL_PLUS_TIP = 2;
+    public static final int GRAND_TOTAL_ONLY = 3;
 
     public PersonAdapter (Context context, int resLayout, List data, int displayMode) {
         mContext = context;
@@ -67,15 +67,15 @@ public class PersonAdapter extends BaseAdapter {
             case SUBTOTAL_ONLY:
                 holder.mAmt.setText(context.getString(R.string.format_dollar_amount, person.getSubtotal()));
                 break;
-            case SUBTOTAL_AND_TAX:
+            case TOTAL_ONLY:
                 holder.mAmt.setText(context.getString(R.string.format_dollar_amount, person.getSubtotal() + person.getTaxAmt()));
                 break;
-            case SUBTOTAL_AND_TAX_PLUS_TIP:
+            case TOTAL_PLUS_TIP:
                 holder.mAmt.setText(context.getString(R.string.format_share_total_tip,
                         person.getSubtotal() + person.getTaxAmt(),
                         person.getTipAmt()));
                 break;
-            case TOTAL_ONLY:
+            case GRAND_TOTAL_ONLY:
                 holder.mAmt.setText(context.getString(R.string.format_dollar_amount, person.getTotal()));
                 break;
         }

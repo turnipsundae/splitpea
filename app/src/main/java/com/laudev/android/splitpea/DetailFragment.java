@@ -373,19 +373,19 @@ public class DetailFragment extends Fragment {
     }
 
     private void updateTax() {
-        mFooterTaxValue.setText(getString(R.string.format_amount, person.getTaxAmt()));
+        mFooterTaxValue.setText(getString(R.string.format_dollar_amount, person.getTaxAmt()));
     }
 
     private void updateTax(float tempAmt) {
-        mFooterTaxValue.setText(getString(R.string.format_amount, person.getTaxAmt() + tempAmt * person.getTaxPercent() / 100f));
+        mFooterTaxValue.setText(getString(R.string.format_dollar_amount, person.getTaxAmt() + tempAmt * person.getTaxPercent() / 100f));
     }
 
     private void updateTip() {
-        mFooterTipValue.setText(getString(R.string.format_amount, person.getTipAmt()));
+        mFooterTipValue.setText(getString(R.string.format_dollar_amount, person.getTipAmt()));
     }
 
     private void updateTip(float tempAmt) {
-        mFooterTipValue.setText(getString(R.string.format_amount, person.getTipAmt() + tempAmt * person.getTipPercent() / 100f));
+        mFooterTipValue.setText(getString(R.string.format_dollar_amount, person.getTipAmt() + tempAmt * person.getTipPercent() / 100f));
     }
 
     private void updateTotal() {
