@@ -7,5 +7,6 @@
         android:id="@+id/action_confirm"
         android:orderInCategory="1"
         android:title="@string/action_confirm"
+        android:icon="@drawable/ic_check_white_24dp"
         app:showAsAction="always"/>
 </menu>
