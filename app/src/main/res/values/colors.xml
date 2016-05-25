@@ -5,4 +5,5 @@
     <color name="colorPrimaryLight">#81C784</color>
     <color name="colorAccent">#FBC02D</color>
     <color name="colorAccentLight">#FFEB3B</color>
+    <color name="colorRemove">#F44336</color>
 </resources>

@@ -17,4 +17,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="BorderlessButtonSmall" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:minWidth">24dip</item>
+        <item name="android:minHeight">24dip</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>
